@@ -62,12 +62,12 @@ main {
 
 .stage {
   position: absolute;
-  width: 38%;
-  max-width: 180px;
-  font-size: 0.8rem;
-  background: rgba(255, 255, 255, 0.9);
+  width: 32%;           /* pulled in to reduce overlap */
+  max-width: 150px;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 6px;
-  padding: 0.4rem 0.5rem;
+  padding: 0.35rem 0.45rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
@@ -88,23 +88,24 @@ main {
   border-radius: 4px;
   border: 1px solid #ccc;
   padding: 0.25rem 0.3rem;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   resize: vertical;
 }
 
-/* 12, 3, 6, 9 o'clock positions */
-.stage-top    { top: 4%;  left: 31%; }
-.stage-right  { top: 31%; right: 4%; }
-.stage-bottom { bottom: 4%; left: 31%; }
-.stage-left   { top: 31%; left: 4%; }
+/* 12, 3, 6, 9 o'clock positions, nudged outward */
+.stage-top    { top: 2%;  left: 34%; }
+.stage-right  { top: 30%; right: 2%; }
+.stage-bottom { bottom: 2%; left: 34%; }
+.stage-left   { top: 30%; left: 2%; }
 
 .center-label {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  font-size: 0.85rem;
-  padding: 0.4rem 0.6rem;
+  font-size: 0.75rem;   /* smaller to avoid overlap */
+  max-width: 60%;
+  padding: 0.3rem 0.5rem;
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -164,6 +165,6 @@ footer {
     height: 320px;
   }
   .stage {
-    max-width: 140px;
+    max-width: 130px;
   }
 }
