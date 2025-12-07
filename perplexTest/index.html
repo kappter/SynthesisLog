@@ -1,165 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Roget Amalgamations</title>
-  <style>
- .circle {
-  position: relative;
-  width: 420px;
-  height: 420px;
-  margin: 1rem auto;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-}
+  <title>Synthesis Log</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Synthesis Log</h1>
+    <p class="subtitle">Four-stage circular reflection on a rotating term bank.</p>
+  </header>
 
-.stage {
-  position: absolute;
-  width: 38%;
-  max-width: 150px;
-  font-size: 0.8rem;
-}
+  <main>
+    <section class="run-info">
+      <div id="runSummary">Loading terms…</div>
+      <div>
+        <label>
+          Day index:
+          <input id="dayIndexInput" type="number" min="1" value="1">
+        </label>
+        <button id="goToDayBtn">Go</button>
+        <button id="prevDayBtn">&#9664; Prev</button>
+        <button id="nextDayBtn">Next &#9654;</button>
+      </div>
+    </section>
 
-.stage-label {
-  font-weight: 600;
-  margin-bottom: 0.2rem;
-}
+    <section class="circle" aria-label="Four-stage circular process">
+      <div class="stage stage-top">
+        <div class="stage-label">1 · History</div>
+        <div class="stage-term" id="termHistory">(term)</div>
+        <textarea id="textHistory" placeholder="Historical context, background associations…"></textarea>
+      </div>
 
-.stage-term {
-  font-style: italic;
-  margin-bottom: 0.2rem;
-}
+      <div class="stage stage-right">
+        <div class="stage-label">2 · Concrete / Abstract</div>
+        <div class="stage-term" id="termConcrete">(term)</div>
+        <textarea id="textConcrete" placeholder="Concrete images and abstract meanings…"></textarea>
+      </div>
 
-.stage textarea {
-  width: 100%;
-  min-height: 70px;
-}
+      <div class="stage stage-bottom">
+        <div class="stage-label">3 · Amalgamation</div>
+        <div class="stage-term" id="termAmalgam">(term)</div>
+        <textarea id="textAmalgam" placeholder="Amalgamations among today&#39;s four terms…"></textarea>
+      </div>
 
-/* 12, 3, 6, 9 o'clock positions */
-.stage-top    { top: 4%;  left: 31%; }
-.stage-right  { top: 31%; right: 4%; }
-.stage-bottom { bottom: 4%; left: 31%; }
-.stage-left   { top: 31%; left: 4%; }
+      <div class="stage stage-left">
+        <div class="stage-label">4 · Motion</div>
+        <div class="stage-term" id="termMotion">(term)</div>
+        <textarea id="textMotion" placeholder="Name a motion or proposal that links the four terms…"></textarea>
+      </div>
 
-.center-label {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  font-size: 0.8rem;
-}
+      <div class="center-label">
+        <div>Today&#39;s four-term set</div>
+        <div id="centerTerms">–</div>
+      </div>
+    </section>
 
-</style>
+    <section class="controls">
+      <button id="saveBtn">Save reflections</button>
+      <span id="status" class="status"></span>
+    </section>
 
-<div class="circle">
-  <!-- 12 o'clock: Day 1 – History -->
-  <div class="stage stage-top">
-    <div class="stage-label">1 · History</div>
-    <div class="stage-term">[new term]</div>
-    <textarea placeholder="Historical notes..."></textarea>
-  </div>
+    <section class="term-bank">
+      <h2>Term bank</h2>
+      <p>Loaded from de>terms.csv</code>. No term is reused until all have completed the four-day cycle.</p>
+      <pre id="termBankPreview"></pre>
+    </section>
+  </main>
 
-  <!-- 3 o'clock: Day 2 – Concrete/Abstract -->
-  <div class="stage stage-right">
-    <div class="stage-label">2 · Concrete / Abstract</div>
-    <div class="stage-term">[term from yesterday]</div>
-    <textarea placeholder="Concrete/abstract images..."></textarea>
-  </div>
+  <footer>
+    <small>Synthesis Log · static prototype (localStorage, CSV-driven)</small>
+  </footer>
 
-  <!-- 6 o'clock: Day 3 – Amalgamation -->
-  <div class="stage stage-bottom">
-    <div class="stage-label">3 · Amalgamation</div>
-    <div class="stage-term">[term from two days ago]</div>
-    <textarea placeholder="Amalgamations with the other three terms..."></textarea>
-  </div>
-
-  <!-- 9 o'clock: Day 4 – Motion -->
-  <div class="stage stage-left">
-    <div class="stage-label">4 · Motion</div>
-    <div class="stage-term">[oldest term in queue]</div>
-    <textarea placeholder="Name the motion / proposal..."></textarea>
-  </div>
-
-  <!-- optional small center label showing today’s 4-term set -->
-  <div class="center-label">
-    <div>Today’s set:</div>
-    <div>[T1 · T2 · T3 · T4]</div>
-  </div>
-</div>
-
-
-  <script>
-  let snapshot = null;
-
-  function init() {
-    google.script.run
-      .withSuccessHandler(drawCircle)
-      .withFailureHandler(showError)
-      .getState();
-  }
-
-  function drawCircle(data) {
-    snapshot = data;
-    const last4 = data.last4; // oldest first
-
-    const stages = [
-      { el: 'stage1', col: 'History', label: 'Day 1 – History' },
-      { el: 'stage2', col: 'ConcreteAbstract', label: 'Day 2 – Concrete/Abstract' },
-      { el: 'stage3', col: 'Amalgamation', label: 'Day 3 – Amalgamation' },
-      { el: 'stage4', col: 'Motion', label: 'Day 4 – Motion' }
-    ];
-
-    stages.forEach((stage, i) => {
-      const row = last4[i] || {};
-      const term = row.Term || '(empty)';
-      const text = row[stage.col] || '';
-      const div = document.getElementById(stage.el);
-      div.innerHTML =
-        '<h3>' + stage.label + '<br>' + term + '</h3>' +
-        '<textarea data-row-index="' + (snapshot.rows.length - last4.length + i) +
-        '" data-col="' + stage.col + '">' +
-        text + '</textarea>';
-    });
-
-    document.getElementById('status').textContent = '';
-  }
-
-  function saveAll() {
-    const boxes = document.querySelectorAll('.stage textarea');
-    document.getElementById('status').textContent = 'Saving...';
-
-    const ops = [];
-    boxes.forEach(box => {
-      const rowIndex = parseInt(box.dataset.rowIndex, 10);
-      const col = box.dataset.col;
-      const val = box.value;
-      ops.push(new Promise((resolve, reject) => {
-        google.script.run
-          .withSuccessHandler(resolve)
-          .withFailureHandler(reject)
-          .saveAnswer(rowIndex, col, val);
-      }));
-    });
-
-    Promise.all(ops)
-      .then(() => document.getElementById('status').textContent = 'Saved.')
-      .catch(err => showError(err));
-  }
-
-  function advance() {
-    document.getElementById('status').textContent = 'Advancing...';
-    google.script.run
-      .withSuccessHandler(drawCircle)
-      .withFailureHandler(showError)
-      .advanceDay();
-  }
-
-  function showError(err) {
-    document.getElementById('status').textContent = 'Error: ' + err.message;
-  }
-
-  window.onload = init;
-</script>
-
+  <script src="main.js"></script>
 </body>
 </html>
