@@ -4,26 +4,51 @@
   <meta charset="utf-8">
   <title>Roget Amalgamations</title>
   <style>
-  .circle {
-    position: relative;
-    width: 420px;
-    height: 420px;
-    margin: 1rem auto;
-    border-radius: 50%;
-    border: 2px solid #ccc;
-  }
-  .stage {
-    position: absolute;
-    width: 40%;
-  }
-  .stage h3 { margin: 0 0 0.25rem; font-size: 0.9rem; }
-  .stage textarea { width: 100%; min-height: 80px; }
-  /* positions: 12, 3, 6, 9 o'clock */
-  #stage1 { top: 0; left: 30%; transform: translateY(-10%); }
-  #stage2 { top: 30%; right: 0; transform: translateX(10%); }
-  #stage3 { bottom: 0; left: 30%; transform: translateY(10%); }
-  #stage4 { top: 30%; left: 0; transform: translateX(-10%); }
-  .controls { text-align: center; margin-top: 1rem; }
+ .circle {
+  position: relative;
+  width: 420px;
+  height: 420px;
+  margin: 1rem auto;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+}
+
+.stage {
+  position: absolute;
+  width: 38%;
+  max-width: 150px;
+  font-size: 0.8rem;
+}
+
+.stage-label {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.stage-term {
+  font-style: italic;
+  margin-bottom: 0.2rem;
+}
+
+.stage textarea {
+  width: 100%;
+  min-height: 70px;
+}
+
+/* 12, 3, 6, 9 o'clock positions */
+.stage-top    { top: 4%;  left: 31%; }
+.stage-right  { top: 31%; right: 4%; }
+.stage-bottom { bottom: 4%; left: 31%; }
+.stage-left   { top: 31%; left: 4%; }
+
+.center-label {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 0.8rem;
+}
+
 </style>
 
 <div class="circle">
