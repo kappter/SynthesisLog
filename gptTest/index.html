@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synthesis Log</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <h1>Synthesis Log Dial</h1>
+
+    <div id="dial-container">
+        <div id="dial">
+            <div class="slot" id="slot-0">History</div>
+            <div class="slot" id="slot-1">Concrete / Abstract</div>
+            <div class="slot" id="slot-2">Amalgamation</div>
+            <div class="slot" id="slot-3">Motion</div>
+        </div>
+        <button id="advanceBtn">Next Step</button>
+    </div>
+
+    <section id="term-section">
+        <h2>Current Term</h2>
+        <div id="current-term">—</div>
+
+        <textarea id="response-box" placeholder="Write your blurb here…"></textarea>
+        <button id="aiSuggest">AI Suggestion</button>
+    </section>
+
+    <section id="import-export">
+        <h3>Import / Export</h3>
+        <button id="exportBtn">Export Log</button>
+        <input type="file" id="importFile" accept=".json" />
+    </section>
+
+    <script type="module" src="./src/main.js"></script>
+</body>
+</html>
