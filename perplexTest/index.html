@@ -54,91 +54,77 @@
   </div>
 
   <script>
-    let state = null;
+  let snapshot = null;
 
-    const QUESTION_COLUMNS = ['History','ConcreteAbstract','Amalgamation','Motion'];
+  function init() {
+    google.script.run
+      .withSuccessHandler(drawCircle)
+      .withFailureHandler(showError)
+      .getState();
+  }
 
-    const QUESTION_TEXT = {
-      History: 'Day 1 – historical context and background for the focal term.',
-      ConcreteAbstract: 'Day 2 – concrete / abstract applications or images involving the focal term.',
-      Amalgamation: 'Day 3 – amalgamations among the four current terms, keeping the focal term centered.',
-      Motion: 'Day 4 – name a motion or connection that links the four terms, anchored in the focal term.'
-    };
+  function drawCircle(data) {
+    snapshot = data;
+    const last4 = data.last4; // oldest first
 
-    function init() {
-      google.script.run
-        .withSuccessHandler(buildUI)
-        .withFailureHandler(err => {
-          document.getElementById('status').textContent = 'Error: ' + err.message;
-        })
-        .getDailyData();
-    }
+    const stages = [
+      { el: 'stage1', col: 'History', label: 'Day 1 – History' },
+      { el: 'stage2', col: 'ConcreteAbstract', label: 'Day 2 – Concrete/Abstract' },
+      { el: 'stage3', col: 'Amalgamation', label: 'Day 3 – Amalgamation' },
+      { el: 'stage4', col: 'Motion', label: 'Day 4 – Motion' }
+    ];
 
-    function buildUI(data) {
-      state = data;
-      const { rows, todayIndex } = data;
-      const termDiv = document.getElementById('termWindow');
-      termDiv.innerHTML = '';
+    stages.forEach((stage, i) => {
+      const row = last4[i] || {};
+      const term = row.Term || '(empty)';
+      const text = row[stage.col] || '';
+      const div = document.getElementById(stage.el);
+      div.innerHTML =
+        '<h3>' + stage.label + '<br>' + term + '</h3>' +
+        '<textarea data-row-index="' + (snapshot.rows.length - last4.length + i) +
+        '" data-col="' + stage.col + '">' +
+        text + '</textarea>';
+    });
 
-      if (todayIndex === -1) {
-        termDiv.textContent = 'No row found for today.';
-        document.getElementById('questionBlock').style.display = 'none';
-        return;
-      }
+    document.getElementById('status').textContent = '';
+  }
 
-      // Build 4‑day window centered on todayIndex (today is last day for its term)
-      const windowRows = [];
-      for (let offset = -3; offset <= 0; offset++) {
-        const idx = todayIndex + offset;
-        if (idx >= 0 && idx < rows.length) windowRows.push({ idx, row: rows[idx] });
-      }
+  function saveAll() {
+    const boxes = document.querySelectorAll('.stage textarea');
+    document.getElementById('status').textContent = 'Saving...';
 
-      windowRows.forEach(({ idx, row }) => {
-        const card = document.createElement('div');
-        card.className = 'term-card';
-        card.innerHTML =
-          '<h3>' + (row.Term || '(no term)') + '</h3>' +
-          '<div>History: ' + (row.History || '') + '</div>' +
-          '<div>Concrete/Abstract: ' + (row.ConcreteAbstract || '') + '</div>' +
-          '<div>Amalgamation: ' + (row.Amalgamation || '') + '</div>' +
-          '<div>Motion: ' + (row.Motion || '') + '</div>';
-        termDiv.appendChild(card);
-      });
+    const ops = [];
+    boxes.forEach(box => {
+      const rowIndex = parseInt(box.dataset.rowIndex, 10);
+      const col = box.dataset.col;
+      const val = box.value;
+      ops.push(new Promise((resolve, reject) => {
+        google.script.run
+          .withSuccessHandler(resolve)
+          .withFailureHandler(reject)
+          .saveAnswer(rowIndex, col, val);
+      }));
+    });
 
-      // Decide which question is active for today’s term
-      const todayRow = rows[todayIndex];
-      const answeredCount = QUESTION_COLUMNS
-        .map(col => todayRow[col])
-        .filter(v => v && v !== '').length;
+    Promise.all(ops)
+      .then(() => document.getElementById('status').textContent = 'Saved.')
+      .catch(err => showError(err));
+  }
 
-      const colKey = QUESTION_COLUMNS[Math.min(answeredCount, QUESTION_COLUMNS.length - 1)];
-      state.activeColKey = colKey;
-      state.todayIndex = todayIndex;
+  function advance() {
+    document.getElementById('status').textContent = 'Advancing...';
+    google.script.run
+      .withSuccessHandler(drawCircle)
+      .withFailureHandler(showError)
+      .advanceDay();
+  }
 
-      document.getElementById('questionLabel').textContent =
-        todayRow.Term + ' — ' + colKey;
-      document.getElementById('questionPrompt').textContent =
-        QUESTION_TEXT[colKey];
-      document.getElementById('answerBox').value = todayRow[colKey] || '';
-      document.getElementById('status').textContent = '';
-    }
+  function showError(err) {
+    document.getElementById('status').textContent = 'Error: ' + err.message;
+  }
 
-    function saveToday() {
-      if (!state) return;
-      const text = document.getElementById('answerBox').value;
-      document.getElementById('status').textContent = 'Saving...';
+  window.onload = init;
+</script>
 
-      google.script.run
-        .withSuccessHandler(() => {
-          document.getElementById('status').textContent = 'Saved.';
-        })
-        .withFailureHandler(err => {
-          document.getElementById('status').textContent = 'Error: ' + err.message;
-        })
-        .saveAnswer(state.todayIndex, state.activeColKey, text);
-    }
-
-    window.onload = init;
-  </script>
 </body>
 </html>
