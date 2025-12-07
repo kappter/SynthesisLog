@@ -1,0 +1,222 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f5f7;
+  color: #222;
+}
+
+header {
+  padding: 1rem 1.5rem 0.5rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 0.03em;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem 1.5rem;
+}
+
+.run-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.run-info input {
+  width: 4rem;
+}
+
+/* Circle visualization */
+
+.circle {
+  position: relative;
+  width: min(60vw, 380px);
+  height: min(60vw, 380px);
+  margin: 1rem auto 0.5rem;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background: radial-gradient(circle at 50% 50%, #ffffff, #f4f4f7);
+}
+
+.stage-label-ring {
+  position: absolute;
+  font-size: 0.75rem;
+  text-align: center;
+  padding: 0.2rem 0.4rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+}
+
+.stage-label-ring span {
+  font-style: italic;
+}
+
+/* positions around rim */
+.stage-top    { top: -0.4rem; left: 50%; transform: translateX(-50%); }
+.stage-right  { top: 50%; right: -0.4rem; transform: translateY(-50%); }
+.stage-bottom { bottom: -0.4rem; left: 50%; transform: translateX(-50%); }
+.stage-left   { top: 50%; left: -0.4rem; transform: translateY(-50%); }
+
+/* tiny center dot, purely visual */
+.center-dot {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+}
+
+/* four-term set below the circle */
+
+.four-set {
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+.four-set span {
+  font-style: italic;
+}
+
+/* Text areas below four-set */
+
+.stage-forms {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.stage-form h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.9rem;
+}
+
+.stage-form h3 span {
+  font-style: italic;
+}
+
+.stage-form textarea {
+  width: 100%;
+  min-height: 80px;
+  font-size: 0.8rem;
+  padding: 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+.controls {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+button {
+  padding: 0.35rem 0.8rem;
+  margin: 0 0.2rem;
+  border-radius: 4px;
+  border: 1px solid #888;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+button:hover {
+  background: #f0f0f0;
+}
+
+.status {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+/* Upload + term bank */
+
+.upload {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  font-size: 0.85rem;
+}
+
+.upload input[type="file"] {
+  margin-right: 0.5rem;
+}
+
+.term-bank {
+  margin-top: 1.0rem;
+  font-size: 0.85rem;
+}
+
+.term-bank pre {
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  max-height: 200px;
+  overflow: auto;
+}
+
+footer {
+  border-top: 1px solid #ddd;
+  padding: 0.5rem 1rem 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  main {
+    padding: 0 0.5rem 1rem;
+  }
+
+  .circle {
+    width: 80vw;
+    height: 80vw;
+  }
+
+  .stage-label-ring {
+    font-size: 0.7rem;
+  }
+
+  .stage-forms textarea {
+    min-height: 70px;
+    font-size: 0.75rem;
+  }
+
+  .run-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
