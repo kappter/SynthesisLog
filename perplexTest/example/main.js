@@ -7,8 +7,7 @@ let termBank = [];
 let totalDays = 0;
 let currentDayIndex = 1;
 
-// Example AI-style reflections for first 8 days.
-// These are just sample texts to show how the log can look.
+// Seed demo reflections for first 8 days.
 const DEMO_REFLECTIONS = {
   'day-1': {
     history: 'Pitch is the most basic measurable parameter of sound; before harmony or rhythm, Western theory organized music by high and low steps on a staff.',
@@ -138,7 +137,6 @@ function loadState() {
     }
     const parsed = JSON.parse(raw);
     parsed.reflections = parsed.reflections || {};
-    // Merge demo reflections without overwriting existing notes
     for (const k in DEMO_REFLECTIONS) {
       if (!parsed.reflections[k]) parsed.reflections[k] = DEMO_REFLECTIONS[k];
     }
@@ -165,6 +163,42 @@ function setReflectionsForDay(state, d, data) {
   state.reflections['day-' + d] = data;
 }
 
+// AI helpers ------------------------------------------------------
+
+function buildPrompt(stage, stages, queue) {
+  const fourSet = queue.join(', ');
+  const focal =
+    stage === 'history'  ? stages.history  :
+    stage === 'concrete' ? stages.concrete :
+    stage === 'amalgam'  ? stages.amalgam  :
+    stages.motion;
+
+  let instruction = '';
+  if (stage === 'history') {
+    instruction = 'Provide concise historical and conceptual context for the focal term.';
+  } else if (stage === 'concrete') {
+    instruction = 'Suggest concrete and abstract images or applications for the focal term.';
+  } else if (stage === 'amalgam') {
+    instruction = 'Propose conceptual amalgamations linking the four terms, keeping the focal term central.';
+  } else {
+    instruction = 'Propose a named “motion” or conceptual move that links the four terms via the focal term.';
+  }
+
+  return (
+    instruction +
+    ' Focal term: ' + focal +
+    '. Four-term set: ' + fourSet +
+    '. Keep the answer short so it can be pasted into a journal box.'
+  );
+}
+
+function openAiForStage(stage, stages, queue) {
+  const prompt = buildPrompt(stage, stages, queue);
+  const encoded = encodeURIComponent(prompt);
+  const url = 'https://www.perplexity.ai/search?q=' + encoded;
+  window.open(url, '_blank');
+}
+
 // Rendering -------------------------------------------------------
 
 function renderDay(d) {
@@ -176,6 +210,9 @@ function renderDay(d) {
   $('dayIndexInput').value = d;
 
   const { queue, stages } = getStagesForDay(d);
+  window.currentStages = stages;
+  window.currentQueue = queue;
+
   const state = loadState();
   const refs = getReflectionsForDay(state, d);
 
@@ -214,7 +251,7 @@ function saveCurrentDay() {
   setStatus('Saved locally.');
 }
 
-// Bootstrapping + upload -----------------------------------------
+// Bootstrapping + upload + AI buttons ----------------------------
 
 function init() {
   loadCSV(TERMS_URL)
@@ -230,6 +267,7 @@ function init() {
     });
 
   $('saveBtn').addEventListener('click', saveCurrentDay);
+
   $('goToDayBtn').addEventListener('click', () => {
     const v = parseInt($('dayIndexInput').value, 10);
     if (!Number.isFinite(v)) return;
@@ -242,6 +280,16 @@ function init() {
     if (currentDayIndex < totalDays) renderDay(currentDayIndex + 1);
   });
 
+  // AI buttons (delegated)
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.ai-btn');
+    if (!btn) return;
+    const stage = btn.dataset.stage;
+    if (!window.currentStages || !window.currentQueue) return;
+    openAiForStage(stage, window.currentStages, window.currentQueue);
+  });
+
+  // Upload handling
   $('loadCsvBtn').addEventListener('click', () => {
     const fileInput = $('csvFileInput');
     const file = fileInput.files && fileInput.files[0];
