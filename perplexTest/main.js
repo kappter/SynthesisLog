@@ -89,6 +89,12 @@ function init() {
   });
 }
 
+function parseTermsCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+  if (lines.length <= 1) throw new Error('CSV must have a header and at least one term');
+  // ignore first line regardless of its exact content
+  return lines.slice(1).map(l => l.trim());
+}
 
 // Scheduling logic -----------------------------------------------
 
