@@ -76,6 +76,25 @@ main {
 .stage-label-ring span {
   font-style: italic;
 }
+.center-dot {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+}
+
+.four-set {
+  text-align: center;
+  font-size: 0.85rem;
+  margin-top: 0.4rem;
+}
+
+.four-set span {
+  font-style: italic;
+}
 
 /* positions around rim */
 .stage-top    { top: -0.4rem; left: 50%; transform: translateX(-50%); }
