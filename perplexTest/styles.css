@@ -1,0 +1,169 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f5f7;
+  color: #222;
+}
+
+header {
+  padding: 1rem 1.5rem 0.5rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  letter-spacing: 0.03em;
+}
+
+.subtitle {
+  margin: 0.25rem 0 0.75rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+main {
+  max-width: 900px;
+  margin: 0 auto 2rem;
+  padding: 0 1rem 1.5rem;
+}
+
+.run-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.run-info input {
+  width: 4rem;
+}
+
+.circle {
+  position: relative;
+  width: 420px;
+  height: 420px;
+  margin: 1rem auto;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background: radial-gradient(circle at 50% 50%, #ffffff, #f0f0f2);
+}
+
+.stage {
+  position: absolute;
+  width: 38%;
+  max-width: 180px;
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.stage-label {
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+}
+
+.stage-term {
+  font-style: italic;
+  margin-bottom: 0.2rem;
+  color: #444;
+}
+
+.stage textarea {
+  width: 100%;
+  min-height: 70px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  padding: 0.25rem 0.3rem;
+  font-size: 0.8rem;
+  resize: vertical;
+}
+
+/* 12, 3, 6, 9 o'clock positions */
+.stage-top    { top: 4%;  left: 31%; }
+.stage-right  { top: 31%; right: 4%; }
+.stage-bottom { bottom: 4%; left: 31%; }
+.stage-left   { top: 31%; left: 4%; }
+
+.center-label {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.controls {
+  text-align: center;
+  margin-top: 0.75rem;
+}
+
+button {
+  padding: 0.35rem 0.8rem;
+  margin: 0 0.2rem;
+  border-radius: 4px;
+  border: 1px solid #888;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+button:hover {
+  background: #f0f0f0;
+}
+
+.status {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.term-bank {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+}
+
+.term-bank pre {
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  max-height: 200px;
+  overflow: auto;
+}
+
+footer {
+  border-top: 1px solid #ddd;
+  padding: 0.5rem 1rem 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+@media (max-width: 520px) {
+  .circle {
+    width: 320px;
+    height: 320px;
+  }
+  .stage {
+    max-width: 140px;
+  }
+}
