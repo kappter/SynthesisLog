@@ -52,8 +52,8 @@ main {
 
 .circle {
   position: relative;
-  width: 420px;
-  height: 420px;
+  width: min(70vw, 420px);
+  height: min(70vw, 420px);
   margin: 1rem auto;
   border-radius: 50%;
   border: 2px solid #ccc;
@@ -62,12 +62,31 @@ main {
 
 .stage {
   position: absolute;
-  width: 32%;           /* pulled in to reduce overlap */
-  max-width: 150px;
-  font-size: 0.75rem;
-  background: rgba(255, 255, 255, 0.95);
+  width: 28%;           /* smaller footprint */
+  max-width: 140px;
+  font-size: 0.7rem;
+  background: rgba(255, 255, 255, 0.96);
   border-radius: 6px;
-  padding: 0.35rem 0.45rem;
+  padding: 0.3rem 0.4rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* push cards further to rim */
+.stage-top    { top: 0%;   left: 36%; }
+.stage-right  { top: 30%;  right: -2%; }
+.stage-bottom { bottom: 0%; left: 36%; }
+.stage-left   { top: 30%;  left: -2%; }
+
+.center-label {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  font-size: 0.7rem;
+  max-width: 55%;
+  padding: 0.25rem 0.45rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.95);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
