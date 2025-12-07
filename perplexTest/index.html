@@ -27,28 +27,17 @@
     </section>
 
     <section class="circle" aria-label="Four-stage circular process">
-      <div class="stage stage-top">
-        <div class="stage-label">1 · History</div>
-        <div class="stage-term" id="termHistory">(term)</div>
-        <textarea id="textHistory" placeholder="Historical context, background associations…"></textarea>
+      <div class="stage-label-ring stage-top">
+        1 · History<br><span id="termHistoryMini">—</span>
       </div>
-
-      <div class="stage stage-right">
-        <div class="stage-label">2 · Concrete / Abstract</div>
-        <div class="stage-term" id="termConcrete">(term)</div>
-        <textarea id="textConcrete" placeholder="Concrete images and abstract meanings…"></textarea>
+      <div class="stage-label-ring stage-right">
+        2 · Concrete / Abstract<br><span id="termConcreteMini">—</span>
       </div>
-
-      <div class="stage stage-bottom">
-        <div class="stage-label">3 · Amalgamation</div>
-        <div class="stage-term" id="termAmalgam">(term)</div>
-        <textarea id="textAmalgam" placeholder="Amalgamations among today&#39;s four terms…"></textarea>
+      <div class="stage-label-ring stage-bottom">
+        3 · Amalgamation<br><span id="termAmalgamMini">—</span>
       </div>
-
-      <div class="stage stage-left">
-        <div class="stage-label">4 · Motion</div>
-        <div class="stage-term" id="termMotion">(term)</div>
-        <textarea id="textMotion" placeholder="Name a motion or proposal that links the four terms…"></textarea>
+      <div class="stage-label-ring stage-left">
+        4 · Motion<br><span id="termMotionMini">—</span>
       </div>
 
       <div class="center-label">
@@ -57,25 +46,43 @@
       </div>
     </section>
 
+    <section class="stage-forms">
+      <div class="stage-form">
+        <h3>1 · History – <span id="termHistoryFull">—</span></h3>
+        <textarea id="textHistory" placeholder="Historical context, background associations…"></textarea>
+      </div>
+      <div class="stage-form">
+        <h3>2 · Concrete / Abstract – <span id="termConcreteFull">—</span></h3>
+        <textarea id="textConcrete" placeholder="Concrete images and abstract meanings…"></textarea>
+      </div>
+      <div class="stage-form">
+        <h3>3 · Amalgamation – <span id="termAmalgamFull">—</span></h3>
+        <textarea id="textAmalgam" placeholder="Amalgamations among today&#39;s four terms…"></textarea>
+      </div>
+      <div class="stage-form">
+        <h3>4 · Motion – <span id="termMotionFull">—</span></h3>
+        <textarea id="textMotion" placeholder="Name a motion or proposal that links the four terms…"></textarea>
+      </div>
+    </section>
+
     <section class="controls">
       <button id="saveBtn">Save reflections</button>
       <span id="status" class="status"></span>
     </section>
 
-    <section class="term-bank">
-      <h2>Term bank</h2>
-      <p>Loaded from de>terms.csv</code>. No term is reused until all have completed the four-day cycle.</p>
-      <pre id="termBankPreview"></pre>
+    <section class="upload">
+      <h2>Load custom term list</h2>
+      <p>Upload a CSV with a header de>term</code> and one term per line. This replaces the current bank for this browser.</p>
+      <input type="file" id="csvFileInput" accept=".csv,text/csv">
+      <button id="loadCsvBtn">Use uploaded terms</button>
+      <span id="uploadStatus" class="status"></span>
     </section>
 
-    <section class="upload">
-  <h2>Load custom term list</h2>
-  <p>Upload a CSV with a header de>term</code> and one term per line. This replaces the current bank for this browser.</p>
-  <input type="file" id="csvFileInput" accept=".csv,text/csv">
-  <button id="loadCsvBtn">Use uploaded terms</button>
-  <span id="uploadStatus" class="status"></span>
-</section>
-
+    <section class="term-bank">
+      <h2>Term bank</h2>
+      <p>Loaded from de>terms.csv</code> or an uploaded file. No term is reused until all have completed the four-day cycle.</p>
+      <pre id="termBankPreview"></pre>
+    </section>
   </main>
 
   <footer>
