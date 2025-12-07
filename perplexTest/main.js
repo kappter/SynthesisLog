@@ -33,17 +33,13 @@ function loadCSV(url) {
 // Scheduling logic -----------------------------------------------
 
 // For N terms, total days = N + 3.
-// Day d (1-based) uses up to 4 terms, depending on d.
-// We always introduce a new term if any remain, and each term
-// stays for exactly 4 consecutive days, then is retired.
+// Day d (1-based) uses up to 4 terms.
+// Term i (0-based) is introduced on day i+1, stays for 4 days (i+1 .. i+4).
 
 function getQueueForDay(d) {
   const N = termBank.length;
   const queue = [];
 
-  // index of first day a term can appear
-  // term i (0-based) is introduced on day (i + 1)
-  // and stays on days (i+1 .. i+4)
   for (let i = 0; i < N; i++) {
     const start = i + 1;
     const end = i + 4;
@@ -51,17 +47,15 @@ function getQueueForDay(d) {
       queue.push(termBank[i]);
     }
   }
-  // We want up to last 4, in order oldest->newest
   if (queue.length > 4) {
     return queue.slice(queue.length - 4);
   }
   return queue;
 }
 
+// Corrected mapping: newest term → History, then Concrete, Amalgam, Motion.
 function getStagesForDay(d) {
   const queue = getQueueForDay(d);
-  // Oldest term is at position 0, newest at last
-  // Map to stages: 1=History (newest), 4=Motion (oldest)
   const stages = {
     history: null,
     concrete: null,
@@ -70,10 +64,10 @@ function getStagesForDay(d) {
   };
 
   const len = queue.length;
-  if (len >= 1) stages.motion = queue[0];
-  if (len >= 2) stages.amalgam = queue[1];
-  if (len >= 3) stages.concrete = queue[2];
-  if (len >= 4) stages.history = queue[3];
+  if (len >= 1) stages.history  = queue[len - 1];      // newest
+  if (len >= 2) stages.concrete = queue[len - 2];
+  if (len >= 3) stages.amalgam  = queue[len - 3];
+  if (len >= 4) stages.motion   = queue[len - 4];      // oldest
 
   return { queue, stages };
 }
@@ -93,7 +87,6 @@ function saveState(state) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
-// key: "day-<d>"
 function getReflectionsForDay(state, d) {
   return state.reflections['day-' + d] || {
     history: '',
