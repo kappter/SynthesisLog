@@ -30,6 +30,66 @@ function loadCSV(url) {
     });
 }
 
+function init() {
+  loadCSV(TERMS_URL)
+    .then(terms => {
+      termBank = terms;
+      totalDays = termBank.length + 3;
+      $('termBankPreview').textContent = terms.join('\n');
+      renderDay(currentDayIndex);
+    })
+    .catch(err => {
+      setStatus('Error: ' + err.message);
+      $('runSummary').textContent = 'Could not load terms.csv';
+    });
+
+  $('saveBtn').addEventListener('click', saveCurrentDay);
+  $('goToDayBtn').addEventListener('click', () => {
+    const v = parseInt($('dayIndexInput').value, 10);
+    if (!Number.isFinite(v)) return;
+    renderDay(v);
+  });
+  $('prevDayBtn').addEventListener('click', () => {
+    if (currentDayIndex > 1) renderDay(currentDayIndex - 1);
+  });
+  $('nextDayBtn').addEventListener('click', () => {
+    if (currentDayIndex < totalDays) renderDay(currentDayIndex + 1);
+  });
+
+  // NEW: upload handling
+  $('loadCsvBtn').addEventListener('click', () => {
+    const fileInput = $('csvFileInput');
+    const file = fileInput.files && fileInput.files[0];
+    const uploadStatus = $('uploadStatus');
+    if (!file) {
+      uploadStatus.textContent = 'Choose a CSV file first.';
+      return;
+    }
+    uploadStatus.textContent = 'Reading…';
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const text = e.target.result;
+        const terms = parseTermsCSV(text);
+        termBank = terms;
+        totalDays = termBank.length + 3;
+        currentDayIndex = 1;
+        $('termBankPreview').textContent = terms.join('\n');
+        renderDay(currentDayIndex);
+        uploadStatus.textContent = 'Loaded ' + terms.length + ' terms.';
+      } catch (err) {
+        uploadStatus.textContent = 'Error: ' + err.message;
+      }
+    };
+    reader.onerror = () => {
+      uploadStatus.textContent = 'Could not read file.';
+    };
+    reader.readAsText(file);
+  });
+}
+
+
 // Scheduling logic -----------------------------------------------
 
 // For N terms, total days = N + 3.
