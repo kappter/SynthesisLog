@@ -23,77 +23,17 @@ function loadCSV(url) {
       if (!r.ok) throw new Error('Failed to load ' + url);
       return r.text();
     })
-    .then(text => {
-      const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l);
-      if (lines.length <= 1) throw new Error('terms.csv must have a header and at least one term');
-      return lines.slice(1); // skip header
-    });
+    .then(text => parseTermsCSV(text));
 }
 
-function init() {
-  loadCSV(TERMS_URL)
-    .then(terms => {
-      termBank = terms;
-      totalDays = termBank.length + 3;
-      $('termBankPreview').textContent = terms.join('\n');
-      renderDay(currentDayIndex);
-    })
-    .catch(err => {
-      setStatus('Error: ' + err.message);
-      $('runSummary').textContent = 'Could not load terms.csv';
-    });
-
-  $('saveBtn').addEventListener('click', saveCurrentDay);
-  $('goToDayBtn').addEventListener('click', () => {
-    const v = parseInt($('dayIndexInput').value, 10);
-    if (!Number.isFinite(v)) return;
-    renderDay(v);
-  });
-  $('prevDayBtn').addEventListener('click', () => {
-    if (currentDayIndex > 1) renderDay(currentDayIndex - 1);
-  });
-  $('nextDayBtn').addEventListener('click', () => {
-    if (currentDayIndex < totalDays) renderDay(currentDayIndex + 1);
-  });
-
-  // NEW: upload handling
-  $('loadCsvBtn').addEventListener('click', () => {
-    const fileInput = $('csvFileInput');
-    const file = fileInput.files && fileInput.files[0];
-    const uploadStatus = $('uploadStatus');
-    if (!file) {
-      uploadStatus.textContent = 'Choose a CSV file first.';
-      return;
-    }
-    uploadStatus.textContent = 'Reading…';
-
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const text = e.target.result;
-        const terms = parseTermsCSV(text);
-        termBank = terms;
-        totalDays = termBank.length + 3;
-        currentDayIndex = 1;
-        $('termBankPreview').textContent = terms.join('\n');
-        renderDay(currentDayIndex);
-        uploadStatus.textContent = 'Loaded ' + terms.length + ' terms.';
-      } catch (err) {
-        uploadStatus.textContent = 'Error: ' + err.message;
-      }
-    };
-    reader.onerror = () => {
-      uploadStatus.textContent = 'Could not read file.';
-    };
-    reader.readAsText(file);
-  });
-}
-
+// Robust CSV parser: ignore exact header text, trim BOM, skip blanks.
 function parseTermsCSV(text) {
-  const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-  if (lines.length <= 1) throw new Error('CSV must have a header and at least one term');
-  // ignore first line regardless of its exact content
-  return lines.slice(1).map(l => l.trim());
+  const lines = text.split(/\r?\n/);
+  const trimmed = lines.map(l => l.replace(/^\uFEFF/, '').trim()).filter(l => l !== '');
+  if (trimmed.length <= 1) {
+    throw new Error('CSV must have a header and at least one term');
+  }
+  return trimmed.slice(1); // drop header, whatever it is
 }
 
 // Scheduling logic -----------------------------------------------
@@ -119,7 +59,7 @@ function getQueueForDay(d) {
   return queue;
 }
 
-// Corrected mapping: newest term → History, then Concrete, Amalgam, Motion.
+// newest term → History, then Concrete, Amalgam, Motion.
 function getStagesForDay(d) {
   const queue = getQueueForDay(d);
   const stages = {
@@ -180,11 +120,19 @@ function renderDay(d) {
   const state = loadState();
   const refs = getReflectionsForDay(state, d);
 
-  $('termHistory').textContent  = stages.history  || '(no term yet)';
-  $('termConcrete').textContent = stages.concrete || '(no term yet)';
-  $('termAmalgam').textContent  = stages.amalgam  || '(no term yet)';
-  $('termMotion').textContent   = stages.motion   || '(no term yet)';
+  // Mini labels around the circle
+  $('termHistoryMini').textContent  = stages.history  || '—';
+  $('termConcreteMini').textContent = stages.concrete || '—';
+  $('termAmalgamMini').textContent  = stages.amalgam  || '—';
+  $('termMotionMini').textContent   = stages.motion   || '—';
 
+  // Full labels above the textareas
+  $('termHistoryFull').textContent  = stages.history  || '—';
+  $('termConcreteFull').textContent = stages.concrete || '—';
+  $('termAmalgamFull').textContent  = stages.amalgam  || '—';
+  $('termMotionFull').textContent   = stages.motion   || '—';
+
+  // Textarea values
   $('textHistory').value  = refs.history  || '';
   $('textConcrete').value = refs.concrete || '';
   $('textAmalgam').value  = refs.amalgam  || '';
@@ -210,7 +158,7 @@ function saveCurrentDay() {
   setStatus('Saved locally.');
 }
 
-// Bootstrapping ---------------------------------------------------
+// Bootstrapping + upload -----------------------------------------
 
 function init() {
   loadCSV(TERMS_URL)
@@ -236,6 +184,38 @@ function init() {
   });
   $('nextDayBtn').addEventListener('click', () => {
     if (currentDayIndex < totalDays) renderDay(currentDayIndex + 1);
+  });
+
+  // Upload handling
+  $('loadCsvBtn').addEventListener('click', () => {
+    const fileInput = $('csvFileInput');
+    const file = fileInput.files && fileInput.files[0];
+    const uploadStatus = $('uploadStatus');
+    if (!file) {
+      uploadStatus.textContent = 'Choose a CSV file first.';
+      return;
+    }
+    uploadStatus.textContent = 'Reading…';
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const text = e.target.result;
+        const terms = parseTermsCSV(text);
+        termBank = terms;
+        totalDays = termBank.length + 3;
+        currentDayIndex = 1;
+        $('termBankPreview').textContent = terms.join('\n');
+        renderDay(currentDayIndex);
+        uploadStatus.textContent = 'Loaded ' + terms.length + ' terms.';
+      } catch (err) {
+        uploadStatus.textContent = 'Error: ' + err.message;
+      }
+    };
+    reader.onerror = () => {
+      uploadStatus.textContent = 'Could not read file.';
+    };
+    reader.readAsText(file);
   });
 }
 
