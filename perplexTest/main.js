@@ -29,11 +29,13 @@ function loadCSV(url) {
 // Robust CSV parser: ignore exact header text, trim BOM, skip blanks.
 function parseTermsCSV(text) {
   const lines = text.split(/\r?\n/);
-  const trimmed = lines.map(l => l.replace(/^\uFEFF/, '').trim()).filter(l => l !== '');
+  const trimmed = lines
+    .map(l => l.replace(/^\uFEFF/, '').trim())
+    .filter(l => l !== '');
   if (trimmed.length <= 1) {
     throw new Error('CSV must have a header and at least one term');
   }
-  return trimmed.slice(1); // drop header, whatever it is
+  return trimmed.slice(1); // drop header
 }
 
 // Scheduling logic -----------------------------------------------
@@ -138,6 +140,7 @@ function renderDay(d) {
   $('textAmalgam').value  = refs.amalgam  || '';
   $('textMotion').value   = refs.motion   || '';
 
+  // Four-term set, now below circle
   $('centerTerms').textContent = queue.length ? queue.join(' · ') : '—';
 
   $('runSummary').textContent =
