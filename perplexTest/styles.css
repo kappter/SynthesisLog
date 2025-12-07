@@ -56,7 +56,7 @@ main {
   position: relative;
   width: min(60vw, 380px);
   height: min(60vw, 380px);
-  margin: 1rem auto;
+  margin: 1rem auto 0.5rem;
   border-radius: 50%;
   border: 2px solid #ccc;
   background: radial-gradient(circle at 50% 50%, #ffffff, #f4f4f7);
@@ -76,6 +76,14 @@ main {
 .stage-label-ring span {
   font-style: italic;
 }
+
+/* positions around rim */
+.stage-top    { top: -0.4rem; left: 50%; transform: translateX(-50%); }
+.stage-right  { top: 50%; right: -0.4rem; transform: translateY(-50%); }
+.stage-bottom { bottom: -0.4rem; left: 50%; transform: translateX(-50%); }
+.stage-left   { top: 50%; left: -0.4rem; transform: translateY(-50%); }
+
+/* tiny center dot, purely visual */
 .center-dot {
   position: absolute;
   top: 50%; left: 50%;
@@ -85,6 +93,8 @@ main {
   border-radius: 50%;
   background: #ccc;
 }
+
+/* four-term set below the circle */
 
 .four-set {
   text-align: center;
@@ -96,23 +106,7 @@ main {
   font-style: italic;
 }
 
-/* positions around rim */
-.stage-top    { top: -0.4rem; left: 50%; transform: translateX(-50%); }
-.stage-right  { top: 50%; right: -0.4rem; transform: translateY(-50%); }
-.stage-bottom { bottom: -0.4rem; left: 50%; transform: translateX(-50%); }
-.stage-left   { top: 50%; left: -0.4rem; transform: translateY(-50%); }
-
-.center-label {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  font-size: 0.75rem;
-  max-width: 70%;
-  padding: 0.25rem 0.45rem;
-}
-
-/* Text areas below circle */
+/* Text areas below four-set */
 
 .stage-forms {
   margin-top: 1.25rem;
