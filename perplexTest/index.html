@@ -27,31 +27,41 @@
 </style>
 
 <div class="circle">
-  <div class="stage" id="stage1"></div>
-  <div class="stage" id="stage2"></div>
-  <div class="stage" id="stage3"></div>
-  <div class="stage" id="stage4"></div>
-</div>
-
-<div class="controls">
-  <button onclick="saveAll()">Save today</button>
-  <button onclick="advance()">Next day</button>
-  <div id="status"></div>
-</div>
-
-</head>
-<body>
-  <h1>Roget Amalgamations</h1>
-
-  <div id="termWindow" class="term-grid"></div>
-
-  <div id="questionBlock">
-    <div class="question-label" id="questionLabel"></div>
-    <div id="questionPrompt"></div>
-    <textarea id="answerBox" placeholder="Type today&#39;s response..."></textarea>
-    <button onclick="saveToday()">Save</button>
-    <div class="status" id="status"></div>
+  <!-- 12 o'clock: Day 1 – History -->
+  <div class="stage stage-top">
+    <div class="stage-label">1 · History</div>
+    <div class="stage-term">[new term]</div>
+    <textarea placeholder="Historical notes..."></textarea>
   </div>
+
+  <!-- 3 o'clock: Day 2 – Concrete/Abstract -->
+  <div class="stage stage-right">
+    <div class="stage-label">2 · Concrete / Abstract</div>
+    <div class="stage-term">[term from yesterday]</div>
+    <textarea placeholder="Concrete/abstract images..."></textarea>
+  </div>
+
+  <!-- 6 o'clock: Day 3 – Amalgamation -->
+  <div class="stage stage-bottom">
+    <div class="stage-label">3 · Amalgamation</div>
+    <div class="stage-term">[term from two days ago]</div>
+    <textarea placeholder="Amalgamations with the other three terms..."></textarea>
+  </div>
+
+  <!-- 9 o'clock: Day 4 – Motion -->
+  <div class="stage stage-left">
+    <div class="stage-label">4 · Motion</div>
+    <div class="stage-term">[oldest term in queue]</div>
+    <textarea placeholder="Name the motion / proposal..."></textarea>
+  </div>
+
+  <!-- optional small center label showing today’s 4-term set -->
+  <div class="center-label">
+    <div>Today’s set:</div>
+    <div>[T1 · T2 · T3 · T4]</div>
+  </div>
+</div>
+
 
   <script>
   let snapshot = null;
