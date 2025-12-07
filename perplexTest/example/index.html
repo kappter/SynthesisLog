@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Synthesis Log – Music Theory Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Synthesis Log</h1>
+    <p class="subtitle">
+      Four-stage circular reflection on a rotating term bank.
+      This demo uses 40 core music-theory concepts.
+    </p>
+  </header>
+
+  <main>
+    <section class="run-info">
+      <div id="runSummary">Loading terms…</div>
+      <div>
+        <label>
+          Day index:
+          <input id="dayIndexInput" type="number" min="1" value="1">
+        </label>
+        <button id="goToDayBtn">Go</button>
+        <button id="prevDayBtn">&#9664; Prev</button>
+        <button id="nextDayBtn">Next &#9654;</button>
+      </div>
+    </section>
+
+    <section class="circle" aria-label="Four-stage circular process">
+      <div class="stage-label-ring stage-top">
+        1 · History<br><span id="termHistoryMini">—</span>
+      </div>
+      <div class="stage-label-ring stage-right">
+        2 · Concrete / Abstract<br><span id="termConcreteMini">—</span>
+      </div>
+      <div class="stage-label-ring stage-bottom">
+        3 · Amalgamation<br><span id="termAmalgamMini">—</span>
+      </div>
+      <div class="stage-label-ring stage-left">
+        4 · Motion<br><span id="termMotionMini">—</span>
+      </div>
+
+      <div class="center-dot"></div>
+    </section>
+
+    <section class="four-set">
+      <strong>Today&#39;s four-term set:</strong>
+      <span id="centerTerms">–</span>
+    </section>
+
+    <section class="stage-forms">
+      <div class="stage-form">
+        <h3>1 · History – <span id="termHistoryFull">—</span></h3>
+        <textarea id="textHistory" placeholder="Historical context, background associations…"></textarea>
+      </div>
+      <div class="stage-form">
+        <h3>2 · Concrete / Abstract – <span id="termConcreteFull">—</span></h3>
+        <textarea id="textConcrete" placeholder="Concrete images and abstract meanings…"></textarea>
+      </div>
+      <div class="stage-form">
+        <h3>3 · Amalgamation – <span id="termAmalgamFull">—</span></h3>
+        <textarea id="textAmalgam" placeholder="Amalgamations among today&#39;s four terms…"></textarea>
+      </div>
+      <div class="stage-form">
+        <h3>4 · Motion – <span id="termMotionFull">—</span></h3>
+        <textarea id="textMotion" placeholder="Name a motion or proposal that links the four terms…"></textarea>
+      </div>
+    </section>
+
+    <section class="controls">
+      <button id="saveBtn">Save reflections</button>
+      <span id="status" class="status"></span>
+    </section>
+
+    <section class="upload">
+      <h2>Load custom term list</h2>
+      <p>Upload a CSV with a header de>term</code> and one term per line. This replaces the current bank for this browser.</p>
+      <input type="file" id="csvFileInput" accept=".csv,text/csv">
+      <button id="loadCsvBtn">Use uploaded terms</button>
+      <span id="uploadStatus" class="status"></span>
+    </section>
+
+    <section class="term-bank">
+      <h2>Term bank</h2>
+      <p>Loaded from de>terms.csv</code> or an uploaded file. No term is reused until all have completed the four-day cycle.</p>
+      <pre id="termBankPreview"></pre>
+    </section>
+  </main>
+
+  <footer>
+    <small>Synthesis Log · music-theory demo (localStorage, CSV-driven)</small>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
