@@ -4,7 +4,7 @@ const TERMS_URL = 'terms.csv';
 const STORAGE_KEY = 'synthesisLog_v1';
 
 let termBank = [];          // array of term strings
-let totalDays = 0;          // N + 3
+let totalDays = 0;          // N + 4 (extra closing day)
 let currentDayIndex = 1;    // 1-based
 
 // Utility ---------------------------------------------------------
@@ -40,10 +40,7 @@ function parseTermsCSV(text) {
 
 // Scheduling logic -----------------------------------------------
 
-// For N terms, total days = N + 3.
-// Day d (1-based) uses up to 4 terms.
-// Term i (0-based) is introduced on day i+1, stays for 4 days (i+1 .. i+4).
-
+// For N terms, each active 4 days, plus 1 extra closing day.
 function getQueueForDay(d) {
   const N = termBank.length;
   const queue = [];
@@ -115,57 +112,74 @@ function renderDay(d) {
     setStatus('Day must be between 1 and ' + totalDays);
     return;
   }
+
   currentDayIndex = d;
   $('dayIndexInput').value = d;
 
+  const { queue, stages } = getStagesForDay(d);
   const isClosingDay = (d === totalDays) && queue.length === 0;
+
   const state = loadState();
   const refs = getReflectionsForDay(state, d);
 
   if (isClosingDay) {
-  $('termHistoryMini').textContent  = '—';
-  $('termConcreteMini').textContent = '—';
-  $('termAmalgamMini').textContent  = '—';
-  $('termMotionMini').textContent   = '—';
+    // Clear mini labels
+    $('termHistoryMini').textContent  = '—';
+    $('termConcreteMini').textContent = '—';
+    $('termAmalgamMini').textContent  = '—';
+    $('termMotionMini').textContent   = '—';
 
-  $('termHistoryFull').textContent  = 'Run complete';
-  $('termConcreteFull').textContent = 'Review motions';
-  $('termAmalgamFull').textContent  = 'Notice patterns';
-  $('termMotionFull').textContent   = 'Name next questions';
+    // Closing headings
+    $('termHistoryFull').textContent  = 'Run complete';
+    $('termConcreteFull').textContent = 'Review motions';
+    $('termAmalgamFull').textContent  = 'Notice patterns';
+    $('termMotionFull').textContent   = 'Name next questions';
 
-  $('textHistory').placeholder  = 'Summarize what you learned about these terms and their histories.';
-  $('textConcrete').placeholder = 'Capture memorable images, metaphors, or examples that surfaced.';
-  $('textAmalgam').placeholder  = 'List the strongest amalgamations or conceptual fusions you discovered.';
-  $('textMotion').placeholder   = 'Propose how this run should influence your next term bank or project.';
+    // Closing placeholders
+    $('textHistory').value      = refs.history  || '';
+    $('textConcrete').value     = refs.concrete || '';
+    $('textAmalgam').value      = refs.amalgam  || '';
+    $('textMotion').value       = refs.motion   || '';
+    $('textHistory').placeholder  = 'Summarize what you learned about these terms and their histories.';
+    $('textConcrete').placeholder = 'Capture memorable images, metaphors, or examples that surfaced.';
+    $('textAmalgam').placeholder  = 'List the strongest amalgamations or conceptual fusions you discovered.';
+    $('textMotion').placeholder   = 'Propose how this run should influence your next term bank or project.';
 
-  $('centerTerms').textContent = 'All terms have completed their four-day cycle.';
-}
+    $('centerTerms').textContent = 'All terms have completed their four-day cycle.';
+  } else {
+    // Mini labels around the circle
+    $('termHistoryMini').textContent  = stages.history  || '—';
+    $('termConcreteMini').textContent = stages.concrete || '—';
+    $('termAmalgamMini').textContent  = stages.amalgam  || '—';
+    $('termMotionMini').textContent   = stages.motion   || '—';
 
-  // Mini labels around the circle
-  $('termHistoryMini').textContent  = stages.history  || '—';
-  $('termConcreteMini').textContent = stages.concrete || '—';
-  $('termAmalgamMini').textContent  = stages.amalgam  || '—';
-  $('termMotionMini').textContent   = stages.motion   || '—';
+    // Full labels above the textareas
+    $('termHistoryFull').textContent  = stages.history  || '—';
+    $('termConcreteFull').textContent = stages.concrete || '—';
+    $('termAmalgamFull').textContent  = stages.amalgam  || '—';
+    $('termMotionFull').textContent   = stages.motion   || '—';
 
-  // Full labels above the textareas
-  $('termHistoryFull').textContent  = stages.history  || '—';
-  $('termConcreteFull').textContent = stages.concrete || '—';
-  $('termAmalgamFull').textContent  = stages.amalgam  || '—';
-  $('termMotionFull').textContent   = stages.motion   || '—';
+    // Textarea values
+    $('textHistory').value  = refs.history  || '';
+    $('textConcrete').value = refs.concrete || '';
+    $('textAmalgam').value  = refs.amalgam  || '';
+    $('textMotion').value   = refs.motion   || '';
 
-  // Textarea values
-  $('textHistory').value  = refs.history  || '';
-  $('textConcrete').value = refs.concrete || '';
-  $('textAmalgam').value  = refs.amalgam  || '';
-  $('textMotion').value   = refs.motion   || '';
+    // Default placeholders
+    $('textHistory').placeholder  = 'Historical context, background associations…';
+    $('textConcrete').placeholder = 'Concrete images and abstract meanings…';
+    $('textAmalgam').placeholder  = 'Amalgamations among today\'s four terms…';
+    $('textMotion').placeholder   = 'Name a motion or proposal that links the four terms…';
 
-  // Four-term set, now below circle
-  $('centerTerms').textContent = queue.length ? queue.join(' · ') : '—';
+    $('centerTerms').textContent = queue.length ? queue.join(' · ') : '—';
+  }
 
   $('runSummary').textContent =
-  isClosingDay
-    ? `Closing day · all ${termBank.length} terms have completed the four-stage process`
-    : `Day ${d} of ${totalDays} · ${termBank.length} terms in bank`;
+    isClosingDay
+      ? `Closing day · all ${termBank.length} terms have completed the four-stage process`
+      : `Day ${d} of ${totalDays} · ${termBank.length} terms in bank`;
+
+  setStatus('');
 }
 
 function saveCurrentDay() {
@@ -187,7 +201,7 @@ function init() {
   loadCSV(TERMS_URL)
     .then(terms => {
       termBank = terms;
-      totalDays = termBank.length + 4;
+      totalDays = termBank.length + 4; // +1 for closing day
       $('termBankPreview').textContent = terms.join('\n');
       renderDay(currentDayIndex);
     })
@@ -197,6 +211,7 @@ function init() {
     });
 
   $('saveBtn').addEventListener('click', saveCurrentDay);
+
   $('goToDayBtn').addEventListener('click', () => {
     const v = parseInt($('dayIndexInput').value, 10);
     if (!Number.isFinite(v)) return;
