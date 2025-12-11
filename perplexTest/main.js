@@ -1,13 +1,12 @@
-// SynthesisLog static prototype: CSV-driven rotating queue, localStorage persistence.
+// Synthesis Log: CSV-driven rotating queue with dark mode, upload, and save/load.
 
-const TERMS_URL = 'terms.csv';
+const TERMS_URL   = 'terms.csv';
 const STORAGE_KEY = 'synthesisLog_v1';
-const THEME_KEY = 'synthesisLog_theme';
+const THEME_KEY   = 'synthesisLog_theme';
 
-
-let termBank = [];          // array of term strings
-let totalDays = 0;          // N + 4 (extra closing day)
-let currentDayIndex = 1;    // 1-based
+let termBank       = [];
+let totalDays      = 0;   // N + 4 (includes closing day)
+let currentDayIndex = 1;  // 1-based
 
 // Utility ---------------------------------------------------------
 
@@ -28,7 +27,7 @@ function loadCSV(url) {
     .then(text => parseTermsCSV(text));
 }
 
-// Robust CSV parser: ignore exact header text, trim BOM, skip blanks.
+// Robust CSV parser
 function parseTermsCSV(text) {
   const lines = text.split(/\r?\n/);
   const trimmed = lines
@@ -37,12 +36,47 @@ function parseTermsCSV(text) {
   if (trimmed.length <= 1) {
     throw new Error('CSV must have a header and at least one term');
   }
-  return trimmed.slice(1); // drop header
+  return trimmed.slice(1);
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+// Theme helpers ---------------------------------------------------
+
+function applyTheme(theme) {
+  const body = document.body;
+  if (theme === 'dark') {
+    body.classList.add('dark');
+    $('themeToggle').textContent = 'Light';
+  } else {
+    body.classList.remove('dark');
+    $('themeToggle').textContent = 'Dark';
+  }
+}
+
+function loadTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY) || 'light';
+  } catch (e) {
+    return 'light';
+  }
+}
+
+function saveTheme(theme) {
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch (e) {
+    // ignore
+  }
 }
 
 // Scheduling logic -----------------------------------------------
 
-// For N terms, each active 4 days, plus 1 extra closing day.
 function getQueueForDay(d) {
   const N = termBank.length;
   const queue = [];
@@ -71,15 +105,15 @@ function getStagesForDay(d) {
   };
 
   const len = queue.length;
-  if (len >= 1) stages.history  = queue[len - 1];      // newest
+  if (len >= 1) stages.history  = queue[len - 1];
   if (len >= 2) stages.concrete = queue[len - 2];
   if (len >= 3) stages.amalgam  = queue[len - 3];
-  if (len >= 4) stages.motion   = queue[len - 4];      // oldest
+  if (len >= 4) stages.motion   = queue[len - 4];
 
   return { queue, stages };
 }
 
-// Persistence -----------------------------------------------------
+// Persistence of reflections -------------------------------------
 
 function loadState() {
   try {
@@ -107,6 +141,85 @@ function setReflectionsForDay(state, d, data) {
   state.reflections['day-' + d] = data;
 }
 
+// Save/load whole log as JSON ------------------------------------
+
+function getFullState() {
+  const s = loadState();
+  return {
+    version: 1,
+    terms: termBank,
+    currentDay: currentDayIndex,
+    reflections: s.reflections || {}
+  };
+}
+
+function downloadJSON(obj, filename) {
+  const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function applyImportedState(data) {
+  if (!data || data.version !== 1) {
+    throw new Error('Unsupported or missing version field.');
+  }
+  if (!Array.isArray(data.terms) || !data.terms.length) {
+    throw new Error('Imported data has no terms.');
+  }
+
+  termBank = [...data.terms];
+  totalDays = termBank.length + 4;
+  currentDayIndex = Math.max(1, Math.min(data.currentDay || 1, totalDays));
+
+  const state = { reflections: data.reflections || {} };
+  saveState(state);
+
+  $('termBankPreview').textContent = termBank.join('\n');
+  renderDay(currentDayIndex);
+}
+
+// AI helpers (optional external agent) ---------------------------
+
+function buildPrompt(stage, stages, queue) {
+  const fourSet = queue.join(', ');
+  const focal =
+    stage === 'history'  ? stages.history  :
+    stage === 'concrete' ? stages.concrete :
+    stage === 'amalgam'  ? stages.amalgam  :
+    stages.motion;
+
+  let instruction = '';
+  if (stage === 'history') {
+    instruction = 'Provide concise historical and conceptual context for the focal term.';
+  } else if (stage === 'concrete') {
+    instruction = 'Suggest concrete and abstract images or applications for the focal term.';
+  } else if (stage === 'amalgam') {
+    instruction = 'Propose conceptual amalgamations linking the four terms, keeping the focal term central.';
+  } else {
+    instruction = 'Propose a named “motion” or conceptual move that links the four terms via the focal term.';
+  }
+
+  return (
+    instruction +
+    ' Focal term: ' + focal +
+    '. Four-term set: ' + fourSet +
+    '. Keep the answer short so it can be pasted into a journal box.'
+  );
+}
+
+function openAiForStage(stage, stages, queue) {
+  const prompt = buildPrompt(stage, stages, queue);
+  const encoded = encodeURIComponent(prompt);
+  const url = 'https://www.perplexity.ai/search?q=' + encoded;
+  window.open(url, '_blank');
+}
+
 // Rendering -------------------------------------------------------
 
 function renderDay(d) {
@@ -119,29 +232,30 @@ function renderDay(d) {
   $('dayIndexInput').value = d;
 
   const { queue, stages } = getStagesForDay(d);
+  window.currentStages = stages;
+  window.currentQueue  = queue;
+
   const isClosingDay = (d === totalDays) && queue.length === 0;
 
   const state = loadState();
   const refs = getReflectionsForDay(state, d);
 
   if (isClosingDay) {
-    // Clear mini labels
     $('termHistoryMini').textContent  = '—';
     $('termConcreteMini').textContent = '—';
     $('termAmalgamMini').textContent  = '—';
     $('termMotionMini').textContent   = '—';
 
-    // Closing headings
     $('termHistoryFull').textContent  = 'Run complete';
     $('termConcreteFull').textContent = 'Review motions';
     $('termAmalgamFull').textContent  = 'Notice patterns';
     $('termMotionFull').textContent   = 'Name next questions';
 
-    // Closing placeholders
-    $('textHistory').value      = refs.history  || '';
-    $('textConcrete').value     = refs.concrete || '';
-    $('textAmalgam').value      = refs.amalgam  || '';
-    $('textMotion').value       = refs.motion   || '';
+    $('textHistory').value  = refs.history  || '';
+    $('textConcrete').value = refs.concrete || '';
+    $('textAmalgam').value  = refs.amalgam  || '';
+    $('textMotion').value   = refs.motion   || '';
+
     $('textHistory').placeholder  = 'Summarize what you learned about these terms and their histories.';
     $('textConcrete').placeholder = 'Capture memorable images, metaphors, or examples that surfaced.';
     $('textAmalgam').placeholder  = 'List the strongest amalgamations or conceptual fusions you discovered.';
@@ -149,25 +263,21 @@ function renderDay(d) {
 
     $('centerTerms').textContent = 'All terms have completed their four-day cycle.';
   } else {
-    // Mini labels around the circle
     $('termHistoryMini').textContent  = stages.history  || '—';
     $('termConcreteMini').textContent = stages.concrete || '—';
     $('termAmalgamMini').textContent  = stages.amalgam  || '—';
     $('termMotionMini').textContent   = stages.motion   || '—';
 
-    // Full labels above the textareas
     $('termHistoryFull').textContent  = stages.history  || '—';
     $('termConcreteFull').textContent = stages.concrete || '—';
     $('termAmalgamFull').textContent  = stages.amalgam  || '—';
     $('termMotionFull').textContent   = stages.motion   || '—';
 
-    // Textarea values
     $('textHistory').value  = refs.history  || '';
     $('textConcrete').value = refs.concrete || '';
     $('textAmalgam').value  = refs.amalgam  || '';
     $('textMotion').value   = refs.motion   || '';
 
-    // Default placeholders
     $('textHistory').placeholder  = 'Historical context, background associations…';
     $('textConcrete').placeholder = 'Concrete images and abstract meanings…';
     $('textAmalgam').placeholder  = 'Amalgamations among today\'s four terms…';
@@ -197,63 +307,28 @@ function saveCurrentDay() {
   setStatus('Saved locally.');
 }
 
-function applyTheme(theme) {
-  const body = document.body;
-  if (theme === 'dark') {
-    body.classList.add('dark');
-    $('themeToggle').textContent = 'Light';
-  } else {
-    body.classList.remove('dark');
-    $('themeToggle').textContent = 'Dark';
-  }
-}
-
-function loadTheme() {
-  try {
-    return localStorage.getItem(THEME_KEY) || 'light';
-  } catch (e) {
-    return 'light';
-  }
-}
-
-function saveTheme(theme) {
-  try {
-    localStorage.setItem(THEME_KEY, theme);
-  } catch (e) {
-    // ignore
-  }
-}
-
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-}
-
-// Bootstrapping + upload -----------------------------------------
+// Bootstrapping + event wiring -----------------------------------
 
 function init() {
-
-  // theme setup
+  // theme
   const initialTheme = loadTheme();
   applyTheme(initialTheme);
-
   $('themeToggle').addEventListener('click', () => {
     const current = document.body.classList.contains('dark') ? 'dark' : 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     applyTheme(next);
     saveTheme(next);
   });
+
+  // load initial CSV
   loadCSV(TERMS_URL)
     .then(terms => {
-  termBank = [...terms];
-  shuffle(termBank);
-  totalDays = termBank.length + 4;
-  $('termBankPreview').textContent = termBank.join('\n');
-  renderDay(currentDayIndex);
-})
-
+      termBank = [...terms];
+      shuffle(termBank);
+      totalDays = termBank.length + 4;
+      $('termBankPreview').textContent = termBank.join('\n');
+      renderDay(currentDayIndex);
+    })
     .catch(err => {
       setStatus('Error: ' + err.message);
       $('runSummary').textContent = 'Could not load terms.csv';
@@ -273,7 +348,16 @@ function init() {
     if (currentDayIndex < totalDays) renderDay(currentDayIndex + 1);
   });
 
-  // Upload handling
+  // AI buttons
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.ai-btn');
+    if (!btn) return;
+    const stage = btn.dataset.stage;
+    if (!window.currentStages || !window.currentQueue) return;
+    openAiForStage(stage, window.currentStages, window.currentQueue);
+  });
+
+  // CSV upload
   $('loadCsvBtn').addEventListener('click', () => {
     const fileInput = $('csvFileInput');
     const file = fileInput.files && fileInput.files[0];
@@ -288,12 +372,12 @@ function init() {
     reader.onload = e => {
       try {
         const text = e.target.result;
-       const terms = parseTermsCSV(text);
+        const terms = parseTermsCSV(text);
         termBank = [...terms];
         shuffle(termBank);
         totalDays = termBank.length + 4;
         currentDayIndex = 1;
-        $('termBankPreview').textContent = terms.join('\n');
+        $('termBankPreview').textContent = termBank.join('\n');
         renderDay(currentDayIndex);
         uploadStatus.textContent = 'Loaded ' + terms.length + ' terms.';
       } catch (err) {
@@ -302,6 +386,42 @@ function init() {
     };
     reader.onerror = () => {
       uploadStatus.textContent = 'Could not read file.';
+    };
+    reader.readAsText(file);
+  });
+
+  // export JSON
+  $('exportBtn').addEventListener('click', () => {
+    const snapshot = getFullState();
+    const stamp = new Date().toISOString().slice(0, 10);
+    downloadJSON(snapshot, `synthesis-log-${stamp}.json`);
+    $('importStatus').textContent = 'Log downloaded.';
+  });
+
+  // import JSON
+  $('importBtn').addEventListener('click', () => {
+    const fileInput = $('importFile');
+    const file = fileInput.files && fileInput.files[0];
+    const importStatus = $('importStatus');
+    if (!file) {
+      importStatus.textContent = 'Choose a JSON file first.';
+      return;
+    }
+    importStatus.textContent = 'Reading…';
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const text = e.target.result;
+        const data = JSON.parse(text);
+        applyImportedState(data);
+        importStatus.textContent = 'Log loaded.';
+      } catch (err) {
+        importStatus.textContent = 'Error loading log: ' + err.message;
+      }
+    };
+    reader.onerror = () => {
+      importStatus.textContent = 'Could not read file.';
     };
     reader.readAsText(file);
   });
