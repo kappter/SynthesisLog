@@ -2,71 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Synthesis Log</title>
+  <title>Synthesis Log – Music Theory Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header>
     <h1>Synthesis Log</h1>
-    <p class="subtitle">Four-stage circular reflection on a rotating term bank.</p>
+    <p class="subtitle">
+      Four-stage circular reflection on a rotating term bank.
+    </p>
   </header>
 
   <main>
-   <section class="run-info">
-  <div id="runSummary">Loading terms…</div>
-  <div>
-    <label>
-      Day index:
-      <input id="dayIndexInput" type="number" min="1" value="1">
-    </label>
-    <button id="goToDayBtn">Go</button>
-    <button id="prevDayBtn">&#9664; Prev</button>
-    <button id="nextDayBtn">Next &#9654;</button>
-    <button id="themeToggle" class="theme-btn">Dark</button>
-  </div>
-</section>
+    <section class="run-info">
+      <div id="runSummary">Loading terms…</div>
+      <div>
+        <label>
+          Day index:
+          <input id="dayIndexInput" type="number" min="1" value="1">
+        </label>
+        <button id="goToDayBtn">Go</button>
+        <button id="prevDayBtn">&#9664; Prev</button>
+        <button id="nextDayBtn">Next &#9654;</button>
+        <button id="themeToggle" class="theme-btn">Dark</button>
+      </div>
+    </section>
 
     <section class="circle" aria-label="Four-stage circular process">
-  <div class="stage-label-ring stage-top">
-    1 · History<br><span id="termHistoryMini">—</span>
-  </div>
-  <div class="stage-label-ring stage-right">
-    2 · Concrete / Abstract<br><span id="termConcreteMini">—</span>
-  </div>
-  <div class="stage-label-ring stage-bottom">
-    3 · Amalgamation<br><span id="termAmalgamMini">—</span>
-  </div>
-  <div class="stage-label-ring stage-left">
-    4 · Motion<br><span id="termMotionMini">—</span>
-  </div>
+      <div class="stage-label-ring stage-top">
+        1 · History<br><span id="termHistoryMini">—</span>
+      </div>
+      <div class="stage-label-ring stage-right">
+        2 · Concrete / Abstract<br><span id="termConcreteMini">—</span>
+      </div>
+      <div class="stage-label-ring stage-bottom">
+        3 · Amalgamation<br><span id="termAmalgamMini">—</span>
+      </div>
+      <div class="stage-label-ring stage-left">
+        4 · Motion<br><span id="termMotionMini">—</span>
+      </div>
 
-  <!-- tiny dot just to visually anchor the circle -->
-  <div class="center-dot"></div>
-</section>
+      <div class="center-dot"></div>
+    </section>
 
-<!-- NEW: four-term set right under the circle -->
-<section class="four-set">
-  <strong>Today&#39;s four-term set:</strong>
-  <span id="centerTerms">–</span>
-</section>
-
+    <section class="four-set">
+      <strong>Today&#39;s four-term set:</strong>
+      <span id="centerTerms">–</span>
+    </section>
 
     <section class="stage-forms">
       <div class="stage-form">
         <h3>1 · History – <span id="termHistoryFull">—</span></h3>
+        <button type="button" class="ai-btn" data-stage="history">Ask AI for context</button>
         <textarea id="textHistory" placeholder="Historical context, background associations…"></textarea>
       </div>
       <div class="stage-form">
         <h3>2 · Concrete / Abstract – <span id="termConcreteFull">—</span></h3>
+        <button type="button" class="ai-btn" data-stage="concrete">Ask AI for images / applications</button>
         <textarea id="textConcrete" placeholder="Concrete images and abstract meanings…"></textarea>
       </div>
       <div class="stage-form">
         <h3>3 · Amalgamation – <span id="termAmalgamFull">—</span></h3>
+        <button type="button" class="ai-btn" data-stage="amalgam">Ask AI for amalgamations</button>
         <textarea id="textAmalgam" placeholder="Amalgamations among today&#39;s four terms…"></textarea>
       </div>
       <div class="stage-form">
         <h3>4 · Motion – <span id="termMotionFull">—</span></h3>
+        <button type="button" class="ai-btn" data-stage="motion">Ask AI for a motion</button>
         <textarea id="textMotion" placeholder="Name a motion or proposal that links the four terms…"></textarea>
       </div>
     </section>
@@ -84,6 +87,14 @@
       <span id="uploadStatus" class="status"></span>
     </section>
 
+    <section class="save-load">
+      <h2>Save / load Synthesis Log</h2>
+      <button id="exportBtn">Download log (JSON)</button>
+      <input type="file" id="importFile" accept="application/json">
+      <button id="importBtn">Load log</button>
+      <span id="importStatus" class="status"></span>
+    </section>
+
     <section class="term-bank">
       <h2>Term bank</h2>
       <p>Loaded from de>terms.csv</code> or an uploaded file. No term is reused until all have completed the four-day cycle.</p>
@@ -92,7 +103,7 @@
   </main>
 
   <footer>
-    <small>Synthesis Log · static prototype (localStorage, CSV-driven)</small>
+    <small>Synthesis Log · CSV-driven, localStorage + JSON export</small>
   </footer>
 
   <script src="main.js"></script>
