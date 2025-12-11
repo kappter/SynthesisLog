@@ -2,6 +2,8 @@
 
 const TERMS_URL = 'terms.csv';
 const STORAGE_KEY = 'synthesisLog_v1';
+const THEME_KEY = 'synthesisLog_theme';
+
 
 let termBank = [];          // array of term strings
 let totalDays = 0;          // N + 4 (extra closing day)
@@ -195,16 +197,63 @@ function saveCurrentDay() {
   setStatus('Saved locally.');
 }
 
+function applyTheme(theme) {
+  const body = document.body;
+  if (theme === 'dark') {
+    body.classList.add('dark');
+    $('themeToggle').textContent = 'Light';
+  } else {
+    body.classList.remove('dark');
+    $('themeToggle').textContent = 'Dark';
+  }
+}
+
+function loadTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY) || 'light';
+  } catch (e) {
+    return 'light';
+  }
+}
+
+function saveTheme(theme) {
+  try {
+    localStorage.setItem(THEME_KEY, theme);
+  } catch (e) {
+    // ignore
+  }
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
 // Bootstrapping + upload -----------------------------------------
 
 function init() {
+
+  // theme setup
+  const initialTheme = loadTheme();
+  applyTheme(initialTheme);
+
+  $('themeToggle').addEventListener('click', () => {
+    const current = document.body.classList.contains('dark') ? 'dark' : 'light';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    saveTheme(next);
+  });
   loadCSV(TERMS_URL)
     .then(terms => {
-      termBank = terms;
-      totalDays = termBank.length + 4; // +1 for closing day
-      $('termBankPreview').textContent = terms.join('\n');
-      renderDay(currentDayIndex);
-    })
+  termBank = [...terms];
+  shuffle(termBank);
+  totalDays = termBank.length + 4;
+  $('termBankPreview').textContent = termBank.join('\n');
+  renderDay(currentDayIndex);
+})
+
     .catch(err => {
       setStatus('Error: ' + err.message);
       $('runSummary').textContent = 'Could not load terms.csv';
