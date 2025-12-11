@@ -83,7 +83,7 @@ main {
 .stage-bottom { bottom: -0.4rem; left: 50%; transform: translateX(-50%); }
 .stage-left   { top: 50%; left: -0.4rem; transform: translateY(-50%); }
 
-/* tiny center dot, purely visual */
+/* tiny center dot */
 .center-dot {
   position: absolute;
   top: 50%; left: 50%;
@@ -133,6 +133,23 @@ main {
   resize: vertical;
 }
 
+/* AI buttons */
+
+.ai-btn {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #666;
+  background: #fafafa;
+  cursor: pointer;
+}
+
+.ai-btn:hover {
+  background: #ececec;
+}
+
 .controls {
   text-align: center;
   margin-top: 0.75rem;
@@ -159,17 +176,19 @@ button:hover {
   color: #555;
 }
 
-/* Upload + term bank */
+/* Upload + save/load + term bank */
 
-.upload {
+.upload,
+.save-load {
   margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid #ddd;
   font-size: 0.85rem;
 }
 
-.upload input[type="file"] {
-  margin-right: 0.5rem;
+.upload input[type="file"],
+.save-load input[type="file"] {
+  margin: 0 0.5rem;
 }
 
 .term-bank {
@@ -194,32 +213,6 @@ footer {
   color: #666;
 }
 
-/* Mobile */
-
-@media (max-width: 600px) {
-  main {
-    padding: 0 0.5rem 1rem;
-  }
-
-  .circle {
-    width: 80vw;
-    height: 80vw;
-  }
-
-  .stage-label-ring {
-    font-size: 0.7rem;
-  }
-
-  .stage-forms textarea {
-    min-height: 70px;
-    font-size: 0.75rem;
-  }
-
-  .run-info {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
 /* Dark mode */
 
 body.dark {
@@ -264,6 +257,7 @@ body.dark .term-bank pre {
 }
 
 body.dark .upload,
+body.dark .save-load,
 body.dark .term-bank {
   border-top-color: #374151;
 }
@@ -284,4 +278,31 @@ body.dark button:hover {
   margin-left: 0.4rem;
   padding: 0.25rem 0.6rem;
   font-size: 0.75rem;
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  main {
+    padding: 0 0.5rem 1rem;
+  }
+
+  .circle {
+    width: 80vw;
+    height: 80vw;
+  }
+
+  .stage-label-ring {
+    font-size: 0.7rem;
+  }
+
+  .stage-forms textarea {
+    min-height: 70px;
+    font-size: 0.75rem;
+  }
+
+  .run-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
