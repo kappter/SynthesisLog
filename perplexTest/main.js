@@ -288,8 +288,9 @@ function init() {
     reader.onload = e => {
       try {
         const text = e.target.result;
-        const terms = parseTermsCSV(text);
-        termBank = terms;
+       const terms = parseTermsCSV(text);
+        termBank = [...terms];
+        shuffle(termBank);
         totalDays = termBank.length + 4;
         currentDayIndex = 1;
         $('termBankPreview').textContent = terms.join('\n');
