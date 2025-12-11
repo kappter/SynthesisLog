@@ -118,9 +118,28 @@ function renderDay(d) {
   currentDayIndex = d;
   $('dayIndexInput').value = d;
 
-  const { queue, stages } = getStagesForDay(d);
+  const isClosingDay = (d === totalDays) && queue.length === 0;
   const state = loadState();
   const refs = getReflectionsForDay(state, d);
+
+  if (isClosingDay) {
+  $('termHistoryMini').textContent  = '—';
+  $('termConcreteMini').textContent = '—';
+  $('termAmalgamMini').textContent  = '—';
+  $('termMotionMini').textContent   = '—';
+
+  $('termHistoryFull').textContent  = 'Run complete';
+  $('termConcreteFull').textContent = 'Review motions';
+  $('termAmalgamFull').textContent  = 'Notice patterns';
+  $('termMotionFull').textContent   = 'Name next questions';
+
+  $('textHistory').placeholder  = 'Summarize what you learned about these terms and their histories.';
+  $('textConcrete').placeholder = 'Capture memorable images, metaphors, or examples that surfaced.';
+  $('textAmalgam').placeholder  = 'List the strongest amalgamations or conceptual fusions you discovered.';
+  $('textMotion').placeholder   = 'Propose how this run should influence your next term bank or project.';
+
+  $('centerTerms').textContent = 'All terms have completed their four-day cycle.';
+}
 
   // Mini labels around the circle
   $('termHistoryMini').textContent  = stages.history  || '—';
@@ -144,8 +163,9 @@ function renderDay(d) {
   $('centerTerms').textContent = queue.length ? queue.join(' · ') : '—';
 
   $('runSummary').textContent =
-    `Day ${d} of ${totalDays} · ${termBank.length} terms in bank`;
-  setStatus('');
+  isClosingDay
+    ? `Closing day · all ${termBank.length} terms have completed the four-stage process`
+    : `Day ${d} of ${totalDays} · ${termBank.length} terms in bank`;
 }
 
 function saveCurrentDay() {
@@ -167,7 +187,7 @@ function init() {
   loadCSV(TERMS_URL)
     .then(terms => {
       termBank = terms;
-      totalDays = termBank.length + 3;
+      totalDays = termBank.length + 4;
       $('termBankPreview').textContent = terms.join('\n');
       renderDay(currentDayIndex);
     })
@@ -206,7 +226,7 @@ function init() {
         const text = e.target.result;
         const terms = parseTermsCSV(text);
         termBank = terms;
-        totalDays = termBank.length + 3;
+        totalDays = termBank.length + 4;
         currentDayIndex = 1;
         $('termBankPreview').textContent = terms.join('\n');
         renderDay(currentDayIndex);
