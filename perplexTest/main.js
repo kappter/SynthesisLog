@@ -468,10 +468,37 @@ function init() {
     saveState(state);
     refreshDatesUI();
   });
+  $('applyPresetBtn').addEventListener('click', () => {
+    const presetStatus = $('presetStatus');
+    const value = $('presetSelect').value;
+
+    if (value === 'current') {
+      // reload from terms.csv
+      presetStatus.textContent = 'Loading current terms.csv…';
+      loadCSV(TERMS_URL)
+        .then(terms => {
+          adoptTermsArray(terms);
+          presetStatus.textContent = 'Current terms.csv loaded.';
+        })
+        .catch(err => {
+          presetStatus.textContent = 'Error: ' + err.message;
+        });
+      return;
+    }
+
+    const preset = PRESET_SETS[value];
+    if (!preset) {
+      presetStatus.textContent = 'Unknown preset.';
+      return;
+    }
+    adoptTermsArray(preset);
+    presetStatus.textContent = `Loaded preset: ${$('presetSelect').selectedOptions[0].textContent}.`;
+  });
 
   // load initial CSV
   loadCSV(TERMS_URL)
     .then(terms => {
+      adoptTermsArray(terms);
       termBank = [...terms];
       shuffle(termBank);
       totalDays = termBank.length + 4;
@@ -522,6 +549,8 @@ function init() {
       try {
         const text = e.target.result;
         const terms = parseTermsCSV(text);
+        adoptTermsArray(terms);
+        uploadStatus.textContent = 'Loaded ' + terms.length + ' terms.';
         termBank = [...terms];
         shuffle(termBank);
         totalDays = termBank.length + 4;
