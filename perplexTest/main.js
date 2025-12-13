@@ -1,12 +1,12 @@
-// Synthesis Log: CSV-driven rotating queue with dark mode, upload, and save/load.
+// Synthesis Log: CSV-driven rotating queue with dark mode, upload, dates, progress, and save/load.
 
 const TERMS_URL   = 'terms.csv';
 const STORAGE_KEY = 'synthesisLog_v1';
 const THEME_KEY   = 'synthesisLog_theme';
 
-let termBank       = [];
-let totalDays      = 0;   // N + 4 (includes closing day)
-let currentDayIndex = 1;  // 1-based
+let termBank        = [];
+let totalDays       = 0;   // N + 4 (includes closing day)
+let currentDayIndex = 1;   // 1-based
 
 // Utility ---------------------------------------------------------
 
@@ -113,18 +113,23 @@ function getStagesForDay(d) {
   return { queue, stages };
 }
 
-// Persistence of reflections -------------------------------------
+// Persistence of reflections + meta ------------------------------
 
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : { reflections: {} };
+    if (!raw) return { reflections: {}, meta: {} };
+    const parsed = JSON.parse(raw);
+    if (!parsed.reflections) parsed.reflections = {};
+    if (!parsed.meta) parsed.meta = {};
+    return parsed;
   } catch (e) {
-    return { reflections: {} };
+    return { reflections: {}, meta: {} };
   }
 }
 
 function saveState(state) {
+  if (!state.meta) state.meta = {};
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
@@ -141,6 +146,20 @@ function setReflectionsForDay(state, d, data) {
   state.reflections['day-' + d] = data;
 }
 
+// Date UI ---------------------------------------------------------
+
+function refreshDatesUI() {
+  const state = loadState();
+  if (state.meta && state.meta.startDate) {
+    $('startDateInput').value = state.meta.startDate;
+  }
+  if (state.meta && state.meta.endDate) {
+    $('endDateDisplay').textContent = 'End: ' + state.meta.endDate;
+  } else {
+    $('endDateDisplay').textContent = '';
+  }
+}
+
 // Save/load whole log as JSON ------------------------------------
 
 function getFullState() {
@@ -149,7 +168,8 @@ function getFullState() {
     version: 1,
     terms: termBank,
     currentDay: currentDayIndex,
-    reflections: s.reflections || {}
+    reflections: s.reflections || {},
+    meta: s.meta || {}
   };
 }
 
@@ -177,14 +197,18 @@ function applyImportedState(data) {
   totalDays = termBank.length + 4;
   currentDayIndex = Math.max(1, Math.min(data.currentDay || 1, totalDays));
 
-  const state = { reflections: data.reflections || {} };
+  const state = {
+    reflections: data.reflections || {},
+    meta: data.meta || {}
+  };
   saveState(state);
 
   $('termBankPreview').textContent = termBank.join('\n');
+  refreshDatesUI();
   renderDay(currentDayIndex);
 }
 
-// AI helpers (optional external agent) ---------------------------
+// AI helpers (external agent) ------------------------------------
 
 function buildPrompt(stage, stages, queue) {
   const fourSet = queue.join(', ');
@@ -220,6 +244,45 @@ function openAiForStage(stage, stages, queue) {
   window.open(url, '_blank');
 }
 
+// Summary builder -------------------------------------------------
+
+function buildSummary() {
+  const state = loadState();
+  const keys = Object.keys(state.reflections || {});
+  if (!keys.length) {
+    return { blurb: 'No reflections yet.', motions: [] };
+  }
+
+  const sorted = keys.slice().sort((a, b) => {
+    const da = parseInt(a.split('-')[1], 10);
+    const db = parseInt(b.split('-')[1], 10);
+    return da - db;
+  });
+
+  const firstDay = parseInt(sorted[0].split('-')[1], 10);
+  const lastDay  = parseInt(sorted[sorted.length - 1].split('-')[1], 10);
+
+  let motionCount = 0;
+  const motionSnippets = [];
+
+  for (const key of sorted) {
+    const idx = parseInt(key.split('-')[1], 10);
+    const r = state.reflections[key];
+    if (r && r.motion && r.motion.trim()) {
+      motionCount++;
+      if (motionSnippets.length < 5) {
+        motionSnippets.push({ day: idx, text: r.motion.trim() });
+      }
+    }
+  }
+
+  const blurb =
+    `You wrote on ${sorted.length} day(s), from day ${firstDay} to day ${lastDay}, ` +
+    `and captured ${motionCount} named motion(s).`;
+
+  return { blurb, motions: motionSnippets };
+}
+
 // Rendering -------------------------------------------------------
 
 function renderDay(d) {
@@ -240,7 +303,21 @@ function renderDay(d) {
   const state = loadState();
   const refs = getReflectionsForDay(state, d);
 
+  // progress bar
+  const percent = ((d - 1) / Math.max(1, totalDays - 1)) * 100;
+  $('progressFill').style.width = percent + '%';
+  $('progressStartLabel').textContent = 'Day 1';
+  $('progressEndLabel').textContent   = 'Day ' + totalDays;
+
   if (isClosingDay) {
+    state.meta = state.meta || {};
+    if (!state.meta.endDate) {
+      const today = new Date().toISOString().slice(0, 10);
+      state.meta.endDate = today;
+      saveState(state);
+    }
+    refreshDatesUI();
+
     $('termHistoryMini').textContent  = '—';
     $('termConcreteMini').textContent = '—';
     $('termAmalgamMini').textContent  = '—';
@@ -262,7 +339,22 @@ function renderDay(d) {
     $('textMotion').placeholder   = 'Propose how this run should influence your next term bank or project.';
 
     $('centerTerms').textContent = 'All terms have completed their four-day cycle.';
+
+    const summary = buildSummary();
+    $('summarySection').hidden = false;
+    $('summaryBlurb').textContent = summary.blurb;
+    const ul = $('motionHighlights');
+    ul.innerHTML = '';
+    summary.motions.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = `Day ${item.day}: “${item.text}”`;
+      ul.appendChild(li);
+    });
   } else {
+    refreshDatesUI();
+
+    $('summarySection').hidden = true;
+
     $('termHistoryMini').textContent  = stages.history  || '—';
     $('termConcreteMini').textContent = stages.concrete || '—';
     $('termAmalgamMini').textContent  = stages.amalgam  || '—';
@@ -318,6 +410,15 @@ function init() {
     const next = current === 'dark' ? 'light' : 'dark';
     applyTheme(next);
     saveTheme(next);
+  });
+
+  refreshDatesUI();
+  $('startDateInput').addEventListener('change', () => {
+    const state = loadState();
+    state.meta = state.meta || {};
+    state.meta.startDate = $('startDateInput').value || null;
+    saveState(state);
+    refreshDatesUI();
   });
 
   // load initial CSV
