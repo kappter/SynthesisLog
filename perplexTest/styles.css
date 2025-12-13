@@ -228,6 +228,23 @@ button:hover {
   color: #555;
 }
 
+
+.presets {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  /*border-top: 1px solid #ddd;*/
+  font-size: 0.85rem;
+}
+
+body.dark .presets {
+  /*border-top-color: #374151;*/
+}
+
+.presets select {
+  font-size: 0.85rem;
+  margin-left: 0.25rem;
+}
+
 /* Upload + save/load + term bank */
 
 .upload,
