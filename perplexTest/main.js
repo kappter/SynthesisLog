@@ -9,6 +9,44 @@ let totalDays       = 0;   // N + 4 (includes closing day)
 let currentDayIndex = 1;   // 1-based
 
 // Utility ---------------------------------------------------------
+const PRESET_SETS = {
+  'music-core': [
+    'Pitch',
+    'Interval',
+    'Scale degree',
+    'Major scale',
+    'Minor scale',
+    'Chord',
+    'Cadence',
+    'Modulation',
+    'Voice leading',
+    'Counterpoint'
+  ],
+  'feel-good': [
+    'Serendipity',
+    'Momentum',
+    'Clarity',
+    'Playfulness',
+    'Flow state',
+    'Gratitude',
+    'Courage',
+    'Curiosity',
+    'Harmony',
+    'Wonder'
+  ],
+  'verbs-motion': [
+    'Zoom',
+    'Unfold',
+    'Anchor',
+    'Pivot',
+    'Cascade',
+    'Spiral',
+    'Drift',
+    'Fuse',
+    'Refract',
+    'Resonate'
+  ]
+};
 
 function $(id) {
   return document.getElementById(id);
