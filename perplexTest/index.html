@@ -17,6 +17,13 @@
   <main>
     <section class="run-info">
       <div id="runSummary">Loading terms…</div>
+      <div class="run-dates">
+        <label>
+          Start:
+          <input type="date" id="startDateInput">
+        </label>
+        <span id="endDateDisplay"></span>
+      </div>
       <div>
         <label>
           Day index:
@@ -26,6 +33,16 @@
         <button id="prevDayBtn">&#9664; Prev</button>
         <button id="nextDayBtn">Next &#9654;</button>
         <button id="themeToggle" class="theme-btn">Dark</button>
+      </div>
+    </section>
+
+    <section class="progress-row">
+      <div class="progress-labels">
+        <span id="progressStartLabel">Day 1</span>
+        <span id="progressEndLabel">Day ?</span>
+      </div>
+      <div class="progress-track">
+        <div id="progressFill" class="progress-fill"></div>
       </div>
     </section>
 
@@ -72,6 +89,12 @@
         <button type="button" class="ai-btn" data-stage="motion">Ask AI for a motion</button>
         <textarea id="textMotion" placeholder="Name a motion or proposal that links the four terms…"></textarea>
       </div>
+    </section>
+
+    <section class="summary" id="summarySection" hidden>
+      <h2>Run summary</h2>
+      <p id="summaryBlurb"></p>
+      <ul id="motionHighlights"></ul>
     </section>
 
     <section class="controls">
