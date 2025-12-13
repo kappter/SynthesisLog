@@ -35,12 +35,11 @@ main {
 }
 
 .run-info {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   padding: 0.5rem 0;
   border-bottom: 1px solid #ddd;
   font-size: 0.9rem;
@@ -48,6 +47,46 @@ main {
 
 .run-info input {
   width: 4rem;
+}
+
+.run-dates {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.run-dates input[type="date"] {
+  font-size: 0.8rem;
+}
+
+/* Progress bar */
+
+.progress-row {
+  margin-bottom: 0.75rem;
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  margin-bottom: 0.15rem;
+}
+
+.progress-track {
+  position: relative;
+  height: 8px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #60a5fa, #22c55e);
+  transition: width 0.25s ease-out;
 }
 
 /* Circle visualization */
@@ -131,6 +170,19 @@ main {
   border-radius: 4px;
   border: 1px solid #ccc;
   resize: vertical;
+}
+
+/* Summary */
+
+.summary {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #d1d5db;
+  font-size: 0.85rem;
+}
+
+.summary ul {
+  padding-left: 1.1rem;
 }
 
 /* AI buttons */
@@ -230,6 +282,14 @@ body.dark .run-info {
   border-bottom-color: #374151;
 }
 
+body.dark .progress-track {
+  background: #1f2937;
+}
+
+body.dark .progress-fill {
+  background: linear-gradient(90deg, #38bdf8, #4ade80);
+}
+
 body.dark .circle {
   border-color: #4b5563;
   background: radial-gradient(circle at 50% 50%, #111827, #020617);
@@ -249,6 +309,10 @@ body.dark textarea {
   background: #020617;
   color: #e5e7eb;
   border-color: #4b5563;
+}
+
+body.dark .summary {
+  border-top-color: #4b5563;
 }
 
 body.dark .term-bank pre {
@@ -287,6 +351,11 @@ body.dark button:hover {
     padding: 0 0.5rem 1rem;
   }
 
+  .run-info {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
   .circle {
     width: 80vw;
     height: 80vw;
@@ -299,10 +368,5 @@ body.dark button:hover {
   .stage-forms textarea {
     min-height: 70px;
     font-size: 0.75rem;
-  }
-
-  .run-info {
-    flex-direction: column;
-    align-items: flex-start;
   }
 }
