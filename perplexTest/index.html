@@ -110,6 +110,22 @@
       <span id="uploadStatus" class="status"></span>
     </section>
 
+    <section class="presets">
+  <h2>Preset term sets</h2>
+  <label>
+    Choose a set:
+    <select id="presetSelect">
+      <option value="current">Current terms.csv</option>
+      <option value="music-core">Music theory · core</option>
+      <option value="feel-good">Feel-good words</option>
+      <option value="verbs-motion">Verbs of motion</option>
+    </select>
+  </label>
+  <button id="applyPresetBtn">Load preset</button>
+  <span id="presetStatus" class="status"></span>
+</section>
+
+
     <section class="save-load">
       <h2>Save / load Synthesis Log</h2>
       <button id="exportBtn">Download log (JSON)</button>
