@@ -48,6 +48,16 @@ const PRESET_SETS = {
   ]
 };
 
+function adoptTermsArray(terms) {
+  termBank = [...terms];
+  shuffle(termBank);
+  totalDays = termBank.length + 4;
+  currentDayIndex = 1;
+  $('termBankPreview').textContent = termBank.join('\n');
+  renderDay(currentDayIndex);
+}
+
+
 function $(id) {
   return document.getElementById(id);
 }
