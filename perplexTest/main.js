@@ -435,11 +435,27 @@ function renderDay(d) {
   const isClosingDay = (d === totalDays) && queue.length === 0;
 
   const state = loadState();
-  const refs = getReflectionsForDay(state, d);
+  const refs  = getReflectionsForDay(state, d);
 
   // progress bar
   const percent = ((d - 1) / Math.max(1, totalDays - 1)) * 100;
-  $('progressFill').style.width = percent + '%';
+  const fill = $('progressFill');
+  fill.style.width = percent + '%';
+
+  // clear previous state
+  fill.classList.remove('normal', 'spiral-soon', 'ending');
+
+  const daysLeft = totalDays - d;
+
+  if (isClosingDay) {
+    fill.classList.add('ending');
+  } else if (daysLeft === 3) {
+    // third day before scheduled end → signal spiral option
+    fill.classList.add('spiral-soon');
+  } else {
+    fill.classList.add('normal');
+  }
+
   $('progressStartLabel').textContent = 'Day 1';
   $('progressEndLabel').textContent   = 'Day ' + totalDays;
 
@@ -519,7 +535,6 @@ function renderDay(d) {
 
   setStatus('');
 }
-
 function saveCurrentDay() {
   const state = loadState();
   const data = {
