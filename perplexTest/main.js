@@ -179,32 +179,28 @@ function getQueueForDay(d) {
 }
 
 function getStagesForDay(d) {
-  const queue = getQueueForDay(d); // oldest → newest
   const stages = { history: null, concrete: null, amalgam: null, motion: null };
-  const len = queue.length;
-  if (!len) return { queue, stages };
+  const queue = [];
 
-  // index of newest term in queue
-  const newestIndex = len - 1;
+  for (let i = 0; i < termBank.length; i++) {
+    const term = termBank[i];
+    const introDay = i + 1;          // T1 appears on day 1, T2 on day 2, etc.
+    const age = d - introDay;        // how many days since introduction
 
-  // dayOffset cycles 0,1,2,3,0,... across days
-  const dayOffset = (d - 1) % 4;
+    let stageName = null;
+    if (age === 0) stageName = 'history';
+    else if (age === 1) stageName = 'concrete';
+    else if (age === 2) stageName = 'amalgam';
+    else if (age === 3) stageName = 'motion';
+    else continue;                   // not active this day
 
-  // order of stages in the cycle (relative to newest term)
-  const stageOrder = ['history', 'concrete', 'amalgam', 'motion'];
-
-  for (let i = 0; i < len; i++) {
-    // map each term in queue (from newest backward) to a different stage
-    const termIndex = newestIndex - i; // walk backwards
-    if (termIndex < 0) break;
-
-    const stageIndex = (dayOffset + i) % 4;
-    const stageName = stageOrder[stageIndex];
-    stages[stageName] = queue[termIndex];
+    stages[stageName] = term;
+    queue.push(term);
   }
 
   return { queue, stages };
 }
+
 
 
 // Persistence of reflections + meta ------------------------------
