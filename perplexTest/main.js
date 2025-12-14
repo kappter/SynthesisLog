@@ -178,24 +178,34 @@ function getQueueForDay(d) {
   return queue;
 }
 
-// newest term → History, then Concrete, Amalgam, Motion.
 function getStagesForDay(d) {
-  const queue = getQueueForDay(d);
-  const stages = {
-    history: null,
-    concrete: null,
-    amalgam: null,
-    motion: null
-  };
-
+  const queue = getQueueForDay(d); // oldest → newest
+  const stages = { history: null, concrete: null, amalgam: null, motion: null };
   const len = queue.length;
-  if (len >= 1) stages.history  = queue[len - 1];
-  if (len >= 2) stages.concrete = queue[len - 2];
-  if (len >= 3) stages.amalgam  = queue[len - 3];
-  if (len >= 4) stages.motion   = queue[len - 4];
+  if (!len) return { queue, stages };
+
+  // index of newest term in queue
+  const newestIndex = len - 1;
+
+  // dayOffset cycles 0,1,2,3,0,... across days
+  const dayOffset = (d - 1) % 4;
+
+  // order of stages in the cycle (relative to newest term)
+  const stageOrder = ['history', 'concrete', 'amalgam', 'motion'];
+
+  for (let i = 0; i < len; i++) {
+    // map each term in queue (from newest backward) to a different stage
+    const termIndex = newestIndex - i; // walk backwards
+    if (termIndex < 0) break;
+
+    const stageIndex = (dayOffset + i) % 4;
+    const stageName = stageOrder[stageIndex];
+    stages[stageName] = queue[termIndex];
+  }
 
   return { queue, stages };
 }
+
 
 // Persistence of reflections + meta ------------------------------
 
