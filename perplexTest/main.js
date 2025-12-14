@@ -306,6 +306,20 @@ function applyImportedState(data) {
   renderDay(currentDayIndex);
 }
 
+function extendTermsArray(newTerms) {
+  const state = loadState();
+  const unique = newTerms.filter(t => t && !termBank.includes(t));
+  if (!unique.length) return;
+
+  termBank = termBank.concat(unique);
+  totalDays = termBank.length + 4;
+  $('termBankPreview').textContent = termBank.join('\n');
+
+  // Preserve current day and reflections
+  saveState(state);
+  renderDay(currentDayIndex);
+}
+
 // AI helpers (external agent) ------------------------------------
 
 function buildPrompt(stage, stages, queue) {
