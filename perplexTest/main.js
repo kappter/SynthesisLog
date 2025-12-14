@@ -45,6 +45,42 @@ const PRESET_SETS = {
     'Fuse',
     'Refract',
     'Resonate'
+  ],
+  'art-terms': [
+    'Abstract art',
+    'Composition',
+    'Perspective',
+    'Contrast',
+    'Sculpture',
+    'Monochrome',
+    'Palette',
+    'Texture',
+    'Symmetry',
+    'Figurative'
+  ],
+  'geography-terms': [
+    'Delta',
+    'Archipelago',
+    'Plateau',
+    'Watershed',
+    'Estuary',
+    'Longitude',
+    'Latitude',
+    'Monsoon',
+    'Glacier',
+    'Biome'
+  ],
+  'cs-terms': [
+    'Algorithm',
+    'Data structure',
+    'Recursion',
+    'Abstraction',
+    'Concurrency',
+    'Compilation',
+    'Protocol',
+    'Runtime',
+    'Refactoring',
+    'State machine'
   ]
 };
 
@@ -285,12 +321,38 @@ function buildPrompt(stage, stages, queue) {
   );
 }
 
-function openAiForStage(stage, stages, queue) {
+async function openAiForStage(stage, stages, queue) {
   const prompt = buildPrompt(stage, stages, queue);
-  const encoded = encodeURIComponent(prompt);
-  const url = 'https://www.perplexity.ai/search?q=' + encoded;
-  window.open(url, '_blank');
+
+  const textareaMap = {
+    history: $('textHistory'),
+    concrete: $('textConcrete'),
+    amalgam: $('textAmalgam'),
+    motion: $('textMotion')
+  };
+  const target = textareaMap[stage];
+  if (!target) return;
+
+  const statusEl = document.querySelector(`.ai-status[data-stage="${stage}"]`);
+  if (statusEl) statusEl.textContent = 'Thinking…';
+
+  try {
+    const res = await fetch('YOUR_AI_ENDPOINT_URL_HERE', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt })
+    });
+    if (!res.ok) throw new Error('AI request failed');
+    const data = await res.json();
+    const text = data.answer || data.content || '';
+    target.value = text;
+    if (statusEl) statusEl.textContent = 'AI response added.';
+  } catch (err) {
+    console.error(err);
+    if (statusEl) statusEl.textContent = 'Error getting AI response.';
+  }
 }
+
 
 // Summary builder -------------------------------------------------
 
