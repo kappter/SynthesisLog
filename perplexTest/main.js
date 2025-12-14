@@ -1,11 +1,10 @@
-// Synthesis Log: CSV-driven rotating queue with dark mode, upload, dates, progress, and save/load.
 
 const TERMS_URL   = 'terms.csv';
 const STORAGE_KEY = 'synthesisLog_v1';
 const THEME_KEY   = 'synthesisLog_theme';
 
 let termBank        = [];
-let totalDays       = 0;   // N + 4 (includes closing day)
+let totalDays       = 0;   // N + 3 (includes closing day)
 let currentDayIndex = 1;   // 1-based
 
 // Utility ---------------------------------------------------------
@@ -87,12 +86,11 @@ const PRESET_SETS = {
 function adoptTermsArray(terms) {
   termBank = [...terms];
   shuffle(termBank);
-  totalDays = termBank.length + 4;
+  totalDays = termBank.length + 3;
   currentDayIndex = 1;
   $('termBankPreview').textContent = termBank.join('\n');
   renderDay(currentDayIndex);
 }
-
 
 function $(id) {
   return document.getElementById(id);
@@ -161,23 +159,6 @@ function saveTheme(theme) {
 
 // Scheduling logic -----------------------------------------------
 
-function getQueueForDay(d) {
-  const N = termBank.length;
-  const queue = [];
-
-  for (let i = 0; i < N; i++) {
-    const start = i + 1;
-    const end = i + 4;
-    if (d >= start && d <= end) {
-      queue.push(termBank[i]);
-    }
-  }
-  if (queue.length > 4) {
-    return queue.slice(queue.length - 4);
-  }
-  return queue;
-}
-
 function getStagesForDay(d) {
   const stages = { history: null, concrete: null, amalgam: null, motion: null };
   const queue = [];
@@ -200,8 +181,6 @@ function getStagesForDay(d) {
 
   return { queue, stages };
 }
-
-
 
 // Persistence of reflections + meta ------------------------------
 
@@ -253,7 +232,6 @@ function refreshDatesUI() {
   }
 }
 
-
 // Save/load whole log as JSON ------------------------------------
 
 function getFullState() {
@@ -288,7 +266,7 @@ function applyImportedState(data) {
   }
 
   termBank = [...data.terms];
-  totalDays = termBank.length + 4;
+  totalDays = termBank.length + 3;
   currentDayIndex = Math.max(1, Math.min(data.currentDay || 1, totalDays));
 
   const state = {
@@ -308,7 +286,7 @@ function extendTermsArray(newTerms) {
   if (!unique.length) return;
 
   termBank = termBank.concat(unique);
-  totalDays = termBank.length + 4;
+  totalDays = termBank.length + 3;
   $('termBankPreview').textContent = termBank.join('\n');
 
   // Preserve current day and reflections
@@ -334,7 +312,7 @@ function buildPrompt(stage, stages, queue) {
   } else if (stage === 'amalgam') {
     instruction = 'Propose conceptual amalgamations linking the four terms, keeping the focal term central.';
   } else {
-    instruction = 'Propose a named “motion” or conceptual move that links the four terms via the focal term.';
+    instruction = 'Propose a named "motion" or conceptual move that links the four terms via the focal term.';
   }
 
   return (
@@ -361,6 +339,14 @@ async function openAiForStage(stage, stages, queue) {
   if (statusEl) statusEl.textContent = 'Thinking…';
 
   try {
+    // TEMP: stub while endpoint is not set
+    const fake = `[AI stub] ${prompt.slice(0, 140)}…`;
+    target.value = fake;
+    if (statusEl) statusEl.textContent = 'AI response added (stub).';
+    return;
+
+    // REAL CALL (uncomment once you have an endpoint)
+    /*
     const res = await fetch('YOUR_AI_ENDPOINT_URL_HERE', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -371,12 +357,12 @@ async function openAiForStage(stage, stages, queue) {
     const text = data.answer || data.content || '';
     target.value = text;
     if (statusEl) statusEl.textContent = 'AI response added.';
+    */
   } catch (err) {
     console.error(err);
     if (statusEl) statusEl.textContent = 'Error getting AI response.';
   }
 }
-
 
 // Summary builder -------------------------------------------------
 
@@ -419,6 +405,8 @@ function buildSummary() {
 
 // Rendering -------------------------------------------------------
 
+// Rendering -------------------------------------------------------
+
 function renderDay(d) {
   if (d < 1 || d > totalDays) {
     setStatus('Day must be between 1 and ' + totalDays);
@@ -450,7 +438,6 @@ function renderDay(d) {
   if (isClosingDay) {
     fill.classList.add('ending');
   } else if (daysLeft === 3) {
-    // third day before scheduled end → signal spiral option
     fill.classList.add('spiral-soon');
   } else {
     fill.classList.add('normal');
@@ -497,7 +484,7 @@ function renderDay(d) {
     ul.innerHTML = '';
     summary.motions.forEach(item => {
       const li = document.createElement('li');
-      li.textContent = `Day ${item.day}: “${item.text}”`;
+      li.textContent = `Day ${item.day}: "${item.text}"`;
       ul.appendChild(li);
     });
   } else {
@@ -535,6 +522,7 @@ function renderDay(d) {
 
   setStatus('');
 }
+
 function saveCurrentDay() {
   const state = loadState();
   const data = {
@@ -551,7 +539,6 @@ function saveCurrentDay() {
 // Bootstrapping + event wiring -----------------------------------
 
 function init() {
-  // theme
   const initialTheme = loadTheme();
   applyTheme(initialTheme);
   $('themeToggle').addEventListener('click', () => {
@@ -563,32 +550,30 @@ function init() {
 
   refreshDatesUI();
   $('startDateInput').addEventListener('change', () => {
-  const state = loadState();
-  state.meta = state.meta || {};
-  const start = $('startDateInput').value || null;
-  state.meta.startDate = start;
+    const state = loadState();
+    state.meta = state.meta || {};
+    const start = $('startDateInput').value || null;
+    state.meta.startDate = start;
 
-  if (start && termBank.length > 0) {
-    const totalDays = termBank.length + 4; // same rule you use elsewhere
-    const startDateObj = new Date(start);
-    // End is inclusive: start + (totalDays - 1) days
-    startDateObj.setDate(startDateObj.getDate() + totalDays - 1);
-    const isoEnd = startDateObj.toISOString().slice(0, 10);
-    state.meta.targetEndDate = isoEnd; // new field
-  } else {
-    state.meta.targetEndDate = null;
-  }
+    if (start && termBank.length > 0) {
+      const totalDays = termBank.length + 3;
+      const startDateObj = new Date(start);
+      startDateObj.setDate(startDateObj.getDate() + totalDays - 1);
+      const isoEnd = startDateObj.toISOString().slice(0, 10);
+      state.meta.targetEndDate = isoEnd;
+    } else {
+      state.meta.targetEndDate = null;
+    }
 
-  saveState(state);
-  refreshDatesUI();
-});
+    saveState(state);
+    refreshDatesUI();
+  });
 
   $('applyPresetBtn').addEventListener('click', () => {
     const presetStatus = $('presetStatus');
     const value = $('presetSelect').value;
 
     if (value === 'current') {
-      // reload from terms.csv
       presetStatus.textContent = 'Loading current terms.csv…';
       loadCSV(TERMS_URL)
         .then(terms => {
@@ -610,13 +595,12 @@ function init() {
     presetStatus.textContent = `Loaded preset: ${$('presetSelect').selectedOptions[0].textContent}.`;
   });
 
-  // load initial CSV
   loadCSV(TERMS_URL)
     .then(terms => {
       adoptTermsArray(terms);
       termBank = [...terms];
       shuffle(termBank);
-      totalDays = termBank.length + 4;
+      totalDays = termBank.length + 3;
       $('termBankPreview').textContent = termBank.join('\n');
       renderDay(currentDayIndex);
     })
@@ -639,7 +623,6 @@ function init() {
     if (currentDayIndex < totalDays) renderDay(currentDayIndex + 1);
   });
 
-  // AI buttons
   document.addEventListener('click', e => {
     const btn = e.target.closest('.ai-btn');
     if (!btn) return;
@@ -648,7 +631,6 @@ function init() {
     openAiForStage(stage, window.currentStages, window.currentQueue);
   });
 
-  // CSV upload
   $('loadCsvBtn').addEventListener('click', () => {
     const fileInput = $('csvFileInput');
     const file = fileInput.files && fileInput.files[0];
@@ -668,7 +650,7 @@ function init() {
         uploadStatus.textContent = 'Loaded ' + terms.length + ' terms.';
         termBank = [...terms];
         shuffle(termBank);
-        totalDays = termBank.length + 4;
+        totalDays = termBank.length + 3;
         currentDayIndex = 1;
         $('termBankPreview').textContent = termBank.join('\n');
         renderDay(currentDayIndex);
@@ -683,7 +665,6 @@ function init() {
     reader.readAsText(file);
   });
 
-  // export JSON
   $('exportBtn').addEventListener('click', () => {
     const snapshot = getFullState();
     const stamp = new Date().toISOString().slice(0, 10);
@@ -691,7 +672,6 @@ function init() {
     $('importStatus').textContent = 'Log downloaded.';
   });
 
-  // import JSON
   $('importBtn').addEventListener('click', () => {
     const fileInput = $('importFile');
     const file = fileInput.files && fileInput.files[0];
