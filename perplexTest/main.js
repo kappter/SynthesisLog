@@ -247,12 +247,16 @@ function refreshDatesUI() {
   if (state.meta && state.meta.startDate) {
     $('startDateInput').value = state.meta.startDate;
   }
-  if (state.meta && state.meta.endDate) {
+  // projected target, if known
+  if (state.meta && state.meta.targetEndDate) {
+    $('endDateDisplay').textContent = 'Target end: ' + state.meta.targetEndDate;
+  } else if (state.meta && state.meta.endDate) {
     $('endDateDisplay').textContent = 'End: ' + state.meta.endDate;
   } else {
     $('endDateDisplay').textContent = '';
   }
 }
+
 
 // Save/load whole log as JSON ------------------------------------
 
@@ -534,12 +538,26 @@ function init() {
 
   refreshDatesUI();
   $('startDateInput').addEventListener('change', () => {
-    const state = loadState();
-    state.meta = state.meta || {};
-    state.meta.startDate = $('startDateInput').value || null;
-    saveState(state);
-    refreshDatesUI();
-  });
+  const state = loadState();
+  state.meta = state.meta || {};
+  const start = $('startDateInput').value || null;
+  state.meta.startDate = start;
+
+  if (start && termBank.length > 0) {
+    const totalDays = termBank.length + 4; // same rule you use elsewhere
+    const startDateObj = new Date(start);
+    // End is inclusive: start + (totalDays - 1) days
+    startDateObj.setDate(startDateObj.getDate() + totalDays - 1);
+    const isoEnd = startDateObj.toISOString().slice(0, 10);
+    state.meta.targetEndDate = isoEnd; // new field
+  } else {
+    state.meta.targetEndDate = null;
+  }
+
+  saveState(state);
+  refreshDatesUI();
+});
+
   $('applyPresetBtn').addEventListener('click', () => {
     const presetStatus = $('presetStatus');
     const value = $('presetSelect').value;
