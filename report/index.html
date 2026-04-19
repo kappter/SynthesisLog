@@ -1,1 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TOK Spiral Reflection Report</title>
+  <link rel="stylesheet" href="tok-report.css" />
+</head>
+<body>
+  <header class="page-header no-print">
+    <div>
+      <h1>TOK Spiral Reflection Report</h1>
+      <p>Load a synthesis log JSON file to generate a detailed, print-ready report of strongest reflections, top concepts, and possible Extended Essay prompt directions.</p>
+    </div>
+    <div class="controls">
+      <label class="file-btn">
+        <input type="file" id="fileInput" accept=".json,application/json" />
+        <span>Load JSON File</span>
+      </label>
+      <button id="printBtn" type="button">Print Report</button>
+    </div>
+  </header>
 
+  <main id="reportRoot">
+    <section class="hero card">
+      <h2>Ready to analyze</h2>
+      <p>This report is designed for the same spiral JSON import file used by the synthesis log tool. It reconstructs term alignment across the reflection flow, highlights the highest-rated entries, and turns those patterns into possible inquiry directions.</p>
+      <ul>
+        <li>Top-rated reflections</li>
+        <li>Concept averages and density</li>
+        <li>Repeated strengths across history, concrete, abstract, amalgam, and motion</li>
+        <li>Possible TOK / EE-style prompt seeds</li>
+      </ul>
+    </section>
+
+    <section id="emptyState" class="card">
+      <h2>No file loaded yet</h2>
+      <p>Select a JSON file above. The page will render a full printable report automatically.</p>
+    </section>
+  </main>
+
+  <script src="tok-report.js"></script>
+</body>
+</html>
