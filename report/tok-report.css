@@ -1,0 +1,262 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f5f7fb;
+  --paper: #ffffff;
+  --ink: #172033;
+  --muted: #5f6980;
+  --line: #d7deea;
+  --accent: #4c5fd7;
+  --accent-soft: #eef1ff;
+  --shadow: 0 10px 28px rgba(20, 30, 60, 0.08);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.45;
+}
+
+body {
+  padding: 28px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0 0 8px 0;
+  font-size: 2rem;
+}
+
+.page-header p {
+  margin: 0;
+  max-width: 760px;
+  color: var(--muted);
+}
+
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.file-btn input {
+  display: none;
+}
+
+.file-btn span,
+button {
+  display: inline-block;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 12px 16px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow);
+}
+
+button:hover,
+.file-btn span:hover {
+  border-color: var(--accent);
+}
+
+#reportRoot {
+  display: grid;
+  gap: 18px;
+}
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+}
+
+.hero ul {
+  margin: 12px 0 0 18px;
+  padding: 0;
+}
+
+.hero li {
+  margin: 6px 0;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+}
+
+.span-12 { grid-column: span 12; }
+.span-8 { grid-column: span 8; }
+.span-6 { grid-column: span 6; }
+.span-4 { grid-column: span 4; }
+.span-3 { grid-column: span 3; }
+
+.stat {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fff, #fafcff);
+}
+
+.stat h3 {
+  font-size: 0.9rem;
+  margin: 0 0 8px 0;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.stat .value {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94rem;
+}
+
+th, td {
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  padding: 10px 8px;
+  vertical-align: top;
+}
+
+th {
+  color: var(--muted);
+  font-weight: 700;
+  background: #fbfcff;
+}
+
+.quote-card {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 16px;
+  background: #fcfdff;
+  margin-bottom: 12px;
+}
+
+.quote-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.prompt {
+  border-left: 4px solid var(--accent);
+  padding: 10px 14px;
+  background: #f9faff;
+  margin: 12px 0;
+}
+
+h2, h3 {
+  margin-top: 0;
+}
+
+.section-subtitle {
+  color: var(--muted);
+  margin-top: -4px;
+}
+
+.term-chip-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.term-chip {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #f8faff;
+  font-size: 0.88rem;
+}
+
+.print-header {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .span-8, .span-6, .span-4, .span-3 {
+    grid-column: span 12;
+  }
+  .page-header {
+    flex-direction: column;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+    padding: 0;
+    color: #000;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-header {
+    display: block;
+    margin-bottom: 18px;
+  }
+
+  .card, .stat, .quote-card {
+    box-shadow: none;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border-color: #bbb;
+  }
+
+  .report-grid {
+    gap: 12px;
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+}
