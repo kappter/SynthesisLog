@@ -1,11 +1,13 @@
 const fileInput = document.getElementById("fileInput");
 const printBtn = document.getElementById("printBtn");
 const themeBtn = document.getElementById("themeBtn");
+const expandBtn = document.getElementById("expandBtn");
 const reportRoot = document.getElementById("reportRoot");
 const rootEl = document.documentElement;
 
 const SLOT_OLDEST_TO_NEWEST = ["motion", "amalgam", "abstract", "concrete", "history"];
 let chartState = null;
+let allExpanded = false;
 
 initTheme();
 
@@ -30,6 +32,12 @@ themeBtn?.addEventListener("click", () => {
   redrawStoredCharts();
 });
 
+expandBtn?.addEventListener("click", () => {
+  allExpanded = !allExpanded;
+  document.querySelectorAll("details.module").forEach(d => d.open = allExpanded);
+  expandBtn.textContent = allExpanded ? "Collapse All" : "Expand All";
+});
+
 window.addEventListener("resize", () => redrawStoredCharts());
 
 function initTheme() {
@@ -50,6 +58,8 @@ function renderReport(data, fileName = "Loaded JSON") {
   }
 
   const { terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta, slotStats } = parsed;
+  allExpanded = false;
+  expandBtn.textContent = "Expand All";
 
   reportRoot.innerHTML = `
     <section class="print-header">
@@ -57,14 +67,14 @@ function renderReport(data, fileName = "Loaded JSON") {
       <p>${escapeHtml(fileName)}</p>
     </section>
 
-    <section class="card span-12">
+    <section class="card">
       <h2>Report overview</h2>
       <p class="section-subtitle">Generated from <strong>${escapeHtml(fileName)}</strong></p>
-      <div class="report-grid">
-        <div class="stat span-3"><h3>Total terms</h3><div class="value">${terms.length}</div></div>
-        <div class="stat span-3"><h3>Total scored reflections</h3><div class="value">${allEntries.length}</div></div>
-        <div class="stat span-3"><h3>Highest rating found</h3><div class="value">${fileMeta.maxRating}</div></div>
-        <div class="stat span-3"><h3>Average rating</h3><div class="value">${fileMeta.avgRating.toFixed(2)}</div></div>
+      <div class="overview-grid">
+        <div class="stat"><div class="stat-label">Total terms</div><div class="stat-value">${terms.length}</div></div>
+        <div class="stat"><div class="stat-label">Total scored reflections</div><div class="stat-value">${allEntries.length}</div></div>
+        <div class="stat"><div class="stat-label">Highest rating found</div><div class="stat-value">${fileMeta.maxRating}</div></div>
+        <div class="stat"><div class="stat-label">Average rating</div><div class="stat-value">${fileMeta.avgRating.toFixed(2)}</div></div>
       </div>
       <div class="term-chip-list">
         ${topTerms.slice(0, 8).map(t => `<span class="term-chip">${escapeHtml(t.term)} · avg ${t.avg.toFixed(2)} · ${t.count} entries</span>`).join("")}
@@ -72,118 +82,119 @@ function renderReport(data, fileName = "Loaded JSON") {
     </section>
 
     <section class="card">
-      <div class="mod-grid">
+      <h2>Charts</h2>
+      <p class="section-subtitle">Quick visual summaries without relying on fragile side-by-side tables.</p>
+      <div class="chart-stack">
         <div class="chart-card">
           <h3>Strongest concepts</h3>
-          <div class="chart-wrap"><canvas id="termsChart" height="300"></canvas></div>
+          <div class="chart-wrap"><canvas id="termsChart" height="320"></canvas></div>
         </div>
         <div class="chart-card">
           <h3>Average by reflection box</h3>
-          <div class="chart-wrap"><canvas id="slotsChart" height="300"></canvas></div>
+          <div class="chart-wrap"><canvas id="slotsChart" height="280"></canvas></div>
         </div>
       </div>
     </section>
 
     <section class="card">
       <h2>Strongest concepts</h2>
-      <p class="section-subtitle">Same data in a table and modular cards for cleaner viewing on smaller screens.</p>
-      <div class="mod-grid">
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Concept</th>
-                <th>Average</th>
-                <th>Highest</th>
-                <th>Entries</th>
-                <th>Strongest boxes</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${topTerms.map(row => `
-                <tr>
-                  <td><strong>${escapeHtml(row.term)}</strong></td>
-                  <td>${row.avg.toFixed(2)}</td>
-                  <td>${row.max}</td>
-                  <td>${row.count}</td>
-                  <td>${escapeHtml(row.topSlots.join(", "))}</td>
-                </tr>
-              `).join("")}
-            </tbody>
-          </table>
-        </div>
-        <div class="row-card-list">
-          ${topTerms.slice(0, 8).map(row => {
-            const entry = termEntries[row.term].slice().sort((a,b)=> b.rating - a.rating || b.text.length - a.text.length)[0];
-            return `
-              <article class="row-card">
-                <div class="row-card-top">
+      <p class="section-subtitle">Each concept is its own module. Open only the ones you want.</p>
+      <div class="accordion-list">
+        ${topTerms.map((row, idx) => {
+          const entry = termEntries[row.term].slice().sort((a,b)=> b.rating - a.rating || b.text.length - a.text.length)[0];
+          return `
+            <details class="module" ${idx < 2 ? "open" : ""}>
+              <summary class="module-summary">
+                <div class="summary-left">
                   <h3>${escapeHtml(row.term)}</h3>
-                  <span class="badge">avg ${row.avg.toFixed(2)}</span>
+                  <p>${escapeHtml(shorten(entry.text, 120))}</p>
                 </div>
-                <p class="muted">Best in ${escapeHtml(entry.slotLabel)} · max ${row.max} · ${row.count} total entries</p>
-                <p>${escapeHtml(shorten(entry.text, 170))}</p>
-              </article>
-            `;
-          }).join("")}
-        </div>
+                <div class="summary-right">
+                  <span class="badge">avg ${row.avg.toFixed(2)}</span>
+                  <span class="badge gold">max ${row.max}</span>
+                  <span class="badge">${row.count} entries</span>
+                  <span class="chevron">▶</span>
+                </div>
+              </summary>
+              <div class="module-content">
+                <div class="metric-row">
+                  <div class="metric"><div class="metric-label">Strongest box</div><div class="metric-value">${escapeHtml(entry.slotLabel)}</div></div>
+                  <div class="metric"><div class="metric-label">Highest rating</div><div class="metric-value">${row.max}</div></div>
+                  <div class="metric"><div class="metric-label">Frequent boxes</div><div class="metric-value">${escapeHtml(row.topSlots.join(", "))}</div></div>
+                </div>
+                <div class="text-block">${escapeHtml(entry.text)}</div>
+              </div>
+            </details>
+          `;
+        }).join("")}
       </div>
     </section>
 
     <section class="card">
       <h2>Highest-rated reflections</h2>
       <p class="section-subtitle">These are the entries most worth revisiting for TOK claims, knowledge questions, or essay direction.</p>
-      <div class="quote-grid">
-        ${topEntries.map(renderQuoteCard).join("")}
+      <div class="accordion-list">
+        ${topEntries.map((entry, idx) => `
+          <details class="module" ${idx < 3 ? "open" : ""}>
+            <summary class="module-summary">
+              <div class="summary-left">
+                <h3>${escapeHtml(entry.term)} · ${escapeHtml(entry.slotLabel)} · Day ${entry.day}</h3>
+                <p>${escapeHtml(shorten(entry.text, 130))}</p>
+              </div>
+              <div class="summary-right">
+                <span class="badge gold">Rating ${entry.rating}</span>
+                <span class="chevron">▶</span>
+              </div>
+            </summary>
+            <div class="module-content">
+              <div class="text-block">${escapeHtml(entry.text)}</div>
+            </div>
+          </details>
+        `).join("")}
       </div>
     </section>
 
     <section class="card">
       <h2>Reflection patterns by term</h2>
-      <p class="section-subtitle">Broken into smaller columns for easier scanning and better resizing.</p>
-      <div class="mod-columns">
-        ${chunk(topTerms, Math.ceil(topTerms.length / 3)).map(group => `
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Term</th>
-                  <th>Best Box</th>
-                  <th>Best Rating</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${group.map(row => {
-                  const entry = termEntries[row.term].slice().sort((a,b)=> b.rating - a.rating || a.day - b.day)[0];
-                  return `
-                    <tr>
-                      <td><strong>${escapeHtml(row.term)}</strong></td>
-                      <td>${escapeHtml(entry.slotLabel)}</td>
-                      <td>${entry.rating}</td>
-                    </tr>
-                  `;
-                }).join("")}
-              </tbody>
-            </table>
+      <p class="section-subtitle">Short stackable modules instead of long narrow tables.</p>
+      <div class="pattern-grid">
+        ${topTerms.map(row => {
+          const entry = termEntries[row.term].slice().sort((a,b)=> b.rating - a.rating || a.day - b.day)[0];
+          return `
+            <div class="pattern-card">
+              <div class="pattern-top">
+                <h3>${escapeHtml(row.term)}</h3>
+                <span class="badge">${escapeHtml(entry.slotLabel)}</span>
+              </div>
+              <p class="muted">Best rating: ${entry.rating}</p>
+              <p>${escapeHtml(shorten(entry.text, 140))}</p>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Possible TOK / EE prompt seeds</h2>
+      <p class="section-subtitle">Starting points built from the highest-rated themes in the spiral.</p>
+      <div class="prompt-grid">
+        ${prompts.map(p => `
+          <div class="prompt-card">
+            <h3>${escapeHtml(p.title)}</h3>
+            <p>${escapeHtml(p.body)}</p>
           </div>
         `).join("")}
       </div>
     </section>
 
     <section class="card">
-      <h2>Possible TOK / EE prompt seeds</h2>
-      <p class="section-subtitle">These are starting points built from the highest-rated themes in the spiral.</p>
-      ${prompts.map(p => `<div class="prompt"><strong>${escapeHtml(p.title)}</strong><br>${escapeHtml(p.body)}</div>`).join("")}
-    </section>
-
-    <section class="card">
       <h2>Next moves</h2>
-      <ol>
-        <li>Circle the 3–5 concepts with the strongest average ratings and the richest language.</li>
-        <li>Compare whether those strong moments came from lived examples, abstract thinking, or movement in thinking.</li>
-        <li>Draft one knowledge question that links two of the strongest concepts.</li>
-        <li>Use the top reflection language as raw material for an extended essay or exhibition planning document.</li>
-      </ol>
+      <div class="stack">
+        <div class="pattern-card"><strong>1.</strong> Circle the 3–5 concepts with the strongest average ratings and the richest language.</div>
+        <div class="pattern-card"><strong>2.</strong> Compare whether those strong moments came from lived examples, abstract thinking, or movement in thinking.</div>
+        <div class="pattern-card"><strong>3.</strong> Draft one knowledge question that links two of the strongest concepts.</div>
+        <div class="pattern-card"><strong>4.</strong> Use the top reflection language as raw material for an extended essay or exhibition planning document.</div>
+      </div>
     </section>
   `;
 
@@ -200,20 +211,6 @@ function redrawStoredCharts() {
   drawBarChart("slotsChart", chartState.slots, { maxValue: 4, horizontal: false });
 }
 
-function renderQuoteCard(entry) {
-  return `
-    <article class="quote-card">
-      <div class="quote-meta">
-        <span class="badge">Rating ${entry.rating}</span>
-        <span>Term: <strong>${escapeHtml(entry.term)}</strong></span>
-        <span>Box: <strong>${escapeHtml(entry.slotLabel)}</strong></span>
-        <span>Day ${entry.day}</span>
-      </div>
-      <div>${escapeHtml(entry.text)}</div>
-    </article>
-  `;
-}
-
 function analyzeSpiral(data) {
   if (!data?.spiral?.segments?.[0]?.terms?.length) {
     return { ok: false, message: "Could not find spiral terms in the file." };
@@ -222,10 +219,7 @@ function analyzeSpiral(data) {
   const terms = data.spiral.segments[0].terms;
   const reflections = data.reflections || {};
   const dayKeys = Object.keys(reflections).filter(k => /^day-\d+$/.test(k)).sort((a,b) => getDayNum(a) - getDayNum(b));
-
-  if (!dayKeys.length) {
-    return { ok: false, message: "Could not find day-based reflections in the file." };
-  }
+  if (!dayKeys.length) return { ok: false, message: "Could not find day-based reflections in the file." };
 
   const termEntries = {};
   const allEntries = [];
@@ -247,9 +241,7 @@ function analyzeSpiral(data) {
     });
   }
 
-  if (!allEntries.length) {
-    return { ok: false, message: "No usable scored reflections were found." };
-  }
+  if (!allEntries.length) return { ok: false, message: "No usable scored reflections were found." };
 
   const maxRating = Math.max(...allEntries.map(e => e.rating));
   const avgRating = allEntries.reduce((a,b) => a + b.rating, 0) / allEntries.length;
@@ -285,30 +277,11 @@ function normalizeEntry(value) {
 function buildPrompts(topTerms) {
   const best = topTerms.slice(0, 6).map(t => t.term);
   const prompts = [];
-  if (best.length >= 2) {
-    prompts.push({
-      title: `How do ${best[0]} and ${best[1]} depend on one another in the making of knowledge?`,
-      body: `Use the strongest reflections on ${best[0]} and ${best[1]} to test whether one concept supports, limits, or corrects the other.`
-    });
-  }
-  if (best.length >= 3) {
-    prompts.push({
-      title: `To what extent is ${best[2].toLowerCase()} shaped by perspective rather than discovered directly?`,
-      body: `Build from the highest-rated language in the report and compare lived examples with more abstract reflections.`
-    });
-  }
-  prompts.push({
-    title: `When does confidence become epistemically dangerous?`,
-    body: `Use strong entries on certainty, authority, trust, evidence, or doubt if they appear in the report to explore where certainty stops being productive.`
-  });
-  prompts.push({
-    title: `What turns information into meaning?`,
-    body: `Follow the strongest concept trail through language, interpretation, perspective, and experience to develop a more focused research question.`
-  });
-  prompts.push({
-    title: `How reliable is lived experience as a route to knowledge?`,
-    body: `Use the report's highest-rated concrete and motion entries to compare personal immediacy with the need for justification and evidence.`
-  });
+  if (best.length >= 2) prompts.push({ title: `How do ${best[0]} and ${best[1]} depend on one another in the making of knowledge?`, body: `Use the strongest reflections on ${best[0]} and ${best[1]} to test whether one concept supports, limits, or corrects the other.` });
+  if (best.length >= 3) prompts.push({ title: `To what extent is ${best[2].toLowerCase()} shaped by perspective rather than discovered directly?`, body: `Build from the highest-rated language in the report and compare lived examples with more abstract reflections.` });
+  prompts.push({ title: `When does confidence become epistemically dangerous?`, body: `Use strong entries on certainty, authority, trust, evidence, or doubt if they appear in the report to explore where certainty stops being productive.` });
+  prompts.push({ title: `What turns information into meaning?`, body: `Follow the strongest concept trail through language, interpretation, perspective, and experience to develop a more focused research question.` });
+  prompts.push({ title: `How reliable is lived experience as a route to knowledge?`, body: `Use the report's highest-rated concrete and motion entries to compare personal immediacy with the need for justification and evidence.` });
   return prompts.slice(0, 5);
 }
 
@@ -318,9 +291,8 @@ function drawBarChart(canvasId, items, options = {}) {
   const ctx = canvas.getContext("2d");
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
-  const width = Math.max(280, rect.width || canvas.width || 600);
+  const width = Math.max(280, rect.width || 600);
   const height = Math.max(220, options.horizontal === false ? 280 : 320);
-
   canvas.width = width * dpr;
   canvas.height = height * dpr;
   canvas.style.width = width + "px";
@@ -425,28 +397,10 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   if (stroke) ctx.stroke();
 }
 
-function chunk(arr, size) {
-  const out = [];
-  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
-  return out;
-}
-
-function getDayNum(key) {
-  return Number(String(key).replace("day-", ""));
-}
-
-function shorten(text, n) {
-  return text.length <= n ? text : text.slice(0, n - 1).trimEnd() + "…";
-}
-
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function textDepthScore(text) {
-  return Math.min(text.length, 300);
-}
-
+function getDayNum(key) { return Number(String(key).replace("day-", "")); }
+function shorten(text, n) { return text.length <= n ? text : text.slice(0, n - 1).trimEnd() + "…"; }
+function capitalize(str) { return str.charAt(0).toUpperCase() + str.slice(1); }
+function textDepthScore(text) { return Math.min(text.length, 300); }
 function escapeHtml(str) {
   return String(str).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
 }

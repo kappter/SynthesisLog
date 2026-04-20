@@ -4,11 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TOK Spiral Reflection Report</title>
-  <link rel="stylesheet" href="tok-report.css" />
+  <link rel="stylesheet" href="tok-report-modular.css" />
 </head>
 <body>
   <header class="page-header no-print">
     <div class="header-copy">
+      <p class="eyebrow">Skyline TOK</p>
       <h1>TOK Spiral Reflection Report</h1>
       <p>Load a synthesis log JSON file to generate a detailed, print-ready report of strongest reflections, top concepts, and possible Extended Essay prompt directions.</p>
     </div>
@@ -19,35 +20,36 @@
       </label>
       <button id="themeBtn" type="button">Toggle Theme</button>
       <button id="printBtn" type="button">Print Report</button>
+      <button id="expandBtn" type="button">Expand All</button>
     </div>
   </header>
 
   <main id="reportRoot">
     <section class="hero card">
       <h2>Ready to analyze</h2>
-      <p>This report is designed for the same spiral JSON import file used by the synthesis log tool. It reconstructs term alignment across the reflection flow, highlights the highest-rated entries, and turns those patterns into possible inquiry directions.</p>
+      <p>This version is fully modular. It stacks vertically, keeps summary information visible, and lets longer content expand only when needed.</p>
       <div class="hero-grid">
         <div class="mini-panel">
-          <h3>What it surfaces</h3>
-          <p>Top-rated reflections, strongest concepts, repeated strengths, and prompt seeds.</p>
+          <h3>Best for phones</h3>
+          <p>Long reflections and prompt seeds stay collapsed until opened.</p>
         </div>
         <div class="mini-panel">
-          <h3>Why it matters</h3>
-          <p>A full spiral should not just be stored. It should reveal which lines of thought deserve deeper inquiry.</p>
+          <h3>Best for tablets</h3>
+          <p>Cards stack cleanly instead of forcing narrow side-by-side columns.</p>
         </div>
         <div class="mini-panel">
-          <h3>Best use</h3>
-          <p>Phone, tablet, desktop, or print. Use it for conferencing, TOK planning, or EE brainstorming.</p>
+          <h3>Best for desktop</h3>
+          <p>Still roomy, but no more fragile multi-column squeeze.</p>
         </div>
       </div>
     </section>
 
     <section id="emptyState" class="card">
       <h2>No file loaded yet</h2>
-      <p>Select a JSON file above. The page will render a full printable report automatically.</p>
+      <p>Select a JSON file above. The page will render a modular report automatically.</p>
     </section>
   </main>
 
-  <script src="tok-report.js"></script>
+  <script src="tok-report-modular.js"></script>
 </body>
 </html>
