@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +8,7 @@
 </head>
 <body>
   <header class="page-header no-print">
-    <div>
+    <div class="header-copy">
       <h1>TOK Spiral Reflection Report</h1>
       <p>Load a synthesis log JSON file to generate a detailed, print-ready report of strongest reflections, top concepts, and possible Extended Essay prompt directions.</p>
     </div>
@@ -17,6 +17,7 @@
         <input type="file" id="fileInput" accept=".json,application/json" />
         <span>Load JSON File</span>
       </label>
+      <button id="themeBtn" type="button">Toggle Theme</button>
       <button id="printBtn" type="button">Print Report</button>
     </div>
   </header>
@@ -25,12 +26,20 @@
     <section class="hero card">
       <h2>Ready to analyze</h2>
       <p>This report is designed for the same spiral JSON import file used by the synthesis log tool. It reconstructs term alignment across the reflection flow, highlights the highest-rated entries, and turns those patterns into possible inquiry directions.</p>
-      <ul>
-        <li>Top-rated reflections</li>
-        <li>Concept averages and density</li>
-        <li>Repeated strengths across history, concrete, abstract, amalgam, and motion</li>
-        <li>Possible TOK / EE-style prompt seeds</li>
-      </ul>
+      <div class="hero-grid">
+        <div class="mini-panel">
+          <h3>What it surfaces</h3>
+          <p>Top-rated reflections, strongest concepts, repeated strengths, and prompt seeds.</p>
+        </div>
+        <div class="mini-panel">
+          <h3>Why it matters</h3>
+          <p>A full spiral should not just be stored. It should reveal which lines of thought deserve deeper inquiry.</p>
+        </div>
+        <div class="mini-panel">
+          <h3>Best use</h3>
+          <p>Phone, tablet, desktop, or print. Use it for conferencing, TOK planning, or EE brainstorming.</p>
+        </div>
+      </div>
     </section>
 
     <section id="emptyState" class="card">
