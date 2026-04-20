@@ -227,6 +227,7 @@ function renderReport(data, fileName = "Loaded JSON") {
   `;
 
   chartState = {
+    motion: [] ,
     terms: topTerms.slice(0, 10).map(t => ({ label: t.term, value: t.avg })),
     slots: slotStats.map(s => ({ label: s.slot, value: s.avg }))
   };
@@ -357,8 +358,9 @@ function buildPromptsFromEntries(entries) {
     usedTerms.add(entry.term);
 
     const snippet = shorten(entry.text, 170);
-    const title = makePromptTitle(entry);
-    const body = makePromptBody(entry);
+    const built = buildPromptFromEntry(entry);
+    const title = built.title;
+    const body = built.body;
 
     prompts.push({
       title,
@@ -374,7 +376,7 @@ function buildPromptsFromEntries(entries) {
   return prompts;
 }
 
-function makePromptTitle(entry) {
+function old_makePromptTitle(entry) {
   const term = entry.term;
   const slot = entry.slot.toLowerCase();
 
@@ -385,7 +387,7 @@ function makePromptTitle(entry) {
   return `What kind of claim about ${term} is this reflection really reaching toward?`;
 }
 
-function makePromptBody(entry) {
+function old_makePromptBody(entry) {
   const term = entry.term;
   const slot = entry.slot.toLowerCase();
 
@@ -402,6 +404,41 @@ function makePromptBody(entry) {
     return `The student's own language is grounded in lived experience. Use that grounding to ask how far one experience can support a broader claim about ${term.toLowerCase()}.`;
   }
   return `Start with the student's own wording, then sharpen it into a question about what counts as good grounds for claiming knowledge in relation to ${term.toLowerCase()}.`;
+}
+
+
+function buildPromptFromEntry(entry) {
+  const text = entry.text.toLowerCase();
+  const hasContrast = text.includes("but") || text.includes("however") || text.includes("yet");
+  const hasUncertainty = text.includes("seems") || text.includes("maybe") || text.includes("not sure");
+  const hasAction = text.includes("i would") || text.includes("i will") || text.includes("test");
+  const hasConnection = text.includes("when") || text.includes("because") || text.includes("depends");
+
+  let title = "";
+  let body = "";
+
+  if (hasContrast) {
+    title = `To what extent can ${entry.term} hold when competing interpretations exist?`;
+    body = `This reflection suggests a tension. Explore what happens when two valid perspectives conflict.`;
+  } 
+  else if (hasUncertainty) {
+    title = `How can we justify claims about ${entry.term} when certainty is limited?`;
+    body = `Build a question around how knowledge survives without full confidence.`;
+  } 
+  else if (hasAction) {
+    title = `How does engaging with ${entry.term} in real situations change our understanding?`;
+    body = `Turn this into inquiry about whether knowledge changes when applied.`;
+  } 
+  else if (hasConnection) {
+    title = `How does ${entry.term} depend on other ways of knowing?`;
+    body = `Expand into a question about interconnected knowledge.`;
+  } 
+  else {
+    title = `What determines whether ${entry.term} leads to reliable knowledge?`;
+    body = `Explore what makes this concept strong or weak in knowing.`;
+  }
+
+  return { title, body };
 }
 
 function normalizeEntry(value) {
