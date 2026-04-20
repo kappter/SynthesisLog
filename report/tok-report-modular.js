@@ -6,8 +6,10 @@ const reportRoot = document.getElementById("reportRoot");
 const rootEl = document.documentElement;
 
 const SLOT_OLDEST_TO_NEWEST = ["motion", "amalgam", "abstract", "concrete", "history"];
+const SLOT_ORDER = ["history", "concrete", "abstract", "amalgam", "motion"];
 let chartState = null;
 let allExpanded = false;
+let growthState = null;
 
 initTheme();
 
@@ -30,6 +32,7 @@ themeBtn?.addEventListener("click", () => {
   rootEl.setAttribute("data-theme", next);
   localStorage.setItem("tok-report-theme", next);
   redrawStoredCharts();
+  redrawGrowthChart();
 });
 
 expandBtn?.addEventListener("click", () => {
@@ -38,7 +41,10 @@ expandBtn?.addEventListener("click", () => {
   expandBtn.textContent = allExpanded ? "Collapse All" : "Expand All";
 });
 
-window.addEventListener("resize", () => redrawStoredCharts());
+window.addEventListener("resize", () => {
+  redrawStoredCharts();
+  redrawGrowthChart();
+});
 
 function initTheme() {
   const saved = localStorage.getItem("tok-report-theme");
@@ -57,7 +63,7 @@ function renderReport(data, fileName = "Loaded JSON") {
     return;
   }
 
-  const { terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta, slotStats } = parsed;
+  const { terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta, slotStats, growthSeries } = parsed;
   allExpanded = false;
   expandBtn.textContent = "Expand All";
 
@@ -108,6 +114,26 @@ function renderReport(data, fileName = "Loaded JSON") {
             <p class="prompt-note">Built from ${escapeHtml(p.term)} · ${escapeHtml(p.slotLabel)} · Day ${p.day}</p>
           </div>
         `).join("")}
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Concept growth line chart</h2>
+      <p class="section-subtitle">Pick a concept to see how its ratings develop across history, concrete, abstract, amalgam, and motion.</p>
+      <div class="growth-layout">
+        <div class="growth-list" id="growthList">
+          ${growthSeries.map((item, idx) => `
+            <div class="growth-item ${idx === 0 ? "active" : ""}" data-term="${escapeHtml(item.term)}">
+              <div class="growth-item-title">${escapeHtml(item.term)}</div>
+              <div class="growth-item-meta">avg ${item.avg.toFixed(2)} · peak ${item.max} · strongest in ${escapeHtml(item.bestSlot)}</div>
+            </div>
+          `).join("")}
+        </div>
+        <div class="growth-card">
+          <h3 id="growthTitle">${escapeHtml(growthSeries[0]?.term || "")}</h3>
+          <div class="chart-wrap"><canvas id="growthChart" height="320"></canvas></div>
+          <div class="growth-summary" id="growthSummary"></div>
+        </div>
       </div>
     </section>
 
@@ -204,13 +230,50 @@ function renderReport(data, fileName = "Loaded JSON") {
     terms: topTerms.slice(0, 10).map(t => ({ label: t.term, value: t.avg })),
     slots: slotStats.map(s => ({ label: s.slot, value: s.avg }))
   };
+  growthState = growthSeries;
   redrawStoredCharts();
+  wireGrowthChart();
+}
+
+function wireGrowthChart() {
+  const items = Array.from(document.querySelectorAll(".growth-item"));
+  if (!items.length || !growthState?.length) return;
+
+  function setActive(term) {
+    items.forEach(el => el.classList.toggle("active", el.dataset.term === term));
+    const series = growthState.find(x => x.term === term) || growthState[0];
+    drawLineChart("growthChart", series);
+    const title = document.getElementById("growthTitle");
+    const summary = document.getElementById("growthSummary");
+    if (title) title.textContent = series.term;
+    if (summary) {
+      summary.innerHTML = `
+        <div class="metric"><div class="metric-label">Average</div><div class="metric-value">${series.avg.toFixed(2)}</div></div>
+        <div class="metric"><div class="metric-label">Peak</div><div class="metric-value">${series.max}</div></div>
+        <div class="metric"><div class="metric-label">Strongest box</div><div class="metric-value">${escapeHtml(series.bestSlot)}</div></div>
+      `;
+    }
+  }
+
+  items.forEach(el => {
+    el.addEventListener("click", () => setActive(el.dataset.term));
+  });
+
+  setActive(growthState[0].term);
 }
 
 function redrawStoredCharts() {
   if (!chartState) return;
   drawBarChart("termsChart", chartState.terms, { maxValue: 4, horizontal: true });
   drawBarChart("slotsChart", chartState.slots, { maxValue: 4, horizontal: false });
+}
+
+function redrawGrowthChart() {
+  if (!growthState?.length) return;
+  const active = document.querySelector(".growth-item.active");
+  const term = active?.dataset.term || growthState[0].term;
+  const series = growthState.find(x => x.term === term) || growthState[0];
+  drawLineChart("growthChart", series);
 }
 
 function analyzeSpiral(data) {
@@ -265,8 +328,24 @@ function analyzeSpiral(data) {
     return { slot: capitalize(slot), avg, count: rows.length };
   });
 
+  const growthSeries = Object.entries(termEntries).map(([term, entries]) => {
+    const values = {};
+    SLOT_ORDER.forEach(slot => values[slot] = null);
+    entries.forEach(e => values[e.slot] = e.rating);
+    const ordered = SLOT_ORDER.map(slot => ({ slot, label: capitalize(slot), value: values[slot] ?? 0 }));
+    const avg = entries.reduce((a,b) => a + b.rating, 0) / entries.length;
+    const bestEntry = entries.slice().sort((a,b) => b.rating - a.rating || b.text.length - a.text.length)[0];
+    return {
+      term,
+      avg,
+      max: Math.max(...entries.map(e => e.rating)),
+      bestSlot: bestEntry.slotLabel,
+      points: ordered
+    };
+  }).sort((a,b) => b.avg - a.avg || b.max - a.max || a.term.localeCompare(b.term));
+
   const prompts = buildPromptsFromEntries(topEntries);
-  return { ok: true, terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta: { maxRating, avgRating }, slotStats };
+  return { ok: true, terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta: { maxRating, avgRating }, slotStats, growthSeries };
 }
 
 function buildPromptsFromEntries(entries) {
@@ -431,6 +510,94 @@ function drawBarChart(canvasId, items, options = {}) {
   ctx.textAlign = "start";
 }
 
+function drawLineChart(canvasId, series) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas || !series?.points?.length) return;
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const width = Math.max(320, rect.width || 700);
+  const height = Math.max(260, rect.height || 320);
+  canvas.width = width * dpr;
+  canvas.height = height * dpr;
+  canvas.style.width = width + "px";
+  canvas.style.height = height + "px";
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, width, height);
+
+  const styles = getComputedStyle(document.documentElement);
+  const ink = styles.getPropertyValue("--ink").trim();
+  const muted = styles.getPropertyValue("--muted").trim();
+  const line = styles.getPropertyValue("--line").trim();
+  const accent = styles.getPropertyValue("--chart-1").trim();
+  const accent2 = styles.getPropertyValue("--chart-2").trim();
+
+  const left = 48, right = 24, top = 18, bottom = 54;
+  const innerW = width - left - right;
+  const innerH = height - top - bottom;
+
+  // grid
+  ctx.strokeStyle = line;
+  ctx.lineWidth = 1;
+  for (let g = 0; g <= 4; g++) {
+    const y = top + innerH - (g / 4) * innerH;
+    ctx.beginPath();
+    ctx.moveTo(left, y);
+    ctx.lineTo(left + innerW, y);
+    ctx.stroke();
+    ctx.fillStyle = muted;
+    ctx.font = "12px Arial";
+    ctx.fillText(String(g), 16, y + 2);
+  }
+
+  const xs = series.points.map((p, i) => left + (innerW / (series.points.length - 1 || 1)) * i);
+  const ys = series.points.map(p => top + innerH - ((p.value || 0) / 4) * innerH);
+
+  // area
+  ctx.beginPath();
+  ctx.moveTo(xs[0], top + innerH);
+  xs.forEach((x, i) => ctx.lineTo(x, ys[i]));
+  ctx.lineTo(xs[xs.length - 1], top + innerH);
+  ctx.closePath();
+  const grad = ctx.createLinearGradient(0, top, 0, top + innerH);
+  grad.addColorStop(0, hexToRgba(accent, 0.22));
+  grad.addColorStop(1, hexToRgba(accent2, 0.04));
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // line
+  ctx.beginPath();
+  xs.forEach((x, i) => {
+    if (i === 0) ctx.moveTo(x, ys[i]);
+    else ctx.lineTo(x, ys[i]);
+  });
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  // points + labels
+  series.points.forEach((p, i) => {
+    const x = xs[i], y = ys[i];
+    ctx.beginPath();
+    ctx.arc(x, y, 5.5, 0, Math.PI * 2);
+    ctx.fillStyle = accent2;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = accent;
+    ctx.fill();
+
+    ctx.fillStyle = ink;
+    ctx.textAlign = "center";
+    ctx.font = "12px Arial";
+    ctx.fillText((p.value || 0).toFixed(0), x, y - 14);
+    ctx.fillStyle = muted;
+    ctx.fillText(p.label, x, top + innerH + 22);
+  });
+
+  ctx.textAlign = "start";
+}
+
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   const r = Math.min(radius, width / 2, height / 2);
   ctx.beginPath();
@@ -442,6 +609,17 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   ctx.closePath();
   if (fill) ctx.fill();
   if (stroke) ctx.stroke();
+}
+
+function hexToRgba(color, alpha) {
+  if (!color.startsWith("#")) return `rgba(31,79,130,${alpha})`;
+  const hex = color.replace("#", "");
+  const normalized = hex.length === 3 ? hex.split("").map(c => c + c).join("") : hex;
+  const bigint = parseInt(normalized, 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
 function getDayNum(key) { return Number(String(key).replace("day-", "")); }

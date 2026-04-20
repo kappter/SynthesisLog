@@ -126,7 +126,7 @@ button:hover, .file-btn span:hover { border-color: var(--accent); }
 .hero-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .overview-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
-.mini-panel, .stat, .chart-card, .summary-card, .prompt-card, .pattern-card {
+.mini-panel, .stat, .chart-card, .summary-card, .prompt-card, .pattern-card, .growth-card {
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--paper-2);
@@ -186,6 +186,63 @@ canvas {
   width: 100%;
   height: auto;
   display: block;
+}
+
+.growth-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.growth-list {
+  display: grid;
+  gap: 10px;
+  max-height: 420px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.growth-item {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper);
+  padding: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease, background 0.15s ease;
+}
+
+.growth-item:hover {
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.growth-item.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.growth-item-title {
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.growth-item-meta {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.growth-summary {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+.growth-summary .metric {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px;
+  background: var(--paper);
 }
 
 .accordion-list {
@@ -305,6 +362,21 @@ details[open] .chevron {
   border-left: 4px solid var(--accent);
 }
 
+.source-snippet {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-style: italic;
+}
+
+.prompt-note {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-top: 8px;
+}
+
 .print-header { display: none; }
 
 @media (min-width: 900px) {
@@ -314,12 +386,15 @@ details[open] .chevron {
   .prompt-grid {
     grid-template-columns: 1fr 1fr;
   }
+  .pattern-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }
 
 @media (max-width: 980px) {
   .page-header { flex-direction: column; }
   .controls { justify-content: flex-start; width: 100%; }
-  .hero-grid, .overview-grid { grid-template-columns: 1fr 1fr; }
+  .hero-grid, .overview-grid, .growth-layout { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
@@ -355,7 +430,7 @@ details[open] .chevron {
     display: block;
     margin-bottom: 18px;
   }
-  .card, .mini-panel, .stat, details.module, .chart-card, .prompt-card, .pattern-card {
+  .card, .mini-panel, .stat, details.module, .chart-card, .prompt-card, .pattern-card, .growth-card {
     box-shadow: none;
     break-inside: avoid;
     page-break-inside: avoid;
@@ -368,20 +443,4 @@ details[open] .chevron {
   details.module .module-content {
     display: block !important;
   }
-}
-
-
-.source-snippet {
-  margin-top: 10px;
-  padding: 12px;
-  border-radius: 12px;
-  background: var(--paper);
-  border: 1px solid var(--line);
-  font-style: italic;
-}
-
-.prompt-note {
-  color: var(--muted);
-  font-size: 0.92rem;
-  margin-top: 8px;
 }
