@@ -63,7 +63,7 @@ function renderReport(data, fileName = "Loaded JSON") {
     return;
   }
 
-  const { terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta, slotStats, growthSeries } = parsed;
+  const { terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta, slotStats, growthSeries, motionStats } = parsed;
   allExpanded = false;
   expandBtn.textContent = "Expand All";
 
@@ -133,6 +133,20 @@ function renderReport(data, fileName = "Loaded JSON") {
           <h3 id="growthTitle">${escapeHtml(growthSeries[0]?.term || "")}</h3>
           <div class="chart-wrap"><canvas id="growthChart" height="320"></canvas></div>
           <div class="growth-summary" id="growthSummary"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Motion Tracker</h2>
+      <p class="section-subtitle">How often motion reflections move from passive thinking into observation, comparison, testing, or application.</p>
+      <div class="motion-grid">
+        <div class="chart-card">
+          <h3>Motion types</h3>
+          <div class="chart-wrap"><canvas id="motionChart" height="300"></canvas></div>
+        </div>
+        <div class="motion-list">
+          ${motionCards(motionStats)}
         </div>
       </div>
     </section>
@@ -227,13 +241,22 @@ function renderReport(data, fileName = "Loaded JSON") {
   `;
 
   chartState = {
-    motion: [] ,
     terms: topTerms.slice(0, 10).map(t => ({ label: t.term, value: t.avg })),
-    slots: slotStats.map(s => ({ label: s.slot, value: s.avg }))
+    slots: slotStats.map(s => ({ label: s.slot, value: s.avg })),
+    motion: motionStats.series
   };
   growthState = growthSeries;
   redrawStoredCharts();
   wireGrowthChart();
+}
+
+function motionCards(motionStats) {
+  return motionStats.series.map(item => `
+    <div class="motion-card">
+      <h3>${escapeHtml(item.label)}</h3>
+      <p>${item.value} motion entries</p>
+    </div>
+  `).join("");
 }
 
 function wireGrowthChart() {
@@ -267,6 +290,7 @@ function redrawStoredCharts() {
   if (!chartState) return;
   drawBarChart("termsChart", chartState.terms, { maxValue: 4, horizontal: true });
   drawBarChart("slotsChart", chartState.slots, { maxValue: 4, horizontal: false });
+  drawBarChart("motionChart", chartState.motion, { maxValue: Math.max(1, ...chartState.motion.map(m => m.value)), horizontal: false });
 }
 
 function redrawGrowthChart() {
@@ -345,8 +369,39 @@ function analyzeSpiral(data) {
     };
   }).sort((a,b) => b.avg - a.avg || b.max - a.max || a.term.localeCompare(b.term));
 
+  const motionStats = classifyMotion(allEntries.filter(e => e.slot === "motion"));
   const prompts = buildPromptsFromEntries(topEntries);
-  return { ok: true, terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta: { maxRating, avgRating }, slotStats, growthSeries };
+  return { ok: true, terms, termEntries, allEntries, topEntries, topTerms, prompts, fileMeta: { maxRating, avgRating }, slotStats, growthSeries, motionStats };
+}
+
+function classifyMotion(entries) {
+  const counts = {
+    Passive: 0,
+    Observational: 0,
+    Comparative: 0,
+    Experimental: 0,
+    Applied: 0
+  };
+
+  entries.forEach(entry => {
+    const t = entry.text.toLowerCase();
+
+    if (t.includes("compare") || t.includes("comparison") || t.includes("another person") || t.includes("two people")) {
+      counts.Comparative++;
+    } else if (t.includes("test") || t.includes("experiment") || t.includes("track") || t.includes("audit") || t.includes("investigation")) {
+      counts.Experimental++;
+    } else if (t.includes("interview") || t.includes("ask") || t.includes("observe") || t.includes("journal") || t.includes("log")) {
+      counts.Observational++;
+    } else if (t.includes("apply") || t.includes("do this") || t.includes("real") || t.includes("redesign") || t.includes("rewrite") || t.includes("create")) {
+      counts.Applied++;
+    } else {
+      counts.Passive++;
+    }
+  });
+
+  return {
+    series: Object.entries(counts).map(([label, value]) => ({ label, value }))
+  };
 }
 
 function buildPromptsFromEntries(entries) {
@@ -359,12 +414,10 @@ function buildPromptsFromEntries(entries) {
 
     const snippet = shorten(entry.text, 170);
     const built = buildPromptFromEntry(entry);
-    const title = built.title;
-    const body = built.body;
 
     prompts.push({
-      title,
-      body,
+      title: built.title,
+      body: built.body,
       snippet,
       term: entry.term,
       slotLabel: entry.slotLabel,
@@ -375,37 +428,6 @@ function buildPromptsFromEntries(entries) {
   }
   return prompts;
 }
-
-function old_makePromptTitle(entry) {
-  const term = entry.term;
-  const slot = entry.slot.toLowerCase();
-
-  if (slot === "motion") return `Where could ${term} be tested, tracked, or revised in real life?`;
-  if (slot === "abstract") return `What larger knowledge question is hiding inside ${term}?`;
-  if (slot === "amalgam") return `How does ${term} change when it interacts with other TOK concepts?`;
-  if (slot === "concrete") return `What does ${term} look like in lived experience?`;
-  return `What kind of claim about ${term} is this reflection really reaching toward?`;
-}
-
-function old_makePromptBody(entry) {
-  const term = entry.term;
-  const slot = entry.slot.toLowerCase();
-
-  if (slot === "motion") {
-    return `Use the student's own action-oriented language as a starting point. Turn this into a sharper inquiry: what would happen if ${term.toLowerCase()} were not only reflected on, but actually tested in a repeatable way?`;
-  }
-  if (slot === "abstract") {
-    return `This reflection is already reaching beyond the immediate example. Pull its central tension into a TOK-style question and ask what assumptions about knowledge, reality, or interpretation are doing the hidden work.`;
-  }
-  if (slot === "amalgam") {
-    return `This wording suggests that ${term.toLowerCase()} becomes more interesting when mixed with other concepts. Build a prompt that compares, connects, or complicates at least two TOK ideas rather than isolating one.`;
-  }
-  if (slot === "concrete") {
-    return `The student's own language is grounded in lived experience. Use that grounding to ask how far one experience can support a broader claim about ${term.toLowerCase()}.`;
-  }
-  return `Start with the student's own wording, then sharpen it into a question about what counts as good grounds for claiming knowledge in relation to ${term.toLowerCase()}.`;
-}
-
 
 function buildPromptFromEntry(entry) {
   const text = entry.text.toLowerCase();
@@ -420,20 +442,16 @@ function buildPromptFromEntry(entry) {
   if (hasContrast) {
     title = `To what extent can ${entry.term} hold when competing interpretations exist?`;
     body = `This reflection suggests a tension. Explore what happens when two valid perspectives conflict.`;
-  } 
-  else if (hasUncertainty) {
+  } else if (hasUncertainty) {
     title = `How can we justify claims about ${entry.term} when certainty is limited?`;
     body = `Build a question around how knowledge survives without full confidence.`;
-  } 
-  else if (hasAction) {
+  } else if (hasAction) {
     title = `How does engaging with ${entry.term} in real situations change our understanding?`;
     body = `Turn this into inquiry about whether knowledge changes when applied.`;
-  } 
-  else if (hasConnection) {
+  } else if (hasConnection) {
     title = `How does ${entry.term} depend on other ways of knowing?`;
     body = `Expand into a question about interconnected knowledge.`;
-  } 
-  else {
+  } else {
     title = `What determines whether ${entry.term} leads to reliable knowledge?`;
     body = `Explore what makes this concept strong or weak in knowing.`;
   }
@@ -483,7 +501,7 @@ function drawBarChart(canvasId, items, options = {}) {
     const left = 38, right = 18, top = 12, bottom = 58;
     const innerW = width - left - right;
     const innerH = height - top - bottom;
-    const band = innerW / items.length;
+    const band = innerW / Math.max(items.length, 1);
     const barW = band * 0.62;
 
     ctx.strokeStyle = line;
@@ -493,8 +511,9 @@ function drawBarChart(canvasId, items, options = {}) {
     ctx.lineTo(left + innerW, top + innerH);
     ctx.stroke();
 
-    for (let g = 0; g <= 4; g++) {
-      const y = top + innerH - (g / 4) * innerH;
+    const steps = Math.max(1, Math.ceil(maxValue));
+    for (let g = 0; g <= steps; g++) {
+      const y = top + innerH - (g / steps) * innerH;
       ctx.strokeStyle = line;
       ctx.beginPath();
       ctx.moveTo(left, y);
@@ -512,7 +531,7 @@ function drawBarChart(canvasId, items, options = {}) {
       roundRect(ctx, x, y, barW, h, 8, true, false);
       ctx.fillStyle = ink;
       ctx.textAlign = "center";
-      ctx.fillText(item.value.toFixed(2), x + barW / 2, y - 10);
+      ctx.fillText(item.value.toFixed(0), x + barW / 2, y - 10);
       ctx.save();
       ctx.translate(x + barW / 2, top + innerH + 18);
       ctx.rotate(-Math.PI / 6);
@@ -573,7 +592,6 @@ function drawLineChart(canvasId, series) {
   const innerW = width - left - right;
   const innerH = height - top - bottom;
 
-  // grid
   ctx.strokeStyle = line;
   ctx.lineWidth = 1;
   for (let g = 0; g <= 4; g++) {
@@ -587,10 +605,9 @@ function drawLineChart(canvasId, series) {
     ctx.fillText(String(g), 16, y + 2);
   }
 
-  const xs = series.points.map((p, i) => left + (innerW / (series.points.length - 1 || 1)) * i);
+  const xs = series.points.map((p, i) => left + (innerW / Math.max(series.points.length - 1, 1)) * i);
   const ys = series.points.map(p => top + innerH - ((p.value || 0) / 4) * innerH);
 
-  // area
   ctx.beginPath();
   ctx.moveTo(xs[0], top + innerH);
   xs.forEach((x, i) => ctx.lineTo(x, ys[i]));
@@ -602,17 +619,12 @@ function drawLineChart(canvasId, series) {
   ctx.fillStyle = grad;
   ctx.fill();
 
-  // line
   ctx.beginPath();
-  xs.forEach((x, i) => {
-    if (i === 0) ctx.moveTo(x, ys[i]);
-    else ctx.lineTo(x, ys[i]);
-  });
+  xs.forEach((x, i) => { if (i === 0) ctx.moveTo(x, ys[i]); else ctx.lineTo(x, ys[i]); });
   ctx.strokeStyle = accent;
   ctx.lineWidth = 3;
   ctx.stroke();
 
-  // points + labels
   series.points.forEach((p, i) => {
     const x = xs[i], y = ys[i];
     ctx.beginPath();

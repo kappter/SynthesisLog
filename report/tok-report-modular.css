@@ -126,7 +126,7 @@ button:hover, .file-btn span:hover { border-color: var(--accent); }
 .hero-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .overview-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
-.mini-panel, .stat, .chart-card, .summary-card, .prompt-card, .pattern-card, .growth-card {
+.mini-panel, .stat, .chart-card, .prompt-card, .pattern-card, .growth-card, .motion-card {
   border: 1px solid var(--line);
   border-radius: 14px;
   background: var(--paper-2);
@@ -243,6 +243,27 @@ canvas {
   border-radius: 12px;
   padding: 10px;
   background: var(--paper);
+}
+
+.motion-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  gap: 16px;
+  align-items: start;
+}
+
+.motion-list {
+  display: grid;
+  gap: 10px;
+}
+
+.motion-card h3 {
+  margin: 0 0 6px 0;
+}
+
+.motion-card p {
+  margin: 0;
+  color: var(--muted);
 }
 
 .accordion-list {
@@ -380,21 +401,15 @@ details[open] .chevron {
 .print-header { display: none; }
 
 @media (min-width: 900px) {
-  .chart-stack {
-    grid-template-columns: 1fr 1fr;
-  }
-  .prompt-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-  .pattern-grid {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
+  .chart-stack { grid-template-columns: 1fr 1fr; }
+  .prompt-grid { grid-template-columns: 1fr 1fr; }
+  .pattern-grid { grid-template-columns: 1fr 1fr 1fr; }
 }
 
 @media (max-width: 980px) {
   .page-header { flex-direction: column; }
   .controls { justify-content: flex-start; width: 100%; }
-  .hero-grid, .overview-grid, .growth-layout { grid-template-columns: 1fr; }
+  .hero-grid, .overview-grid, .growth-layout, .motion-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
@@ -411,12 +426,8 @@ details[open] .chevron {
   .hero-grid, .overview-grid, .metric-row {
     grid-template-columns: 1fr;
   }
-  summary.module-summary {
-    flex-direction: column;
-  }
-  .summary-right {
-    justify-content: flex-start;
-  }
+  summary.module-summary { flex-direction: column; }
+  .summary-right { justify-content: flex-start; }
 }
 
 @media print {
@@ -430,17 +441,13 @@ details[open] .chevron {
     display: block;
     margin-bottom: 18px;
   }
-  .card, .mini-panel, .stat, details.module, .chart-card, .prompt-card, .pattern-card, .growth-card {
+  .card, .mini-panel, .stat, details.module, .chart-card, .prompt-card, .pattern-card, .growth-card, .motion-card {
     box-shadow: none;
     break-inside: avoid;
     page-break-inside: avoid;
     border-color: #bbb;
     background: #fff;
   }
-  details.module {
-    display: block;
-  }
-  details.module .module-content {
-    display: block !important;
-  }
+  details.module { display: block; }
+  details.module .module-content { display: block !important; }
 }
