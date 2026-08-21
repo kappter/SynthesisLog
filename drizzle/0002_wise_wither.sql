@@ -1,0 +1,1 @@
+ALTER TABLE `runs` ADD `reflectionDepth` int DEFAULT 4 NOT NULL;

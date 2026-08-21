@@ -1,0 +1,1 @@
+ALTER TABLE `chat_history` MODIFY COLUMN `stage` varchar(64) NOT NULL;
