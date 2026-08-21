@@ -1,0 +1,54 @@
+body {
+  font-family: Arial;
+  background: #f4f7fb;
+  padding: 20px;
+}
+
+.wrap {
+  max-width: 1000px;
+  margin: auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+input,
+select {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font: inherit;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+button {
+  padding: 10px;
+  cursor: pointer;
+  font: inherit;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
