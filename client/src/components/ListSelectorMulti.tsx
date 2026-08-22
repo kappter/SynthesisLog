@@ -25,6 +25,8 @@ import {
 } from "@shared/spiralTypes";
 import type { ReflectionDepth } from "@shared/reflectionDepth";
 import { DepthSelector } from "@/components/DepthSelector";
+import { isStaticMode } from "@/lib/staticMode";
+import { getGoogleSheetCsvUrl, parseTermCsv } from "@shared/googleSheetsClient";
 
 interface ListSelectorMultiProps {
   onSelectLists: (
@@ -41,6 +43,7 @@ export function ListSelectorMulti({
   isTransitionZone,
   trigger,
 }: ListSelectorMultiProps) {
+  const staticMode = isStaticMode();
   const [open, setOpen] = useState(false);
   const [selectedPresets, setSelectedPresets] = useState<Set<string>>(new Set());
   const [spiralMode, setSpiralMode] = useState<SpiralMode>("shuffled");
@@ -138,10 +141,26 @@ export function ListSelectorMulti({
       return;
     }
 
-    importFromSheet.mutate({
+    if (!staticMode) {
+      importFromSheet.mutate({
       sheetUrl,
       name: customName,
-    });
+      });
+      return;
+    }
+
+    void (async () => {
+      try {
+        const response = await fetch(getGoogleSheetCsvUrl(sheetUrl));
+        if (!response.ok) throw new Error("The published CSV could not be loaded.");
+        const terms = parseTermCsv(await response.text());
+        onSelectLists([{ id: `sheet-${Date.now()}`, name: customName, hue: Math.floor(Math.random() * 360), terms }], spiralMode, reflectionDepth);
+        setOpen(false);
+        toast.success(`Imported ${terms.length} terms from Google Sheets.`);
+      } catch {
+        toast.error("Google Sheets direct import needs a publicly published, CORS-enabled CSV. Use CSV Upload if this Sheet blocks browser access.");
+      }
+    })();
   };
 
   return (
@@ -330,7 +349,7 @@ export function ListSelectorMulti({
                 placeholder="https://docs.google.com/spreadsheets/d/..."
               />
               <p className="text-xs text-muted-foreground">
-                Make sure the sheet is publicly accessible (Anyone with link can view)
+                {staticMode ? "Static mode fetches a publicly published, CORS-enabled CSV directly. If it is blocked, download the CSV and use CSV Upload." : "Make sure the sheet is publicly accessible (Anyone with link can view)"}
               </p>
             </div>
             <Button

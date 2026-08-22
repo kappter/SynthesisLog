@@ -70,6 +70,8 @@ import {
 import { PRESET_LISTS } from "@shared/presets";
 import type { ReflectionDepth } from "@shared/reflectionDepth";
 import { getStageConfig } from "@shared/reflectionDepth";
+import { generateIcsCalendar } from "@shared/icsCalendar";
+import { isStaticMode } from "@/lib/staticMode";
 
 interface SpiralState {
   segments: Array<{
@@ -96,6 +98,7 @@ interface RatingsState {
 export default function SynthesisLog() {
   const { user, loading: authLoading } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const staticMode = isStaticMode();
 
   // Spiral state
   const [spiralState, setSpiralState] = useState<SpiralState>({
@@ -157,16 +160,21 @@ export default function SynthesisLog() {
 
   // ── AI Feature Toggle ──────────────────────────────────────────────────────
   const [aiEnabled, setAiEnabled] = useState<boolean>(() => {
+    if (isStaticMode()) return false;
     const saved = localStorage.getItem("synthesisLog_aiEnabled");
     return saved === null ? true : saved === "true";
   });
   const toggleAiEnabled = useCallback(() => {
+    if (staticMode) {
+      toast.message("AI is unavailable in the browser-only static version.");
+      return;
+    }
     setAiEnabled((prev) => {
       const next = !prev;
       localStorage.setItem("synthesisLog_aiEnabled", String(next));
       return next;
     });
-  }, []);
+  }, [staticMode]);
 
   // ── AI Chat Cache ─────────────────────────────────────────────────────────
   // Key format: "day{N}-{stageId}-{term}" — persisted in sessionStorage
@@ -497,11 +505,21 @@ export default function SynthesisLog() {
       toast.error('No spiral data to export');
       return;
     }
+    if (staticMode) {
+      toast.message("Static mode uses your browser's Print dialog. Choose ‘Save as PDF’ to create a PDF.");
+      setPrintWorksheetOpen(true);
+      return;
+    }
     setPdfDialogOpen(true);
-  }, [spiralState.segments.length]);
+  }, [spiralState.segments.length, staticMode]);
 
   // Actually fires the mutation with the chosen report type
   const doExportPDF = useCallback((reportType: 'standard' | 'ib-tok') => {
+    if (staticMode) {
+      setPdfDialogOpen(false);
+      setPrintWorksheetOpen(true);
+      return;
+    }
     // Gather all reflections from localStorage
     // Flatten each field to a plain string — stored values may be objects like { text: "...", aiSuggestion: "..." }
     const reflections: Record<string, Record<string, string>> = {};
@@ -538,7 +556,7 @@ export default function SynthesisLog() {
       reflectionDepth: spiralState.reflectionDepth,
       reportType,
     });
-  }, [spiralState, totalDays, segmentInfo, exportPDF]);
+  }, [spiralState, totalDays, segmentInfo, exportPDF, staticMode]);
 
   const exportCalendar = trpc.spiral.exportCalendar.useMutation({
     onSuccess: (data) => {
@@ -570,6 +588,25 @@ export default function SynthesisLog() {
       return;
     }
     const startDate = spiralState.startDate || new Date().toISOString().split('T')[0];
+    if (staticMode) {
+      const ics = generateIcsCalendar({
+        allTerms: spiralState.shuffledTerms,
+        startDate,
+        totalDays,
+        reflectionDepth: spiralState.reflectionDepth,
+        calendarName: `Synthesis Log — ${spiralState.segments.map(s => s.listName).join(' + ')}`,
+        appId: `local-${Date.now()}`,
+      });
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = 'synthesis-log-spiral.ics';
+      anchor.click();
+      URL.revokeObjectURL(url);
+      toast.success('Calendar exported locally. Import the .ics file into your calendar.');
+      return;
+    }
     exportCalendar.mutate({
       allTerms: spiralState.shuffledTerms,
       startDate,
@@ -577,7 +614,7 @@ export default function SynthesisLog() {
       reflectionDepth: spiralState.reflectionDepth,
       calendarName: `Synthesis Log — ${spiralState.segments.map(s => s.listName).join(' + ')}`,
     });
-  }, [spiralState, totalDays, exportCalendar]);
+  }, [spiralState, totalDays, exportCalendar, staticMode]);
 
   const handleImport = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -640,12 +677,27 @@ export default function SynthesisLog() {
           const currentDayData = localStorage.getItem(currentDayKey);
           if (currentDayData) {
             try {
-              setReflections(JSON.parse(currentDayData));
+              const parsedDay = JSON.parse(currentDayData) as Record<string, unknown>;
+              const restoredReflections = emptyReflections(importDepth);
+              const restoredRatings = emptyRatings(importDepth);
+              for (const [stageId, value] of Object.entries(parsedDay)) {
+                if (typeof value === "string") {
+                  restoredReflections[stageId] = value;
+                } else if (value && typeof value === "object" && "text" in value) {
+                  const entry = value as { text?: unknown; rating?: unknown };
+                  restoredReflections[stageId] = String(entry.text ?? "");
+                  restoredRatings[stageId] = typeof entry.rating === "number" ? entry.rating : 0;
+                }
+              }
+              setReflections(restoredReflections);
+              setRatings(restoredRatings);
             } catch {
               setReflections(emptyReflections(importDepth));
+              setRatings(emptyRatings(importDepth));
             }
           } else {
             setReflections(emptyReflections(importDepth));
+            setRatings(emptyRatings(importDepth));
           }
 
           setSpiralState(importedState);
@@ -661,7 +713,7 @@ export default function SynthesisLog() {
       }
     };
     reader.readAsText(file);
-  }, []);
+  }, [emptyReflections, emptyRatings]);
 
   // Show getting started if no lists
   if (spiralState.segments.length === 0) {
@@ -743,22 +795,23 @@ export default function SynthesisLog() {
                 variant={aiEnabled ? "outline" : "secondary"}
                 size="sm"
                 onClick={toggleAiEnabled}
-                title={aiEnabled ? "Hide AI Assistant" : "Show AI Assistant"}
+                disabled={staticMode}
+                title={staticMode ? "AI requires an optional external AI gateway" : aiEnabled ? "Hide AI Assistant" : "Show AI Assistant"}
               >
                 {aiEnabled ? <Sparkles className="h-4 w-4 mr-1.5" /> : <BrainCircuit className="h-4 w-4 mr-1.5" />}
-                {aiEnabled ? "AI On" : "AI Off"}
+                {staticMode ? "AI Unavailable" : aiEnabled ? "AI On" : "AI Off"}
               </Button>
               <Button variant="outline" size="sm" onClick={handleExport}>
                 <FileJson className="h-4 w-4 mr-1.5" />
                 Export JSON
               </Button>
-              <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={exportPDF.isPending}>
+              <Button variant="outline" size="sm" onClick={handleExportPDF} disabled={!staticMode && exportPDF.isPending}>
                 <FileText className="h-4 w-4 mr-1.5" />
-                {exportPDF.isPending ? "Generating…" : "Export PDF"}
+                {staticMode ? "Print / PDF" : exportPDF.isPending ? "Generating…" : "Export PDF"}
               </Button>
-              <Button variant="outline" size="sm" onClick={handleExportCalendar} disabled={exportCalendar.isPending}>
+              <Button variant="outline" size="sm" onClick={handleExportCalendar} disabled={!staticMode && exportCalendar.isPending}>
                 <CalendarDays className="h-4 w-4 mr-1.5" />
-                {exportCalendar.isPending ? "Exporting…" : "Calendar"}
+                {staticMode ? "Calendar" : exportCalendar.isPending ? "Exporting…" : "Calendar"}
               </Button>
               <Button variant="outline" size="sm" onClick={() => setPrintWorksheetOpen(true)}>
                 <Printer className="h-4 w-4 mr-1.5" />
@@ -797,19 +850,19 @@ export default function SynthesisLog() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-52">
-                <DropdownMenuItem onClick={toggleAiEnabled}>
+                <DropdownMenuItem onClick={toggleAiEnabled} disabled={staticMode}>
                   {aiEnabled ? <Sparkles className="h-4 w-4 mr-2" /> : <BrainCircuit className="h-4 w-4 mr-2" />}
-                  {aiEnabled ? "Hide AI Assistant" : "Show AI Assistant"}
+                  {staticMode ? "AI unavailable in static mode" : aiEnabled ? "Hide AI Assistant" : "Show AI Assistant"}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleExport}>
                   <FileJson className="h-4 w-4 mr-2" />Export JSON
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleExportPDF} disabled={exportPDF.isPending}>
-                  <FileText className="h-4 w-4 mr-2" />{exportPDF.isPending ? "Generating…" : "Export PDF"}
+                <DropdownMenuItem onClick={handleExportPDF} disabled={!staticMode && exportPDF.isPending}>
+                  <FileText className="h-4 w-4 mr-2" />{staticMode ? "Print / PDF" : exportPDF.isPending ? "Generating…" : "Export PDF"}
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleExportCalendar} disabled={exportCalendar.isPending}>
-                  <CalendarDays className="h-4 w-4 mr-2" />{exportCalendar.isPending ? "Exporting…" : "Export Calendar"}
+                <DropdownMenuItem onClick={handleExportCalendar} disabled={!staticMode && exportCalendar.isPending}>
+                  <CalendarDays className="h-4 w-4 mr-2" />{staticMode ? "Export Calendar" : exportCalendar.isPending ? "Exporting…" : "Export Calendar"}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setPrintWorksheetOpen(true)}>
                   <Printer className="h-4 w-4 mr-2" />Print Today

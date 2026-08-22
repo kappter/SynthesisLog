@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, FileText } from "lucide-react";
+import { appBasePath } from "@/lib/staticMode";
 
 export default function ToolReport() {
   return (
@@ -39,7 +40,7 @@ export default function ToolReport() {
       {/* Iframe fills remaining viewport */}
       <div className="flex-1 flex flex-col">
         <iframe
-          src="/tools/report/index.html"
+          src={`${appBasePath()}tools/report/index.html`}
           title="TOK Spiral Reflection Report"
           className="flex-1 w-full border-0"
           style={{ minHeight: "calc(100vh - 57px)" }}

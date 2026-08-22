@@ -95,10 +95,12 @@ describe("Spiral Queue Logic", () => {
 
     it("assigns correct stages during wind-down", () => {
       const stages = getStagesForDay(sampleTerms, 6, 4);
-      expect(stages.history?.term).toBe("Term5");
-      expect(stages.concrete_abstract?.term).toBe("Term4");
-      expect(stages.amalgam?.term).toBe("Term3");
-      expect(stages.motion).toBeNull();
+      // After the final term enters, each earlier term continues advancing
+      // through its stage position instead of remaining locked in its entry slot.
+      expect(stages.history).toBeNull();
+      expect(stages.concrete_abstract?.term).toBe("Term5");
+      expect(stages.amalgam?.term).toBe("Term4");
+      expect(stages.motion?.term).toBe("Term3");
     });
   });
 

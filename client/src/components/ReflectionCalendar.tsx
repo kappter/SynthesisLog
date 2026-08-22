@@ -68,9 +68,9 @@ export function ReflectionCalendar({
       if (saved) {
         try {
           const reflections = JSON.parse(saved);
-          const entries = Object.entries(reflections).filter(
-            ([_, text]) => typeof text === "string" && (text as string).trim().length > 0
-          );
+          const entries = Object.entries(reflections)
+            .map(([stage, value]) => [stage, typeof value === "string" ? value : value && typeof value === "object" && "text" in value ? String((value as { text?: unknown }).text ?? "") : ""] as const)
+            .filter(([_, text]) => text.trim().length > 0);
           const filledStages = entries.length;
           const totalStages = Object.keys(reflections).length;
           completionPercent = totalStages > 0 ? (filledStages / totalStages) * 100 : 0;
@@ -79,8 +79,8 @@ export function ReflectionCalendar({
           if (entries.length > 0) {
             reflectionSummary = entries
               .map(([stage, text]) => {
-                const preview = (text as string).slice(0, 100);
-                return `${stage}: ${preview}${(text as string).length > 100 ? "..." : ""}`;
+                const preview = text.slice(0, 100);
+                return `${stage}: ${preview}${text.length > 100 ? "..." : ""}`;
               })
               .join("\n\n");
           }

@@ -6,11 +6,13 @@ import About from "@/pages/About";
 import ToolReport from "@/pages/ToolReport";
 import ToolStudentMaker from "@/pages/ToolStudentMaker";
 import ToolTeacherBatch from "@/pages/ToolTeacherBatch";
-import { Route, Switch, Link } from "wouter";
+import { Route, Router, Switch, Link } from "wouter";
+import { useHashLocation } from "wouter/use-hash-location";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { isStaticMode } from "./lib/staticMode";
 
-function Router() {
+function AppRoutes() {
   return (
     <Switch>
       <Route path="/" component={SynthesisLog} />
@@ -108,20 +110,23 @@ function Footer() {
 }
 
 function App() {
+  const staticMode = isStaticMode();
   return (
-    <ErrorBoundary>
-      <ThemeProvider defaultTheme="light" switchable>
-        <TooltipProvider>
-          <Toaster />
-          <div className="flex flex-col min-h-screen">
-            <div className="flex-1">
-              <Router />
+    <Router hook={staticMode ? useHashLocation : undefined}>
+      <ErrorBoundary>
+        <ThemeProvider defaultTheme="light" switchable>
+          <TooltipProvider>
+            <Toaster />
+            <div className="flex flex-col min-h-screen">
+              <div className="flex-1">
+                <AppRoutes />
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
-        </TooltipProvider>
-      </ThemeProvider>
-    </ErrorBoundary>
+          </TooltipProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
+    </Router>
   );
 }
 

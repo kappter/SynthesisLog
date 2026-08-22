@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Users } from "lucide-react";
+import { appBasePath } from "@/lib/staticMode";
 
 export default function ToolTeacherBatch() {
   return (
@@ -39,7 +40,7 @@ export default function ToolTeacherBatch() {
       {/* Iframe fills remaining viewport */}
       <div className="flex-1 flex flex-col">
         <iframe
-          src="/tools/teacher-batch/index.html"
+          src={`${appBasePath()}tools/teacher-batch/index.html`}
           title="Teacher Batch Tool"
           className="flex-1 w-full border-0"
           style={{ minHeight: "calc(100vh - 57px)" }}

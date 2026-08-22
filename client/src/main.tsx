@@ -6,12 +6,14 @@ import { createRoot } from "react-dom/client";
 import superjson from "superjson";
 import App from "./App";
 import { getLoginUrl } from "./const";
+import { isStaticMode } from "./lib/staticMode";
 import "./index.css";
 
 const queryClient = new QueryClient();
+const staticMode = isStaticMode();
 
 const redirectToLoginIfUnauthorized = (error: unknown) => {
-  if (!(error instanceof TRPCClientError)) return;
+  if (staticMode || !(error instanceof TRPCClientError)) return;
   if (typeof window === "undefined") return;
 
   const isUnauthorized = error.message === UNAUTHED_ERR_MSG;
@@ -40,7 +42,9 @@ queryClient.getMutationCache().subscribe(event => {
 const trpcClient = trpc.createClient({
   links: [
     httpBatchLink({
-      url: "/api/trpc",
+      // Static mode never enables queries or invokes mutations. The sentinel
+      // avoids embedding a live production API endpoint in the static build.
+      url: staticMode ? "/__static_backend_disabled__" : "/api/trpc",
       transformer: superjson,
       fetch(input, init) {
         return globalThis.fetch(input, {

@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, UserSquare2 } from "lucide-react";
+import { appBasePath } from "@/lib/staticMode";
 
 export default function ToolStudentMaker() {
   return (
@@ -39,7 +40,7 @@ export default function ToolStudentMaker() {
       {/* Iframe fills remaining viewport */}
       <div className="flex-1 flex flex-col">
         <iframe
-          src="/tools/student-maker/index.html"
+          src={`${appBasePath()}tools/student-maker/index.html`}
           title="Student JSON Maker"
           className="flex-1 w-full border-0"
           style={{ minHeight: "calc(100vh - 57px)" }}

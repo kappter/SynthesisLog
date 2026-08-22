@@ -7,8 +7,10 @@ import {
   Upload, Download, CheckCircle, AlertCircle, Lightbulb, Users
 } from "lucide-react";
 import { SpiralOrbitAnimation } from "@/components/SpiralOrbitAnimation";
+import { appBasePath } from "@/lib/staticMode";
 
 export default function About() {
+  const appUrl = new URL(appBasePath(), window.location.origin).toString();
   const [windowSize, setWindowSize] = useState<number>(5);
 
   const [animSpeed, setAnimSpeed] = useState<number>(() => {
@@ -246,7 +248,7 @@ export default function About() {
               <div>
                 <h3 className="font-semibold text-[#2c2c2c] mb-1">Loading on a different device</h3>
                 <p className="text-sm text-[#6b5c4a] leading-relaxed">
-                  Open <strong>synthlogai-hpenl2r8.manus.space</strong> on the new device.
+                  Open <strong>{appUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")}</strong> on the new device.
                   On the start screen, click <strong>Import JSON</strong> and select your exported file.
                   Your entire spiral — all reflections, all term lists, your current day — will be restored exactly.
                   You can then continue journaling from where you left off.
@@ -302,7 +304,7 @@ export default function About() {
             <div className="p-5 space-y-3">
               <p className="text-sm text-[#4a3c2e] font-medium">TOK Synthesis Log Entry (Weekly)</p>
               <div className="text-sm text-[#6b5c4a] space-y-2 leading-relaxed">
-                <p>Complete one full spiral entry using <a href="https://synthlogai-hpenl2r8.manus.space" className="text-[#b08060] underline underline-offset-2" target="_blank" rel="noreferrer">Synthesis Log</a>. Your entry must include:</p>
+                <p>Complete one full spiral entry using <a href={appBasePath()} className="text-[#b08060] underline underline-offset-2" target="_blank" rel="noreferrer">Synthesis Log</a>. Your entry must include:</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
                   <li>A <strong>History / Context</strong> reflection: personal connection or origin story for the term</li>
                   <li>A <strong>Concrete / Abstract</strong> reflection: one real-world example and one theoretical framing</li>

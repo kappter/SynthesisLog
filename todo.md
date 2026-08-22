@@ -341,3 +341,12 @@
 
 ## Strategic Product Review (Jun 2026)
 - [x] Review uploaded product prompts and recommend a prioritized future direction for Synthesis Log AI
+
+## Isolated GitHub Pages Static Proof of Concept (Jun 2026)
+- [x] Create an isolated migration branch or workspace without changing Manus production or main
+- [x] Map every client-to-server dependency from the actual source
+- [x] Add explicit VITE_STATIC_MODE behavior with no required tRPC, OAuth, database, or Forge calls
+- [x] Move core calendar export and static-mode PDF outcome to browser-only behavior where practical
+- [x] Add GitHub Pages-compatible Vite build, routing configuration, and deployment workflow
+- [x] Validate static workflow, JSON disaster recovery, tools, and zero-backend network isolation
+- [x] Write STATIC_MODE_FEASIBILITY.md with results, differences, risks, and files changed
