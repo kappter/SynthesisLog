@@ -1,0 +1,1416 @@
+{
+  "version": 2,
+  "exportDate": "2026-04-20T19:46:08.398680",
+  "spiral": {
+    "segments": [
+      {
+        "listId": "tok-spiral",
+        "listName": "TOK Spiral",
+        "listHue": 260,
+        "terms": [
+          "Knowledge",
+          "Belief",
+          "Truth",
+          "Justification",
+          "Certainty",
+          "Doubt",
+          "Objectivity",
+          "Subjectivity",
+          "Evidence",
+          "Interpretation",
+          "Perception",
+          "Reality",
+          "Emotion",
+          "Reason",
+          "Intuition",
+          "Logic",
+          "Bias",
+          "Awareness",
+          "Memory",
+          "Reconstruction",
+          "Authority",
+          "Trust",
+          "Consensus",
+          "Language",
+          "Meaning",
+          "Perspective",
+          "Information"
+        ]
+      }
+    ],
+    "shuffledTerms": [
+      {
+        "term": "Knowledge",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 0
+      },
+      {
+        "term": "Belief",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 1
+      },
+      {
+        "term": "Truth",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 2
+      },
+      {
+        "term": "Justification",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 3
+      },
+      {
+        "term": "Certainty",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 4
+      },
+      {
+        "term": "Doubt",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 5
+      },
+      {
+        "term": "Objectivity",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 6
+      },
+      {
+        "term": "Subjectivity",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 7
+      },
+      {
+        "term": "Evidence",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 8
+      },
+      {
+        "term": "Interpretation",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 9
+      },
+      {
+        "term": "Perception",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 10
+      },
+      {
+        "term": "Reality",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 11
+      },
+      {
+        "term": "Emotion",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 12
+      },
+      {
+        "term": "Reason",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 13
+      },
+      {
+        "term": "Intuition",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 14
+      },
+      {
+        "term": "Logic",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 15
+      },
+      {
+        "term": "Bias",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 16
+      },
+      {
+        "term": "Awareness",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 17
+      },
+      {
+        "term": "Memory",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 18
+      },
+      {
+        "term": "Reconstruction",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 19
+      },
+      {
+        "term": "Authority",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 20
+      },
+      {
+        "term": "Trust",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 21
+      },
+      {
+        "term": "Consensus",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 22
+      },
+      {
+        "term": "Language",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 23
+      },
+      {
+        "term": "Meaning",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 24
+      },
+      {
+        "term": "Perspective",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 25
+      },
+      {
+        "term": "Information",
+        "listId": "tok-spiral",
+        "listHue": 260,
+        "originalIndex": 26
+      }
+    ],
+    "currentDay": 1,
+    "startDate": "2026-04-20",
+    "mode": "sequential",
+    "reflectionDepth": 5
+  },
+  "reflections": {
+    "day-1": {
+      "history": {
+        "text": "Knowledge used to feel like something finished, almost like an answer key hidden somewhere behind reality. The longer I think about it, the more it seems like humanity advances by replacing sturdy old maps with newer, less wrong ones.",
+        "rating": 4
+      }
+    },
+    "1": {
+      "history": {
+        "text": "Knowledge used to feel like something finished, almost like an answer key hidden somewhere behind reality. The longer I think about it, the more it seems like humanity advances by replacing sturdy old maps with newer, less wrong ones.",
+        "rating": 4
+      }
+    },
+    "day-2": {
+      "concrete": {
+        "text": "I see knowledge show up when someone learns from a mistake and actually behaves differently afterward. A person may talk confidently for years, but once experience changes their choices, knowledge starts to look more real.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Belief may be one of the deepest engines of human action. People have crossed oceans, started revolutions, raised children, and endured suffering because they trusted something before proof was complete.",
+        "rating": 2
+      }
+    },
+    "2": {
+      "concrete": {
+        "text": "I see knowledge show up when someone learns from a mistake and actually behaves differently afterward. A person may talk confidently for years, but once experience changes their choices, knowledge starts to look more real.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Belief may be one of the deepest engines of human action. People have crossed oceans, started revolutions, raised children, and endured suffering because they trusted something before proof was complete.",
+        "rating": 2
+      }
+    },
+    "day-3": {
+      "abstract": {
+        "text": "Knowledge now feels less like possession and more like contact. It is a relationship between a mind and a world that resists being simplified forever.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "In daily life, belief is everywhere: believing a friend means well, believing tomorrow can improve, believing effort matters even when results are late. It often arrives before evidence catches up.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Truth seems older than any one civilization's language for it. Human beings keep changing theories, but the world still seems to contain a structure that our better explanations answer to more faithfully than our weaker ones.",
+        "rating": 3
+      }
+    },
+    "3": {
+      "abstract": {
+        "text": "Knowledge now feels less like possession and more like contact. It is a relationship between a mind and a world that resists being simplified forever.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "In daily life, belief is everywhere: believing a friend means well, believing tomorrow can improve, believing effort matters even when results are late. It often arrives before evidence catches up.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Truth seems older than any one civilization's language for it. Human beings keep changing theories, but the world still seems to contain a structure that our better explanations answer to more faithfully than our weaker ones.",
+        "rating": 3
+      }
+    },
+    "day-4": {
+      "amalgam": {
+        "text": "When knowledge mixes with belief, evidence, memory, and language, it loses its clean edges. That makes it messier, but also more honest.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Belief seems to occupy a space between emptiness and proof. It can be reckless, but it can also be the bridge that allows action before certainty appears.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "Truth matters when it interrupts convenience. A consequence, a measurement, or a contradiction can bring someone back to reality even when they were emotionally invested in another version of events.",
+        "rating": 2
+      },
+      "history": {
+        "text": "Justification feels like the quiet structure underneath every claim that wants to be taken seriously. Human beings have always made bold statements, but fewer of those statements can survive the question, 'Why should anyone accept this?'",
+        "rating": 4
+      }
+    },
+    "4": {
+      "amalgam": {
+        "text": "When knowledge mixes with belief, evidence, memory, and language, it loses its clean edges. That makes it messier, but also more honest.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Belief seems to occupy a space between emptiness and proof. It can be reckless, but it can also be the bridge that allows action before certainty appears.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "Truth matters when it interrupts convenience. A consequence, a measurement, or a contradiction can bring someone back to reality even when they were emotionally invested in another version of events.",
+        "rating": 2
+      },
+      "history": {
+        "text": "Justification feels like the quiet structure underneath every claim that wants to be taken seriously. Human beings have always made bold statements, but fewer of those statements can survive the question, 'Why should anyone accept this?'",
+        "rating": 4
+      }
+    },
+    "day-5": {
+      "motion": {
+        "text": "I would keep a three-entry knowledge log this week: one thing I thought I knew, one thing that challenged it, and one revision I made because of that challenge. At the end, I would write a short conclusion on whether knowledge grows more through certainty or correction.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Once belief is placed beside truth, trust, bias, and emotion, it becomes clear that belief can both open the way to knowledge and protect error from being questioned.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "The concept of truth matters because it suggests our claims are not only competing with each other, but also with whatever actually is. Without that, inquiry loses its seriousness.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I notice justification when a person has to show not just what they think, but why they think it. Sometimes that reveals care, and sometimes it reveals how thin a conclusion actually was.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Certainty has always attracted people because it offers closure. It calms the mind, even though calmness and correctness are not the same thing.",
+        "rating": 3
+      }
+    },
+    "5": {
+      "motion": {
+        "text": "I would keep a three-entry knowledge log this week: one thing I thought I knew, one thing that challenged it, and one revision I made because of that challenge. At the end, I would write a short conclusion on whether knowledge grows more through certainty or correction.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Once belief is placed beside truth, trust, bias, and emotion, it becomes clear that belief can both open the way to knowledge and protect error from being questioned.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "The concept of truth matters because it suggests our claims are not only competing with each other, but also with whatever actually is. Without that, inquiry loses its seriousness.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I notice justification when a person has to show not just what they think, but why they think it. Sometimes that reveals care, and sometimes it reveals how thin a conclusion actually was.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Certainty has always attracted people because it offers closure. It calms the mind, even though calmness and correctness are not the same thing.",
+        "rating": 3
+      }
+    },
+    "day-6": {
+      "motion": {
+        "text": "I would interview two people about a belief they changed over time, then compare their stories to one belief of my own that has shifted. The final product would be a one-page reflection on what makes a belief flexible instead of locked in.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Truth becomes harder when language, evidence, and interpretation all get involved. Yet that difficulty may be exactly what proves truth is more than simple personal preference.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Justification is interesting because it sits underneath knowledge without always being visible. It is the hidden support that determines whether a conclusion is standing on ground or only on style.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "I have seen people who were certain and wrong, and people who were thoughtful but cautious. That contrast makes certainty feel more like an emotional state than an automatic sign of knowledge.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Doubt can feel uncomfortable, but history suggests it often enters just before understanding deepens. A mind that never doubts may also never truly investigate.",
+        "rating": 1
+      }
+    },
+    "6": {
+      "motion": {
+        "text": "I would interview two people about a belief they changed over time, then compare their stories to one belief of my own that has shifted. The final product would be a one-page reflection on what makes a belief flexible instead of locked in.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Truth becomes harder when language, evidence, and interpretation all get involved. Yet that difficulty may be exactly what proves truth is more than simple personal preference.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Justification is interesting because it sits underneath knowledge without always being visible. It is the hidden support that determines whether a conclusion is standing on ground or only on style.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "I have seen people who were certain and wrong, and people who were thoughtful but cautious. That contrast makes certainty feel more like an emotional state than an automatic sign of knowledge.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Doubt can feel uncomfortable, but history suggests it often enters just before understanding deepens. A mind that never doubts may also never truly investigate.",
+        "rating": 1
+      }
+    },
+    "day-7": {
+      "motion": {
+        "text": "I would choose one controversial claim from social media, trace three sources behind it, and label each source as stronger or weaker in its relationship to truth. Then I would write a short summary of how the claim changed once sourcing replaced first impressions.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Placed beside evidence, logic, and authority, justification becomes more demanding. It asks not only whether support exists, but whether the support is the right kind.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "Certainty now seems like a condition of consciousness rather than a guarantee of truth. It may accompany knowledge, but it also appears in pride, fear, and repetition.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "In life, doubt shows up before sending a risky message, before trusting a memory, or when a polished explanation feels too clean to be complete.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Objectivity once sounded like stepping completely outside oneself. Now it feels more like the harder task of acknowledging one's angle while resisting its complete control.",
+        "rating": 4
+      }
+    },
+    "7": {
+      "motion": {
+        "text": "I would choose one controversial claim from social media, trace three sources behind it, and label each source as stronger or weaker in its relationship to truth. Then I would write a short summary of how the claim changed once sourcing replaced first impressions.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Placed beside evidence, logic, and authority, justification becomes more demanding. It asks not only whether support exists, but whether the support is the right kind.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "Certainty now seems like a condition of consciousness rather than a guarantee of truth. It may accompany knowledge, but it also appears in pride, fear, and repetition.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "In life, doubt shows up before sending a risky message, before trusting a memory, or when a polished explanation feels too clean to be complete.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Objectivity once sounded like stepping completely outside oneself. Now it feels more like the harder task of acknowledging one's angle while resisting its complete control.",
+        "rating": 4
+      }
+    },
+    "day-8": {
+      "motion": {
+        "text": "I would take one opinion I hold strongly, write out the reasons for it, then ask a classmate to challenge each reason. Afterward I would revise the claim into a version that is narrower but better justified.",
+        "rating": 2
+      },
+      "amalgam": {
+        "text": "Once certainty stands next to doubt, perspective, and evidence, it starts to look less like strength and more like something that must be earned repeatedly.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "Doubt seems less like the enemy of knowledge and more like a pressure that keeps thought from hardening too early. It is a kind of intellectual ventilation.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I practice objectivity whenever I check a source I already agree with, compare two accounts of the same event, or deliberately slow down an emotional reaction before calling it truth.",
+        "rating": 1
+      },
+      "history": {
+        "text": "Subjectivity reminds me that all knowing arrives through a situated life. Human beings do not encounter the world from nowhere, but from inside memory, culture, desire, and vulnerability.",
+        "rating": 4
+      }
+    },
+    "8": {
+      "motion": {
+        "text": "I would take one opinion I hold strongly, write out the reasons for it, then ask a classmate to challenge each reason. Afterward I would revise the claim into a version that is narrower but better justified.",
+        "rating": 2
+      },
+      "amalgam": {
+        "text": "Once certainty stands next to doubt, perspective, and evidence, it starts to look less like strength and more like something that must be earned repeatedly.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "Doubt seems less like the enemy of knowledge and more like a pressure that keeps thought from hardening too early. It is a kind of intellectual ventilation.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I practice objectivity whenever I check a source I already agree with, compare two accounts of the same event, or deliberately slow down an emotional reaction before calling it truth.",
+        "rating": 1
+      },
+      "history": {
+        "text": "Subjectivity reminds me that all knowing arrives through a situated life. Human beings do not encounter the world from nowhere, but from inside memory, culture, desire, and vulnerability.",
+        "rating": 4
+      }
+    },
+    "day-9": {
+      "motion": {
+        "text": "I would make a list of three things I feel highly certain about, then test each one by finding the strongest alternative view or conflicting evidence. The practice would end with a certainty scale showing what stayed high, what weakened, and why.",
+        "rating": 1
+      },
+      "amalgam": {
+        "text": "When doubt is placed beside authority, certainty, and trust, it becomes more than hesitation. It becomes part of ethical knowing as well as intellectual knowing.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Objectivity may not be the absence of viewpoint so much as a disciplined refusal to let one viewpoint silently dominate the whole picture.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "Two people can experience the same event and leave carrying different truths about what mattered most. That difference is often not fake; it is rooted in what each person brought with them.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Evidence matters because it gives the world a chance to answer back. Without it, human thought could become a contest won mostly by force of personality.",
+        "rating": 2
+      }
+    },
+    "9": {
+      "motion": {
+        "text": "I would make a list of three things I feel highly certain about, then test each one by finding the strongest alternative view or conflicting evidence. The practice would end with a certainty scale showing what stayed high, what weakened, and why.",
+        "rating": 1
+      },
+      "amalgam": {
+        "text": "When doubt is placed beside authority, certainty, and trust, it becomes more than hesitation. It becomes part of ethical knowing as well as intellectual knowing.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Objectivity may not be the absence of viewpoint so much as a disciplined refusal to let one viewpoint silently dominate the whole picture.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "Two people can experience the same event and leave carrying different truths about what mattered most. That difference is often not fake; it is rooted in what each person brought with them.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Evidence matters because it gives the world a chance to answer back. Without it, human thought could become a contest won mostly by force of personality.",
+        "rating": 2
+      }
+    },
+    "day-10": {
+      "motion": {
+        "text": "I would keep a 'productive doubt' note for five days and record one moment each day when questioning something improved my judgment instead of just slowing me down. Then I would decide whether doubt is more often a weakness or a safeguard.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Once objectivity stands with subjectivity, bias, and evidence, it stops sounding pure and starts sounding responsible.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Subjectivity does not only distort knowledge; it can also deepen it by revealing meaning, value, and stakes that detached description might miss.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "In daily life, evidence appears in repeated outcomes, physical traces, receipts, measurements, screenshots, and observable patterns. It matters because it can push back against wishful thinking.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Interpretation may be one of the reasons disagreements persist even after facts are shared. People do not only differ on information; they differ on what that information means.",
+        "rating": 3
+      }
+    },
+    "10": {
+      "motion": {
+        "text": "I would keep a 'productive doubt' note for five days and record one moment each day when questioning something improved my judgment instead of just slowing me down. Then I would decide whether doubt is more often a weakness or a safeguard.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Once objectivity stands with subjectivity, bias, and evidence, it stops sounding pure and starts sounding responsible.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Subjectivity does not only distort knowledge; it can also deepen it by revealing meaning, value, and stakes that detached description might miss.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "In daily life, evidence appears in repeated outcomes, physical traces, receipts, measurements, screenshots, and observable patterns. It matters because it can push back against wishful thinking.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Interpretation may be one of the reasons disagreements persist even after facts are shared. People do not only differ on information; they differ on what that information means.",
+        "rating": 3
+      }
+    },
+    "day-11": {
+      "motion": {
+        "text": "I would choose one issue I care about, read one source I agree with and one I do not, then write a brief comparison of how each source frames the same facts. The final task would be to identify where my own objectivity improved and where it probably did not.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "When subjectivity is placed beside objectivity, perception, and emotion, it becomes harder to dismiss as merely flawed. It may be part of what gives knowledge human significance.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Evidence is powerful but never fully raw. It is gathered, framed, selected, and interpreted, which means it anchors us without ever removing human mediation completely.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "A gesture, a statistic, a headline, or a text can produce very different conclusions depending on context and expectation. Interpretation shapes what the same material becomes.",
+        "rating": 2
+      },
+      "history": {
+        "text": "Perception feels immediate enough to tempt trust, but history has shown again and again that immediacy is not the same thing as completeness.",
+        "rating": 4
+      }
+    },
+    "11": {
+      "motion": {
+        "text": "I would choose one issue I care about, read one source I agree with and one I do not, then write a brief comparison of how each source frames the same facts. The final task would be to identify where my own objectivity improved and where it probably did not.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "When subjectivity is placed beside objectivity, perception, and emotion, it becomes harder to dismiss as merely flawed. It may be part of what gives knowledge human significance.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Evidence is powerful but never fully raw. It is gathered, framed, selected, and interpreted, which means it anchors us without ever removing human mediation completely.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "A gesture, a statistic, a headline, or a text can produce very different conclusions depending on context and expectation. Interpretation shapes what the same material becomes.",
+        "rating": 2
+      },
+      "history": {
+        "text": "Perception feels immediate enough to tempt trust, but history has shown again and again that immediacy is not the same thing as completeness.",
+        "rating": 4
+      }
+    },
+    "day-12": {
+      "motion": {
+        "text": "I would ask two people to describe the same shared event, then compare their versions to my own. I would mark where subjectivity changed emphasis, tone, and meaning, and then write about whether those differences weakened or enriched the overall understanding.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Evidence becomes especially interesting when joined to interpretation, trust, and bias. It remains necessary, but it stops looking self-explanatory.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Interpretation matters because facts do not arrive already labeled with significance. Minds connect them to patterns, values, and larger narratives.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "Color shifts in different lighting, a room feels threatening when I am already anxious, and two people can notice different details in the same scene. Perception is real, but not neutral.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Reality seems to be whatever remains whether or not my preferences approve of it. That makes it humbling and strangely reassuring at the same time.",
+        "rating": 3
+      }
+    },
+    "12": {
+      "motion": {
+        "text": "I would ask two people to describe the same shared event, then compare their versions to my own. I would mark where subjectivity changed emphasis, tone, and meaning, and then write about whether those differences weakened or enriched the overall understanding.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Evidence becomes especially interesting when joined to interpretation, trust, and bias. It remains necessary, but it stops looking self-explanatory.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Interpretation matters because facts do not arrive already labeled with significance. Minds connect them to patterns, values, and larger narratives.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "Color shifts in different lighting, a room feels threatening when I am already anxious, and two people can notice different details in the same scene. Perception is real, but not neutral.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Reality seems to be whatever remains whether or not my preferences approve of it. That makes it humbling and strangely reassuring at the same time.",
+        "rating": 3
+      }
+    },
+    "day-13": {
+      "motion": {
+        "text": "I would run a mini-investigation into one school rumor or online claim by collecting only verifiable evidence and separating it from hearsay. Then I would present a short 'case file' showing what the evidence actually supports and what it does not.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Placed beside evidence, language, and perspective, interpretation stops seeming secondary. It becomes one of the main sites where knowledge takes shape.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Perception is our opening to the world, but every opening is also a frame. To notice something is already to leave something else outside notice.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "Reality appears in consequences: a grade earned, a promise broken, a body that gets tired, a structure that either holds or fails. It does not need my agreement to keep operating.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Emotion has often been treated as a threat to clear thought, but that seems too simple. Without emotion, much of what matters in human life would never rise into visibility at all.",
+        "rating": 1
+      }
+    },
+    "13": {
+      "motion": {
+        "text": "I would run a mini-investigation into one school rumor or online claim by collecting only verifiable evidence and separating it from hearsay. Then I would present a short 'case file' showing what the evidence actually supports and what it does not.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Placed beside evidence, language, and perspective, interpretation stops seeming secondary. It becomes one of the main sites where knowledge takes shape.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Perception is our opening to the world, but every opening is also a frame. To notice something is already to leave something else outside notice.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "Reality appears in consequences: a grade earned, a promise broken, a body that gets tired, a structure that either holds or fails. It does not need my agreement to keep operating.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Emotion has often been treated as a threat to clear thought, but that seems too simple. Without emotion, much of what matters in human life would never rise into visibility at all.",
+        "rating": 1
+      }
+    },
+    "day-14": {
+      "motion": {
+        "text": "I would take one chart, image, or quote and ask three people to interpret it independently. Then I would compare the results and write a short analysis of what stayed stable and what changed through interpretation.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "When perception stands next to reality, emotion, and memory, direct experience starts to look powerful without being final.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "The concept matters because it points beyond private experience toward something that exceeds interpretation, even if interpretation is the only route by which we approach it.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "Emotion shows up in the body's response before words arrive, in the force of grief or excitement, and in the way certain memories still carry heat years later.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Reason feels like the mind taking a longer breath. It slows the rush toward certainty and asks whether the path between claims can actually carry weight.",
+        "rating": 4
+      }
+    },
+    "14": {
+      "motion": {
+        "text": "I would take one chart, image, or quote and ask three people to interpret it independently. Then I would compare the results and write a short analysis of what stayed stable and what changed through interpretation.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "When perception stands next to reality, emotion, and memory, direct experience starts to look powerful without being final.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "The concept matters because it points beyond private experience toward something that exceeds interpretation, even if interpretation is the only route by which we approach it.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "Emotion shows up in the body's response before words arrive, in the force of grief or excitement, and in the way certain memories still carry heat years later.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Reason feels like the mind taking a longer breath. It slows the rush toward certainty and asks whether the path between claims can actually carry weight.",
+        "rating": 4
+      }
+    },
+    "day-15": {
+      "motion": {
+        "text": "I would do a perception journal for one day: three events, my first perception of each, and then what changed after I got more context. The goal would be to map how quickly perception becomes interpretation.",
+        "rating": 2
+      },
+      "amalgam": {
+        "text": "Reality becomes harder and more important when placed beside perception, truth, and language. We never touch it without mediation, yet it still pushes back against weak descriptions.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "Emotion is neither pure truth nor pure interference. It is a mode of significance that can reveal value while also distorting proportion.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I rely on reason when I compare explanations, notice contradictions, and try not to let one strong mood decide a larger truth too quickly.",
+        "rating": 1
+      },
+      "history": {
+        "text": "Intuition feels ancient, like understanding arriving before explanation catches up. Human beings have likely depended on it long before they named it.",
+        "rating": 4
+      }
+    },
+    "15": {
+      "motion": {
+        "text": "I would do a perception journal for one day: three events, my first perception of each, and then what changed after I got more context. The goal would be to map how quickly perception becomes interpretation.",
+        "rating": 2
+      },
+      "amalgam": {
+        "text": "Reality becomes harder and more important when placed beside perception, truth, and language. We never touch it without mediation, yet it still pushes back against weak descriptions.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "Emotion is neither pure truth nor pure interference. It is a mode of significance that can reveal value while also distorting proportion.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I rely on reason when I compare explanations, notice contradictions, and try not to let one strong mood decide a larger truth too quickly.",
+        "rating": 1
+      },
+      "history": {
+        "text": "Intuition feels ancient, like understanding arriving before explanation catches up. Human beings have likely depended on it long before they named it.",
+        "rating": 4
+      }
+    },
+    "day-16": {
+      "motion": {
+        "text": "I would choose one assumption I have about school, relationships, or myself and test it against actual outcomes for a week. At the end I would compare assumption versus reality in a short written reflection.",
+        "rating": 1
+      },
+      "amalgam": {
+        "text": "Placed beside reason, intuition, and bias, emotion becomes more complicated than a simple obstacle. It may cloud thought, but it also tells thought where the stakes are.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Reason matters because it makes thought shareable. A reasoned path can be examined, challenged, and improved by others in a way a private impression cannot.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "I notice intuition when I sense a room's tone quickly, make a creative decision before I can defend it, or feel that something is slightly off without yet knowing why.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Logic seems less dramatic than intuition or emotion, but without it, thought can become beautifully worded confusion. It is the quiet architecture beneath claims that want to last.",
+        "rating": 2
+      }
+    },
+    "16": {
+      "motion": {
+        "text": "I would choose one assumption I have about school, relationships, or myself and test it against actual outcomes for a week. At the end I would compare assumption versus reality in a short written reflection.",
+        "rating": 1
+      },
+      "amalgam": {
+        "text": "Placed beside reason, intuition, and bias, emotion becomes more complicated than a simple obstacle. It may cloud thought, but it also tells thought where the stakes are.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Reason matters because it makes thought shareable. A reasoned path can be examined, challenged, and improved by others in a way a private impression cannot.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "I notice intuition when I sense a room's tone quickly, make a creative decision before I can defend it, or feel that something is slightly off without yet knowing why.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Logic seems less dramatic than intuition or emotion, but without it, thought can become beautifully worded confusion. It is the quiet architecture beneath claims that want to last.",
+        "rating": 2
+      }
+    },
+    "day-17": {
+      "motion": {
+        "text": "I would track one strong emotional reaction each day for four days and write what happened before the reaction, what I assumed during it, and what I thought afterward. Then I would reflect on whether emotion gave me insight, distortion, or both.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Set beside evidence, logic, and emotion, reason becomes less mechanical than it first sounds. It is one of several ways human beings try to think faithfully under pressure.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Intuition could be compressed experience, hidden bias, or some unstable blend of both. That ambiguity is exactly what makes it difficult to evaluate.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "In ordinary life, logic appears when two statements cannot both be true, when a conclusion outruns its reasons, or when language hides contradiction behind style.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Bias is unsettling because it can feel exactly like common sense from the inside. History suggests people are rarely more dangerous than when they cannot see the angle from which they are judging.",
+        "rating": 3
+      }
+    },
+    "17": {
+      "motion": {
+        "text": "I would track one strong emotional reaction each day for four days and write what happened before the reaction, what I assumed during it, and what I thought afterward. Then I would reflect on whether emotion gave me insight, distortion, or both.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Set beside evidence, logic, and emotion, reason becomes less mechanical than it first sounds. It is one of several ways human beings try to think faithfully under pressure.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Intuition could be compressed experience, hidden bias, or some unstable blend of both. That ambiguity is exactly what makes it difficult to evaluate.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "In ordinary life, logic appears when two statements cannot both be true, when a conclusion outruns its reasons, or when language hides contradiction behind style.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Bias is unsettling because it can feel exactly like common sense from the inside. History suggests people are rarely more dangerous than when they cannot see the angle from which they are judging.",
+        "rating": 3
+      }
+    },
+    "day-18": {
+      "motion": {
+        "text": "I would choose one decision I need to make soon and write out the reasoning path behind it step by step. Then I would review the chain with someone else to see where my reasoning is solid and where it is being influenced by something outside reason.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Placed beside awareness, logic, and emotion, intuition becomes more interesting and less romantic. It may begin insight, but it cannot guarantee it.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Logic matters because it formalizes consistency. Even if life is messy, contradiction still matters, and logic remains one of the clearest ways to catch it.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "I see bias in what people excuse, what they exaggerate, what they dismiss quickly, and what they remember selectively. It often reveals itself most clearly in patterns, not single moments.",
+        "rating": 2
+      },
+      "history": {
+        "text": "Awareness feels like widening attention until it begins to include the one who is paying attention. That shift changes reflection from observation into self-observation.",
+        "rating": 4
+      }
+    },
+    "18": {
+      "motion": {
+        "text": "I would choose one decision I need to make soon and write out the reasoning path behind it step by step. Then I would review the chain with someone else to see where my reasoning is solid and where it is being influenced by something outside reason.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Placed beside awareness, logic, and emotion, intuition becomes more interesting and less romantic. It may begin insight, but it cannot guarantee it.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Logic matters because it formalizes consistency. Even if life is messy, contradiction still matters, and logic remains one of the clearest ways to catch it.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "I see bias in what people excuse, what they exaggerate, what they dismiss quickly, and what they remember selectively. It often reveals itself most clearly in patterns, not single moments.",
+        "rating": 2
+      },
+      "history": {
+        "text": "Awareness feels like widening attention until it begins to include the one who is paying attention. That shift changes reflection from observation into self-observation.",
+        "rating": 4
+      }
+    },
+    "day-19": {
+      "motion": {
+        "text": "I would make two columns for one week: moments when I trusted intuition and moments when I paused to verify it. At the end I would compare which intuitive judgments held up and which ones collapsed under checking.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "When logic meets language, interpretation, and reason, it becomes less cold than it first sounds. It is not the whole of wisdom, but it protects thought from self-collapse.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Bias matters because it does not only distort conclusions; it shapes attention. It helps decide what even gets to count as worth noticing.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I notice awareness when I catch an emotion rising before it takes over, or when I realize that an old memory is shaping the meaning of a current moment.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Memory feels intimate because so much of identity depends on it, yet time keeps showing how unstable memory can be without making it meaningless.",
+        "rating": 3
+      }
+    },
+    "19": {
+      "motion": {
+        "text": "I would make two columns for one week: moments when I trusted intuition and moments when I paused to verify it. At the end I would compare which intuitive judgments held up and which ones collapsed under checking.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "When logic meets language, interpretation, and reason, it becomes less cold than it first sounds. It is not the whole of wisdom, but it protects thought from self-collapse.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Bias matters because it does not only distort conclusions; it shapes attention. It helps decide what even gets to count as worth noticing.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I notice awareness when I catch an emotion rising before it takes over, or when I realize that an old memory is shaping the meaning of a current moment.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Memory feels intimate because so much of identity depends on it, yet time keeps showing how unstable memory can be without making it meaningless.",
+        "rating": 3
+      }
+    },
+    "day-20": {
+      "motion": {
+        "text": "I would collect three arguments from ads, social media, or conversation and test each one for logical strength. Then I would rewrite the weakest one into a stronger form and explain what changed.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Once bias stands beside objectivity, perception, and authority, it becomes more than an error. It becomes a hidden pressure inside the whole process of knowing.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Awareness matters because without it, thought stays trapped inside itself. It creates a small distance in which revision becomes possible.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "A smell, a song, or a place can reopen a whole season of life, and yet another person's memory of the same event can sound almost like another world.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Reconstruction changes the way I think about the past. It suggests that remembering is often a rebuilding project shaped by what remains and what the present needs to make coherent.",
+        "rating": 1
+      }
+    },
+    "20": {
+      "motion": {
+        "text": "I would collect three arguments from ads, social media, or conversation and test each one for logical strength. Then I would rewrite the weakest one into a stronger form and explain what changed.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Once bias stands beside objectivity, perception, and authority, it becomes more than an error. It becomes a hidden pressure inside the whole process of knowing.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Awareness matters because without it, thought stays trapped inside itself. It creates a small distance in which revision becomes possible.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "A smell, a song, or a place can reopen a whole season of life, and yet another person's memory of the same event can sound almost like another world.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Reconstruction changes the way I think about the past. It suggests that remembering is often a rebuilding project shaped by what remains and what the present needs to make coherent.",
+        "rating": 1
+      }
+    },
+    "day-21": {
+      "motion": {
+        "text": "I would pick one topic I care strongly about and do a bias audit: what I already assume, which sources I trust automatically, and which positions I resist before reading. Then I would write one paragraph on what I discovered about my own blind spots.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Placed beside bias, emotion, and memory, awareness starts to look like one of the most valuable corrective forces in the spiral.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "Memory matters because it gives continuity, but that continuity is never perfect storage. It preserves while quietly transforming.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I see reconstruction when stories shift slightly each time they are told, when certainty grows with repetition, or when missing details are filled in so smoothly they barely feel invented.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Authority is unavoidable because no one has time to verify everything personally. Human life depends on trusting concentrated expertise at least some of the time.",
+        "rating": 4
+      }
+    },
+    "21": {
+      "motion": {
+        "text": "I would pick one topic I care strongly about and do a bias audit: what I already assume, which sources I trust automatically, and which positions I resist before reading. Then I would write one paragraph on what I discovered about my own blind spots.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Placed beside bias, emotion, and memory, awareness starts to look like one of the most valuable corrective forces in the spiral.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "Memory matters because it gives continuity, but that continuity is never perfect storage. It preserves while quietly transforming.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I see reconstruction when stories shift slightly each time they are told, when certainty grows with repetition, or when missing details are filled in so smoothly they barely feel invented.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Authority is unavoidable because no one has time to verify everything personally. Human life depends on trusting concentrated expertise at least some of the time.",
+        "rating": 4
+      }
+    },
+    "day-22": {
+      "motion": {
+        "text": "I would set three phone reminders in one day that simply ask, 'What is shaping my thinking right now?' Each time, I would write a sentence or two. By the end of the day, I would look for repeated filters I normally miss.",
+        "rating": 2
+      },
+      "amalgam": {
+        "text": "Once memory stands beside reconstruction, emotion, and perception, it becomes less like a cabinet and more like a living process.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "The concept matters because it complicates what many people assume memory is. To remember may partly be to create a version that can survive now.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I rely on authority when I accept medical guidance, learn from teachers, use technology I cannot fully explain, or trust a historical account because the alternative would be rebuilding the whole field myself.",
+        "rating": 1
+      },
+      "history": {
+        "text": "Trust may be one of the quiet foundations of human life. Without it, schools, medicine, friendship, and even basic communication would slow to a crawl under impossible suspicion.",
+        "rating": 4
+      }
+    },
+    "22": {
+      "motion": {
+        "text": "I would set three phone reminders in one day that simply ask, 'What is shaping my thinking right now?' Each time, I would write a sentence or two. By the end of the day, I would look for repeated filters I normally miss.",
+        "rating": 2
+      },
+      "amalgam": {
+        "text": "Once memory stands beside reconstruction, emotion, and perception, it becomes less like a cabinet and more like a living process.",
+        "rating": 3
+      },
+      "abstract": {
+        "text": "The concept matters because it complicates what many people assume memory is. To remember may partly be to create a version that can survive now.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I rely on authority when I accept medical guidance, learn from teachers, use technology I cannot fully explain, or trust a historical account because the alternative would be rebuilding the whole field myself.",
+        "rating": 1
+      },
+      "history": {
+        "text": "Trust may be one of the quiet foundations of human life. Without it, schools, medicine, friendship, and even basic communication would slow to a crawl under impossible suspicion.",
+        "rating": 4
+      }
+    },
+    "day-23": {
+      "motion": {
+        "text": "I would describe one vivid memory in detail, then ask someone else who shared it to tell their version. After comparing the two, I would write what stayed stable and what changed, and what that suggests about memory.",
+        "rating": 1
+      },
+      "amalgam": {
+        "text": "Placed beside memory, language, and interpretation, reconstruction feels unavoidable. Minds want patterns even when the past resists tidy form.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Authority matters because it concentrates knowledge, but also power. That combination makes it valuable and dangerous at once.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "Trust shows up when I believe someone means what they say, assume a structure is safe, or let another person guide me where I lack knowledge of my own.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Consensus sounds powerful because many voices together resemble certainty. Yet history keeps showing that large groups can agree strongly and still miss something real.",
+        "rating": 2
+      }
+    },
+    "23": {
+      "motion": {
+        "text": "I would describe one vivid memory in detail, then ask someone else who shared it to tell their version. After comparing the two, I would write what stayed stable and what changed, and what that suggests about memory.",
+        "rating": 1
+      },
+      "amalgam": {
+        "text": "Placed beside memory, language, and interpretation, reconstruction feels unavoidable. Minds want patterns even when the past resists tidy form.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Authority matters because it concentrates knowledge, but also power. That combination makes it valuable and dangerous at once.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "Trust shows up when I believe someone means what they say, assume a structure is safe, or let another person guide me where I lack knowledge of my own.",
+        "rating": 3
+      },
+      "history": {
+        "text": "Consensus sounds powerful because many voices together resemble certainty. Yet history keeps showing that large groups can agree strongly and still miss something real.",
+        "rating": 2
+      }
+    },
+    "day-24": {
+      "motion": {
+        "text": "I would record a story from my past, then revisit it two days later and retell it without looking. I would compare both versions and mark where reconstruction entered, then reflect on whether reconstruction damages truth or simply reshapes access to it.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "When authority is placed beside trust, doubt, and evidence, the real question becomes not whether authority exists, but how it earns legitimacy.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Trust matters because knowledge is deeply social. Many of the things I call knowledge depend on networks of reliability I did not construct alone.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I notice consensus in friend groups, classrooms, and online spaces where repetition alone starts to feel like evidence. Sometimes the group is wise, and sometimes the group is simply synchronized.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Language fascinates me because it does not merely report thought; it shapes what can be noticed, shared, and defended in the first place.",
+        "rating": 3
+      }
+    },
+    "24": {
+      "motion": {
+        "text": "I would record a story from my past, then revisit it two days later and retell it without looking. I would compare both versions and mark where reconstruction entered, then reflect on whether reconstruction damages truth or simply reshapes access to it.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "When authority is placed beside trust, doubt, and evidence, the real question becomes not whether authority exists, but how it earns legitimacy.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Trust matters because knowledge is deeply social. Many of the things I call knowledge depend on networks of reliability I did not construct alone.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "I notice consensus in friend groups, classrooms, and online spaces where repetition alone starts to feel like evidence. Sometimes the group is wise, and sometimes the group is simply synchronized.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Language fascinates me because it does not merely report thought; it shapes what can be noticed, shared, and defended in the first place.",
+        "rating": 3
+      }
+    },
+    "day-25": {
+      "motion": {
+        "text": "I would compare two authorities speaking on the same issue and build a short credibility checklist: expertise, evidence used, transparency, and limits admitted. Then I would decide which authority I trust more and defend why.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Placed beside authority, doubt, and evidence, trust becomes more serious than a feeling. It becomes an ongoing judgment about credibility under uncertainty.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Consensus matters because human beings do not think alone. Still, agreement is a social fact, not automatically a measure of truth.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "A single word choice can soften conflict, sharpen accusation, clarify emotion, or disguise vagueness behind confidence. Language is never just a neutral vehicle.",
+        "rating": 2
+      },
+      "history": {
+        "text": "Meaning is what keeps information from lying flat. Human beings do not just gather facts; they try to locate significance inside experience.",
+        "rating": 4
+      }
+    },
+    "25": {
+      "motion": {
+        "text": "I would compare two authorities speaking on the same issue and build a short credibility checklist: expertise, evidence used, transparency, and limits admitted. Then I would decide which authority I trust more and defend why.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "Placed beside authority, doubt, and evidence, trust becomes more serious than a feeling. It becomes an ongoing judgment about credibility under uncertainty.",
+        "rating": 2
+      },
+      "abstract": {
+        "text": "Consensus matters because human beings do not think alone. Still, agreement is a social fact, not automatically a measure of truth.",
+        "rating": 3
+      },
+      "concrete": {
+        "text": "A single word choice can soften conflict, sharpen accusation, clarify emotion, or disguise vagueness behind confidence. Language is never just a neutral vehicle.",
+        "rating": 2
+      },
+      "history": {
+        "text": "Meaning is what keeps information from lying flat. Human beings do not just gather facts; they try to locate significance inside experience.",
+        "rating": 4
+      }
+    },
+    "day-26": {
+      "motion": {
+        "text": "I would reflect on one place where I currently give trust too quickly and one place where I withhold it too strongly. Then I would create a short personal framework for what should actually earn trust in each case.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Placed beside authority, language, and truth, consensus becomes more ambiguous. It may be a clue, but it is never the whole argument.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Language matters because almost every claim about knowledge is carried through it somehow. Even definition, metaphor, and silence help shape what becomes thinkable.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "The same event can feel trivial to one person and life-changing to another. That alone suggests meaning emerges in the meeting between world and interpreter.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Perspective teaches humility because position changes proportion. What seems central from one place can shrink, grow, or transform when seen from another.",
+        "rating": 3
+      }
+    },
+    "26": {
+      "motion": {
+        "text": "I would reflect on one place where I currently give trust too quickly and one place where I withhold it too strongly. Then I would create a short personal framework for what should actually earn trust in each case.",
+        "rating": 4
+      },
+      "amalgam": {
+        "text": "Placed beside authority, language, and truth, consensus becomes more ambiguous. It may be a clue, but it is never the whole argument.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Language matters because almost every claim about knowledge is carried through it somehow. Even definition, metaphor, and silence help shape what becomes thinkable.",
+        "rating": 4
+      },
+      "concrete": {
+        "text": "The same event can feel trivial to one person and life-changing to another. That alone suggests meaning emerges in the meeting between world and interpreter.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Perspective teaches humility because position changes proportion. What seems central from one place can shrink, grow, or transform when seen from another.",
+        "rating": 3
+      }
+    },
+    "day-27": {
+      "motion": {
+        "text": "I would observe one group discussion and note where people genuinely converged and where they may have conformed. Then I would write a short distinction between consensus built from reasoning and consensus built from pressure.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "When language stands beside meaning, interpretation, and consensus, it becomes central rather than decorative. It helps form the world knowledge inhabits.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Meaning matters because life is not lived on data alone. People need coherence, value, relation, and significance, not merely accumulation.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "Travel, age, conflict, and conversation all shift perspective. A problem that once filled the whole horizon can later look smaller, and something ignored can become essential once it comes near.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "27": {
+      "motion": {
+        "text": "I would observe one group discussion and note where people genuinely converged and where they may have conformed. Then I would write a short distinction between consensus built from reasoning and consensus built from pressure.",
+        "rating": 3
+      },
+      "amalgam": {
+        "text": "When language stands beside meaning, interpretation, and consensus, it becomes central rather than decorative. It helps form the world knowledge inhabits.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Meaning matters because life is not lived on data alone. People need coherence, value, relation, and significance, not merely accumulation.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "Travel, age, conflict, and conversation all shift perspective. A problem that once filled the whole horizon can later look smaller, and something ignored can become essential once it comes near.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "day-28": {
+      "amalgam": {
+        "text": "When language stands beside meaning, interpretation, and consensus, it becomes central rather than decorative. It helps form the world knowledge inhabits.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Meaning matters because life is not lived on data alone. People need coherence, value, relation, and significance, not merely accumulation.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "Travel, age, conflict, and conversation all shift perspective. A problem that once filled the whole horizon can later look smaller, and something ignored can become essential once it comes near.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "28": {
+      "amalgam": {
+        "text": "When language stands beside meaning, interpretation, and consensus, it becomes central rather than decorative. It helps form the world knowledge inhabits.",
+        "rating": 4
+      },
+      "abstract": {
+        "text": "Meaning matters because life is not lived on data alone. People need coherence, value, relation, and significance, not merely accumulation.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "Travel, age, conflict, and conversation all shift perspective. A problem that once filled the whole horizon can later look smaller, and something ignored can become essential once it comes near.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "day-29": {
+      "abstract": {
+        "text": "Meaning matters because life is not lived on data alone. People need coherence, value, relation, and significance, not merely accumulation.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "Travel, age, conflict, and conversation all shift perspective. A problem that once filled the whole horizon can later look smaller, and something ignored can become essential once it comes near.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "29": {
+      "abstract": {
+        "text": "Meaning matters because life is not lived on data alone. People need coherence, value, relation, and significance, not merely accumulation.",
+        "rating": 2
+      },
+      "concrete": {
+        "text": "Travel, age, conflict, and conversation all shift perspective. A problem that once filled the whole horizon can later look smaller, and something ignored can become essential once it comes near.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "day-30": {
+      "concrete": {
+        "text": "Travel, age, conflict, and conversation all shift perspective. A problem that once filled the whole horizon can later look smaller, and something ignored can become essential once it comes near.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "30": {
+      "concrete": {
+        "text": "Travel, age, conflict, and conversation all shift perspective. A problem that once filled the whole horizon can later look smaller, and something ignored can become essential once it comes near.",
+        "rating": 4
+      },
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "day-31": {
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    },
+    "31": {
+      "history": {
+        "text": "Information has become abundant in a way earlier ages could barely imagine, yet abundance has not automatically produced wisdom. In some ways, the challenge has shifted from access to discernment.",
+        "rating": 1
+      }
+    }
+  }
+}
